@@ -4,15 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 @Entity
 @Table
-public class Owo_product implements Serializable {
+public class ShopKeeperProducts{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int product_id;
@@ -36,6 +34,7 @@ public class Owo_product implements Serializable {
     private String product_sub_category;
     @Column(nullable = false)
     private String product_brand;
-    @Column(nullable = false)
-    private String product_image;
+
+    @ManyToOne
+    private Shops shops;
 }
