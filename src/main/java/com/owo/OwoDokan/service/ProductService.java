@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.lang.reflect.Array;
 import java.util.*;
 
 @Service

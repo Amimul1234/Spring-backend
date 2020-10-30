@@ -2,7 +2,9 @@ package com.owo.OwoDokan.controller;
 
 import com.owo.OwoDokan.ResponseManipulation.Product_data_manipulation;
 import com.owo.OwoDokan.entity.Owo_product;
+import com.owo.OwoDokan.entity.Shops;
 import com.owo.OwoDokan.service.ProductService;
+import com.owo.OwoDokan.service.ShopAddingService;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,16 +15,14 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final ShopAddingService shopAddingService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, ShopAddingService shopAddingService) {
         this.productService = productService;
+        this.shopAddingService = shopAddingService;
     }
 
-    @PostMapping("/addProduct") //This method is for adding new products
-    public Owo_product addProduct(@RequestBody Owo_product product)
-    {
-        return productService.saveProduct(product);
-    }
+    //Customer and shop keeper section
 
     @GetMapping("/allProducts")
     public Product_data_manipulation getAllProduct(@RequestParam(name = "page") int page)
@@ -148,18 +148,6 @@ public class ProductController {
         return productService.getProductById(id);
     }
 
-    @PutMapping("/updateProduct")
-    public Owo_product updateProductInformation(@RequestBody Owo_product product)
-    {
-        return productService.updateProduct(product);
-    }
-
-    @DeleteMapping("/deleteProduct/{product_id}")
-    public void deleteProduct(@PathVariable("product_id") String product_id)
-    {
-        productService.deleteProduct(product_id);
-    }
-
     @GetMapping("/searchProduct")
     public Product_data_manipulation searchProduct(@RequestParam(name = "page") int page, @RequestParam(name = "product_categories") String[] product_categories, @RequestParam(name = "product_name") String product_name)
     {
@@ -227,6 +215,49 @@ public class ProductController {
         }
 
         return product_data_manipulation;
+    }
+
+
+    /*
+    Admin Section beginning here
+
+           ----------------***********************************------------------------------------------
+           -------------------*****************************---------------------------------------------
+           ----------------------***********************------------------------------------------------
+           --------------------------***************----------------------------------------------------
+
+     */
+
+    @PostMapping("/addProduct") //This method is for adding new products
+    public Owo_product addProduct(@RequestBody Owo_product product)
+    {
+        return productService.saveProduct(product);
+    }
+
+    @PostMapping("/approveShop") //This method is for adding new products
+    public Shops approveShop(@RequestBody Shops shops)
+    {
+        return shopAddingService.approveNewShop(shops);
+    }
+
+    @PostMapping("/updateShopInfo") //This method is for adding new products
+    public Shops updateShop(@RequestBody Shops shops)
+    {
+        return shopAddingService.updateShop(shops);
+    }
+
+    
+
+    @PutMapping("/updateProduct")
+    public Owo_product updateProductInformation(@RequestBody Owo_product product)
+    {
+        return productService.updateProduct(product);
+    }
+
+    @DeleteMapping("/deleteProduct/{product_id}")
+    public void deleteProduct(@PathVariable("product_id") String product_id)
+    {
+        productService.deleteProduct(product_id);
     }
 
 }
