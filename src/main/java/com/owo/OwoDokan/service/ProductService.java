@@ -55,7 +55,7 @@ public class ProductService {
     }
 
     public Page<Owo_product> getProduct_by_categoriesDesc(int page, List<String> categories) {
-        int pageSize = 10; //products per page
+        int pageSize = 20; //products per page
         org.springframework.data.domain.Pageable pageable = PageRequest.of(page, pageSize);
         return productRepository.findByCategoriesDesc(categories, pageable);
     }
@@ -91,19 +91,15 @@ public class ProductService {
         int offset = 30 * page; //Here page starts from 0
 
         Query query = entityManager.createNativeQuery(
-                "SELECT * FROM owo_product" +
-                        " WHERE product_category IN(:categories) and MATCH(product_name) AGAINST (:name IN BOOLEAN MODE) ORDER BY product_price ASC limit :offset , 30",
+                "SELECT * FROM owo_product WHERE product_category IN(:categories) and MATCH(product_name) AGAINST (:name IN BOOLEAN MODE) ORDER BY product_price ASC limit :offset , 30",
                 Owo_product.class
         );
 
-        StringJoiner joiner = new StringJoiner(",");
-        for (String item : categories) {
-            joiner.add(item);
-        }
+        List<String> abcd = Arrays.asList(categories);
 
-        query.setParameter("offset", offset);
-        query.setParameter("categories", joiner.toString());
+        query.setParameter("categories", abcd);
         query.setParameter("name", name+"*");
+        query.setParameter("offset", offset);
 
         Iterator iterator = query.getResultList().iterator();
 
@@ -126,13 +122,10 @@ public class ProductService {
                 Owo_product.class
         );
 
-        StringJoiner joiner = new StringJoiner(",");
-        for (String item : categories) {
-            joiner.add(item);
-        }
+        List<String> abcd = Arrays.asList(categories);
 
         query.setParameter("offset", offset);
-        query.setParameter("categories", joiner.toString());
+        query.setParameter("categories", abcd);
         query.setParameter("name", name+"*");
 
         Iterator iterator = query.getResultList().iterator();
@@ -160,4 +153,27 @@ public class ProductService {
         return productRepository.findProductByBrandDesc(pageable, product_brand, product_categories);
     }
 
+    public List<Owo_product> searchProductAdmin(int page, String product_name) {
+
+        int offset = 30 * page; //Here page starts from 0
+
+        Query query = entityManager.createNativeQuery(
+                "SELECT * FROM owo_product" +
+                        " Where MATCH(product_name) AGAINST (:name IN BOOLEAN MODE) limit :offset , 30",
+                Owo_product.class
+        );
+
+        query.setParameter("offset", offset);
+        query.setParameter("name", product_name+"*");
+
+        Iterator iterator = query.getResultList().iterator();
+
+        List<Owo_product> result = new ArrayList<>();
+
+        while (iterator.hasNext()) {
+            result.add((Owo_product) iterator.next());
+        }
+
+        return result;
+    }
 }

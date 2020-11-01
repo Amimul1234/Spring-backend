@@ -9,7 +9,6 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 @Entity
 @Table
 public class Owo_product implements Serializable {
@@ -26,7 +25,7 @@ public class Owo_product implements Serializable {
     private double product_discount;
     @Column(nullable = false)
     private int product_quantity;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String product_description;
     @Column(nullable = false)
     private String product_creation_date;
@@ -36,6 +35,6 @@ public class Owo_product implements Serializable {
     private String product_sub_category;
     @Column(nullable = false)
     private String product_brand;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String product_image;
 }

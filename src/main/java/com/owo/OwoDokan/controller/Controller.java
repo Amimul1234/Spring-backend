@@ -1,25 +1,28 @@
 package com.owo.OwoDokan.controller;
 
 import com.owo.OwoDokan.ResponseManipulation.Product_data_manipulation;
+import com.owo.OwoDokan.entity.Brands;
 import com.owo.OwoDokan.entity.Owo_product;
 import com.owo.OwoDokan.entity.Shops;
+import com.owo.OwoDokan.service.BrandsService;
 import com.owo.OwoDokan.service.ProductService;
 import com.owo.OwoDokan.service.ShopAddingService;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Arrays;
 import java.util.List;
 
 @RestController
-public class ProductController {
+public class Controller {
 
     private final ProductService productService;
     private final ShopAddingService shopAddingService;
+    private final BrandsService brandsService;
 
-    public ProductController(ProductService productService, ShopAddingService shopAddingService) {
+    public Controller(ProductService productService, ShopAddingService shopAddingService, BrandsService brandsService) {
         this.productService = productService;
         this.shopAddingService = shopAddingService;
+        this.brandsService = brandsService;
     }
 
     //Customer and shop keeper section
@@ -217,6 +220,14 @@ public class ProductController {
         return product_data_manipulation;
     }
 
+    @GetMapping("/getBrandsViaCategory")
+    public List<Brands> getBrandsViaCategory(@RequestParam(name = "page") int page, @RequestParam(name = "product_categories") String[] product_categories)
+    {
+        List<String> categories = Arrays.asList(product_categories);
+        Page<Brands> pagedList = brandsService.getBrandsViaCategory(page, categories);
+        return pagedList.getContent();
+    }
+
 
     /*
     Admin Section beginning here
@@ -258,6 +269,32 @@ public class ProductController {
     public void deleteProduct(@PathVariable("product_id") String product_id)
     {
         productService.deleteProduct(product_id);
+    }
+
+    @PostMapping("/addABrand")
+    public void addBrand(@RequestBody Brands brands)
+    {
+        brandsService.createBrand(brands);
+    }
+
+    @GetMapping("/getBrandsAdmin")
+    public List<String> brandsAdmin(@RequestParam(name = "category") String category)
+    {
+        return brandsService.getBrandsAdmin(category);
+    }
+
+    @GetMapping("/searchProduct_admin")
+    public Product_data_manipulation searchProduct_admin(@RequestParam(name = "page") int page, @RequestParam(name = "product_name") String product_name)
+    {
+        Product_data_manipulation product_data_manipulation = new Product_data_manipulation();
+        try
+        {
+            product_data_manipulation.products.addAll(productService.searchProductAdmin(page, product_name));
+            product_data_manipulation.error = false;
+        } catch (Exception e) {
+            product_data_manipulation.error = true;
+        }
+        return product_data_manipulation;
     }
 
 }
