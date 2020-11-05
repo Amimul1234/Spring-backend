@@ -1,5 +1,6 @@
 package com.owo.OwoDokan.entity.admin_related.cart;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,6 +39,7 @@ public class Cart_list_product implements Serializable {
     private String product_image;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
     @JoinColumn(name = "cart_mobile_number")
     private CartList cart;
 }
