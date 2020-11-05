@@ -1,7 +1,7 @@
-package com.owo.OwoDokan.service;
+package com.owo.OwoDokan.service.admin_related;
 
-import com.owo.OwoDokan.entity.Owo_product;
-import com.owo.OwoDokan.repository.ProductRepository;
+import com.owo.OwoDokan.entity.admin_related.Owo_product;
+import com.owo.OwoDokan.repository.admin_related.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;

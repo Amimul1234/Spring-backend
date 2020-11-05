@@ -1,5 +1,6 @@
-package com.owo.OwoDokan.entity;
+package com.owo.OwoDokan.entity.admin_related;
 
+import com.owo.OwoDokan.entity.shopKeeper_related.ShopKeeperProducts;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

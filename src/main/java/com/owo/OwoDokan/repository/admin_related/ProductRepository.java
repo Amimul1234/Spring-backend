@@ -1,6 +1,6 @@
-package com.owo.OwoDokan.repository;
+package com.owo.OwoDokan.repository.admin_related;
 
-import com.owo.OwoDokan.entity.Owo_product;
+import com.owo.OwoDokan.entity.admin_related.Owo_product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

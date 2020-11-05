@@ -1,12 +1,12 @@
 package com.owo.OwoDokan.controller;
 
 import com.owo.OwoDokan.ResponseManipulation.Product_data_manipulation;
-import com.owo.OwoDokan.entity.Brands;
-import com.owo.OwoDokan.entity.Owo_product;
-import com.owo.OwoDokan.entity.Shops;
-import com.owo.OwoDokan.service.BrandsService;
-import com.owo.OwoDokan.service.ProductService;
-import com.owo.OwoDokan.service.ShopAddingService;
+import com.owo.OwoDokan.entity.admin_related.Brands;
+import com.owo.OwoDokan.entity.admin_related.Owo_product;
+import com.owo.OwoDokan.entity.admin_related.Shops;
+import com.owo.OwoDokan.service.admin_related.BrandsService;
+import com.owo.OwoDokan.service.admin_related.ProductService;
+import com.owo.OwoDokan.service.admin_related.ShopAddingService;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;

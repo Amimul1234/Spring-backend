@@ -1,4 +1,4 @@
-package com.owo.OwoDokan.entity;
+package com.owo.OwoDokan.entity.admin_related;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

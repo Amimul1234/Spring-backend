@@ -1,16 +1,17 @@
-package com.owo.OwoDokan.entity;
+package com.owo.OwoDokan.entity.admin_related;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table
-public class ShopKeeperProducts{
+public class Owo_product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int product_id;
@@ -24,7 +25,7 @@ public class ShopKeeperProducts{
     private double product_discount;
     @Column(nullable = false)
     private int product_quantity;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String product_description;
     @Column(nullable = false)
     private String product_creation_date;
@@ -34,7 +35,6 @@ public class ShopKeeperProducts{
     private String product_sub_category;
     @Column(nullable = false)
     private String product_brand;
-
-    @ManyToOne
-    private Shops shops;
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
+    private String product_image;
 }

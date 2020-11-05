@@ -1,6 +1,6 @@
 package com.owo.OwoDokan.ResponseManipulation;
 
-import com.owo.OwoDokan.entity.Owo_product;
+import com.owo.OwoDokan.entity.admin_related.Owo_product;
 
 import java.util.ArrayList;
 import java.util.List;
