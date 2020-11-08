@@ -17,7 +17,7 @@ import java.util.List;
 public class Shops {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    int shop_id;
+    private long shop_id;
     private double latitude;
     private double longitude;
     private String shop_address;

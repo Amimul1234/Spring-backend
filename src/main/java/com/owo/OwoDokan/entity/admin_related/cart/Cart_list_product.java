@@ -14,7 +14,9 @@ import java.io.Serializable;
 @Table
 public class Cart_list_product implements Serializable {
     @Id
-    private int product_id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    private long product_id;
     @Column(nullable = false)
     private String product_name;
     @Column(nullable = false)

@@ -1,9 +1,10 @@
-package com.owo.OwoDokan.entity.shopKeeper_related;
+package com.owo.OwoDokan.entity.admin_related.order;
 
-import com.owo.OwoDokan.entity.admin_related.Shops;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Data
@@ -11,9 +12,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table
-public class ShopKeeperProducts{
+public class Shop_keeper_ordered_products {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
     private long product_id;
     @Column(nullable = false)
     private String product_name;
@@ -25,7 +27,7 @@ public class ShopKeeperProducts{
     private double product_discount;
     @Column(nullable = false)
     private int product_quantity;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String product_description;
     @Column(nullable = false)
     private String product_creation_date;
@@ -35,7 +37,10 @@ public class ShopKeeperProducts{
     private String product_sub_category;
     @Column(nullable = false)
     private String product_brand;
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
+    private String product_image;
 
-    @ManyToOne
-    private Shops shops;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
+    private Shop_keeper_orders shop_keeper_orders;
 }

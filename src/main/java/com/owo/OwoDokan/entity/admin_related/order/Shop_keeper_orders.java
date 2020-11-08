@@ -1,0 +1,50 @@
+package com.owo.OwoDokan.entity.admin_related.order;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table
+public class Shop_keeper_orders {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long order_number;
+    @Column(columnDefinition = "LONGTEXT")
+    private String additional_comments;
+    private double coupon_discount;
+    @Column(nullable = false)
+    private String date;
+    @Column(nullable = false)
+    private String delivery_address;
+    @Column(nullable = false)
+    private String method;
+    private String receiver_phone;
+    @Column(nullable = false)
+    private String shop_phone;
+    @Column(nullable = false)
+    private String shipping_state;
+    @Column(nullable = false)
+    private String time_slot;
+    @Column(nullable = false)
+    private String order_time;
+    @Column(nullable = false)
+    private double total_amount;
+
+    @OneToMany(
+            targetEntity = Shop_keeper_ordered_products.class,
+            mappedBy = "shop_keeper_orders",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+
+    @JsonManagedReference
+    private List<Shop_keeper_ordered_products> shop_keeper_ordered_products = new ArrayList<>();
+}

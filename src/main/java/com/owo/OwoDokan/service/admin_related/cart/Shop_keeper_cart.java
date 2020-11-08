@@ -1,17 +1,16 @@
-package com.owo.OwoDokan.service.admin_related;
+package com.owo.OwoDokan.service.admin_related.cart;
 
 import com.owo.OwoDokan.ModelClass.CartListFromClient;
 import com.owo.OwoDokan.entity.admin_related.cart.CartList;
 import com.owo.OwoDokan.entity.admin_related.cart.Cart_list_product;
 import com.owo.OwoDokan.repository.admin_related.cart_repo.CartRepo;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 @Service
 public class Shop_keeper_cart {
+
     private final CartRepo cartRepo;
 
     public Shop_keeper_cart(CartRepo cartRepo) {
@@ -42,12 +41,12 @@ public class Shop_keeper_cart {
         return cartRepo.save(cartList);
     }
 
-    public List<Cart_list_product> getCartItems(String mobile_number) {
+    public List<Cart_list_product> getCartItems(String mobile_number) throws Exception{
         return cartRepo.getOne(mobile_number).getCart_list_products();
     }
 
     public Cart_list_product updateCartItem(Cart_list_product cart_list_product, String mobile_number) {
-        int id = cart_list_product.getProduct_id();
+        long id = cart_list_product.getProduct_id();
         CartList cartList = cartRepo.getOne(mobile_number);
 
         for(Cart_list_product cartListProduct : cartList.getCart_list_products())

@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class Owo_product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int product_id;
+    private long product_id;
     @Column(nullable = false)
     private String product_name;
     @Column(nullable = false)
