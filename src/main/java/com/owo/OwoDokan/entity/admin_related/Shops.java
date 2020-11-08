@@ -16,7 +16,7 @@ import java.util.List;
 @Table
 public class Shops {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long shop_id;
     private double latitude;
     private double longitude;
