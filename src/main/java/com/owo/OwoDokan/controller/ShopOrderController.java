@@ -5,8 +5,8 @@ import com.owo.OwoDokan.entity.admin_related.cart.Cart_list_product;
 import com.owo.OwoDokan.entity.admin_related.order.Shop_keeper_orders;
 import com.owo.OwoDokan.service.admin_related.cart.Shop_keeper_cart;
 import com.owo.OwoDokan.service.admin_related.order.Shop_keeper_order;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -48,4 +48,10 @@ public class ShopOrderController {
         shop_keeper_order.addOrder(shop_keeper_orders);
     }
 
+    @GetMapping("/get_shop_keeper_order")
+    public List<Shop_keeper_orders> getShopKeeperOrders(@RequestParam(name = "page") int page, @RequestParam(name = "mobile_number") String mobile_number)
+    {
+        Page<Shop_keeper_orders> pagedList = shop_keeper_order.getAllProducts(page, mobile_number);
+        return pagedList.getContent();
+    }
 }
