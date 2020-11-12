@@ -257,7 +257,12 @@ public class Controller {
         return shopAddingService.updateShop(shops);
     }
 
-    
+    @GetMapping("/getShopInfo")
+    public Shops get_shop_info(@RequestParam(name = "shop_phone") String shop_phone)
+    {
+        return shopAddingService.getShopInfo(shop_phone);
+    }
+
 
     @PutMapping("/updateProduct")
     public Owo_product updateProductInformation(@RequestBody Owo_product product)

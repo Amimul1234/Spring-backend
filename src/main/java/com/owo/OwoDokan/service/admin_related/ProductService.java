@@ -72,7 +72,7 @@ public class ProductService {
         return productRepository.findByproduct_sub_categoryDesc(sub_category, pageable);
     }
 
-    public Owo_product getProductById(int id) {
+    public Owo_product getProductById(long id) {
         return productRepository.findByProduct_Id(id);
     }
 

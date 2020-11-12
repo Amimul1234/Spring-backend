@@ -20,4 +20,8 @@ public class ShopAddingService {
     public Shops updateShop(Shops shops) {
         return shopRepository.save(shops);
     }
+
+    public Shops getShopInfo(String shop_phone) {
+        return shopRepository.getByPhone(shop_phone);
+    }
 }

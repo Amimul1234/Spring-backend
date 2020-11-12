@@ -30,7 +30,7 @@ public interface ProductRepository extends JpaRepository<Owo_product, Integer> {
     Page<Owo_product> findByproduct_sub_categoryDesc(@Param("sub_category") String sub_category, Pageable pageable);
 
     @Query("SELECT e FROM Owo_product e WHERE e.product_id = :id")
-    Owo_product findByProduct_Id(@Param("id") int id);
+    Owo_product findByProduct_Id(@Param("id") long id);
 
     @Modifying
     @Query("DELETE FROM Owo_product e WHERE e.product_id = :product_id")

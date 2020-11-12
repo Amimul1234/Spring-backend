@@ -1,10 +1,11 @@
 package com.owo.OwoDokan.entity.admin_related;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.owo.OwoDokan.entity.shopKeeper_related.ShopKeeperProducts;
+import com.owo.OwoDokan.entity.shopKeeper_related.UserDebts;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,4 +32,14 @@ public class Shops {
 
     @OneToMany(mappedBy = "shops")
     private List<ShopKeeperProducts> shopKeeperProductsList = new ArrayList<>();
+
+    @OneToMany(
+            targetEntity = UserDebts.class,
+            mappedBy = "shops",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+
+    @JsonManagedReference
+    private List<UserDebts> userDebts = new ArrayList<>();
 }
