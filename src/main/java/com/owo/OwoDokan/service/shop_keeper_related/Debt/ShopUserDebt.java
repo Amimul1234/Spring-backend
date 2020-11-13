@@ -102,8 +102,6 @@ public class ShopUserDebt {
 
     public void clearAllDebtDetails(String mobile_number) {
         UserDebts userDebts = userDebt.findByUserMobileNumber(mobile_number);
-        userDebts.setUser_total_debt(0.0);
-        userDebts.getUserDebtDetails().clear();
-        userDebt.save(userDebts);
+        userDebt.delete(userDebts);
     }
 }
