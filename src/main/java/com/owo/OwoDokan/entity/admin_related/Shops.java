@@ -36,8 +36,7 @@ public class Shops {
     @OneToMany(
             targetEntity = UserDebts.class,
             mappedBy = "shops",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+            cascade = CascadeType.ALL
     )
 
     @JsonManagedReference

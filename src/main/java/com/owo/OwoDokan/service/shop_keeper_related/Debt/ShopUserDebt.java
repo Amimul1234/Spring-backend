@@ -1,7 +1,9 @@
 package com.owo.OwoDokan.service.shop_keeper_related.Debt;
 
+import com.owo.OwoDokan.entity.admin_related.Shops;
 import com.owo.OwoDokan.entity.shopKeeper_related.UserDebts;
 import com.owo.OwoDokan.entity.shopKeeper_related.User_debt_details;
+import com.owo.OwoDokan.repository.admin_related.ShopRepository;
 import com.owo.OwoDokan.repository.shop_keeper_related.Debt.UserDebt;
 import org.springframework.stereotype.Service;
 
@@ -11,19 +13,25 @@ import java.util.List;
 @Service
 public class ShopUserDebt {
     private final UserDebt userDebt;
+    private final ShopRepository shopRepository;
 
-    public ShopUserDebt(UserDebt userDebt) {
+    public ShopUserDebt(UserDebt userDebt, ShopRepository shopRepository) {
         this.userDebt = userDebt;
+        this.shopRepository = shopRepository;
     }
 
-    public UserDebts addDebt(UserDebts userDebts) {
+    public void addDebt(UserDebts userDebts, String shop_service_mobile) {
+
+        Shops shops = shopRepository.getByPhone(shop_service_mobile);
+
         UserDebts userDebts1 = userDebt.findByUserMobileNumber(userDebts.getUser_mobile_number());
+
         if(userDebts1 == null)
         {
-            return userDebt.save(userDebts);
+            shops.getUserDebts().add(userDebts);
+            userDebts.setShops(shops);
+            shopRepository.save(shops);
         }
-        else
-            return userDebts1;
     }
 
     public void addDebtDetails(User_debt_details user_debt_details, String mobile_number) {
@@ -49,7 +57,6 @@ public class ShopUserDebt {
         List<User_debt_details> userDebtDetailsList = new ArrayList<>();
 
         userDebtDetailsList.addAll(userDebts1.getUserDebtDetails());
-
 
         double debt = userDebts1.getUser_total_debt();
 

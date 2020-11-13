@@ -1,8 +1,7 @@
-package com.owo.OwoDokan.controller;
+package com.owo.OwoDokan.controller.shopKeeper;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.List;
 import com.owo.OwoDokan.entity.shopKeeper_related.UserDebts;
 import com.owo.OwoDokan.entity.shopKeeper_related.User_debt_details;
@@ -36,9 +35,9 @@ public class ShopUserController {
     }
 
     @PostMapping("/addUserDebt") //this is the first time when shop keeper will add user to debt list
-    public UserDebts addUserDebt(@RequestBody UserDebts userDebts)
+    public void addUserDebt(@RequestBody UserDebts userDebts, @RequestParam(name = "shop_service_mobile") String shop_service_mobile)
     {
-        return shopUserDebt.addDebt(userDebts);
+        shopUserDebt.addDebt(userDebts, shop_service_mobile);
     }
 
     @PostMapping("/addAdebtDetails") //This is for adding debt details of an existing user
@@ -53,7 +52,7 @@ public class ShopUserController {
         shopUserDebt.deleteAdebtDetails(id_of_debt_details, mobile_number);
     }
 
-    @PostMapping("/updateAdebtDetails") //Updating a customer's debt_details
+    @PutMapping("/updateAdebtDetails") //Updating a customer's debt_details
     public void updateAdebtDetails(@RequestBody User_debt_details user_debt_details, @RequestParam(name = "mobile_number") String mobile_number)
     {
         shopUserDebt.updateAdebtDetails(user_debt_details, mobile_number);
@@ -73,7 +72,7 @@ public class ShopUserController {
     }
 
     @GetMapping("/getAllDebtDetailsReport") //This method is for getting pdf report of the debt for a user
-    public ResponseEntity<Resource> generateExcelReport(@RequestParam(name = "mobile_number") String mobile_number) throws IOException, DocumentException {
+    public ResponseEntity<Resource> generateExcelReport(@RequestParam(name = "mobile_number") String mobile_number) throws DocumentException {
 
         List<User_debt_details> user_debt_details = shopUserDebt.getAllDebtDetails(mobile_number);
 
@@ -131,11 +130,7 @@ public class ShopUserController {
         headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
         headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=DebtDetails.pdf");
 
-        ResponseEntity<Resource> response = new ResponseEntity<Resource>(new InputStreamResource(is), headers,
+        return new ResponseEntity<>(new InputStreamResource(is), headers,
                 HttpStatus.OK);
-
-        return response;
     }
-
-
 }
