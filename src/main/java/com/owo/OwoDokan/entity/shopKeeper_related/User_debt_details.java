@@ -4,15 +4,15 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table
-public class User_debt_details {
+public class User_debt_details implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -21,7 +21,7 @@ public class User_debt_details {
     private String date;
     private double taka;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     private UserDebts userDebts;
 }

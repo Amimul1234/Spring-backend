@@ -25,6 +25,7 @@ public class CartList {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+
     @JsonManagedReference
     private List<Cart_list_product> cart_list_products = new ArrayList<>();
 }

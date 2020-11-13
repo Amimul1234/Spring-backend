@@ -26,7 +26,6 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
-
 @RestController
 public class ShopUserController {
 
@@ -48,22 +47,37 @@ public class ShopUserController {
         shopUserDebt.addDebtDetails(user_debt_details, mobile_number);
     }
 
-    @PutMapping("/deleteAdebtDetails")
+    @DeleteMapping("/deleteAdebtDetails")
     public void deleteAdebtDetails(@RequestParam(name = "id_of_debt_details") long id_of_debt_details, @RequestParam(name = "mobile_number") String mobile_number)
     {
         shopUserDebt.deleteAdebtDetails(id_of_debt_details, mobile_number);
     }
 
-    @GetMapping("/getAllDebtDetails")
+    @PostMapping("/updateAdebtDetails") //Updating a customer's debt_details
+    public void updateAdebtDetails(@RequestBody User_debt_details user_debt_details, @RequestParam(name = "mobile_number") String mobile_number)
+    {
+        shopUserDebt.updateAdebtDetails(user_debt_details, mobile_number);
+    }
+
+    @PutMapping("/clearAllDebtDetails") //this is for clearing a customer all debt details
+    public void clearAllDebtDetails(@RequestParam(name = "mobile_number") String mobile_number)
+    {
+        shopUserDebt.clearAllDebtDetails(mobile_number);
+    }
+
+
+    @GetMapping("/getAllDebtDetails") //This method is for getting debt details for an user
     public List<User_debt_details> getAllDebtDetails(@RequestParam(name = "mobile_number") String mobile_number)
     {
         return shopUserDebt.getAllDebtDetails(mobile_number);
     }
 
-    @GetMapping("/getAllDebtDetailsReport")
+    @GetMapping("/getAllDebtDetailsReport") //This method is for getting pdf report of the debt for a user
     public ResponseEntity<Resource> generateExcelReport(@RequestParam(name = "mobile_number") String mobile_number) throws IOException, DocumentException {
 
         List<User_debt_details> user_debt_details = shopUserDebt.getAllDebtDetails(mobile_number);
+
+        String customer_name = shopUserDebt.getCustomerName(mobile_number);
 
         Document document = new Document(PageSize.A4, 25, 25, 25, 25);
 
@@ -73,8 +87,8 @@ public class ShopUserController {
 
         document.open();
 
-        Paragraph title = new Paragraph("Customers debt details",
-                FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD, new BaseColor(0, 255, 255)));
+        Paragraph title = new Paragraph(customer_name+" Debt details",
+                FontFactory.getFont(FontFactory.HELVETICA, 20, Font.BOLD, new BaseColor(255, 0, 0)));
 
         document.add(title);
 
@@ -100,7 +114,7 @@ public class ShopUserController {
 
         for(i=0; i<length; i++)
         {
-            table.addCell(String.valueOf(i));
+            table.addCell(String.valueOf(i+1));
             table.addCell(user_debt_details.get(i).getDescription());
             table.addCell(user_debt_details.get(i).getDate());
             table.addCell(String.valueOf(user_debt_details.get(i).getTaka()));
@@ -122,5 +136,7 @@ public class ShopUserController {
 
         return response;
     }
+
+
 
 }
