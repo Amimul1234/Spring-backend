@@ -5,6 +5,10 @@ import com.owo.OwoDokan.entity.shopKeeper_related.UserDebts;
 import com.owo.OwoDokan.entity.shopKeeper_related.User_debt_details;
 import com.owo.OwoDokan.repository.admin_related.ShopRepository;
 import com.owo.OwoDokan.repository.shop_keeper_related.Debt.UserDebt;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,18 +24,25 @@ public class ShopUserDebt {
         this.shopRepository = shopRepository;
     }
 
-    public void addDebt(UserDebts userDebts, String shop_service_mobile) {
+    public String addDebt(UserDebts userDebts, String shop_mobile_number) {
 
-        Shops shops = shopRepository.getByPhone(shop_service_mobile);
+        Shops shops = shopRepository.getByPhone(shop_mobile_number);
 
-        UserDebts userDebts1 = userDebt.findByUserMobileNumber(userDebts.getUser_mobile_number());
+        List<UserDebts> userDebts1 = shops.getUserDebts();
 
-        if(userDebts1 == null)
+        for(UserDebts userDebts2 : userDebts1)
         {
-            shops.getUserDebts().add(userDebts);
-            userDebts.setShops(shops);
-            shopRepository.save(shops);
+            if(userDebts2.getUser_mobile_number().equals(userDebts.getUser_mobile_number()))
+            {
+                return "User already exists";
+            }
         }
+
+        shops.getUserDebts().add(userDebts);
+        userDebts.setShops(shops);
+        shopRepository.save(shops);
+        return "Success";
+
     }
 
     public void addDebtDetails(User_debt_details user_debt_details, String mobile_number) {
@@ -110,5 +121,38 @@ public class ShopUserDebt {
     public void clearAllDebtDetails(String mobile_number) {
         UserDebts userDebts = userDebt.findByUserMobileNumber(mobile_number);
         userDebt.delete(userDebts);
+    }
+
+    public ResponseEntity getAllDebts(int page, String shop_mobile_number) {
+
+        int pageSize = 10;
+
+        Shops shop = null;
+
+        int fromIndex = page * pageSize;
+
+        try {
+            shop  = shopRepository.getByPhone(shop_mobile_number);
+        }catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+
+        if (shop != null) {
+            int size = shop.getUserDebts().size();
+
+            if(fromIndex >= size)
+            {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            else
+            {
+                return new ResponseEntity<>(shop.getUserDebts().subList(fromIndex, Math.min(fromIndex + pageSize, shop.getUserDebts().size())), HttpStatus.OK);
+            }
+        }
+        else
+        {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

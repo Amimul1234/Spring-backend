@@ -21,8 +21,6 @@ public class ShopKeeperRestController {
         this.brandsService = brandsService;
     }
 
-    //Customer and shop keeper section
-
     @GetMapping("/allProducts")
     public Product_data_manipulation getAllProduct(@RequestParam(name = "page") int page)
     {
@@ -162,7 +160,6 @@ public class ShopKeeperRestController {
         }
 
         return product_data_manipulation;
-
     }
 
     @GetMapping("/searchProductDesc")
@@ -223,16 +220,4 @@ public class ShopKeeperRestController {
         Page<Brands> pagedList = brandsService.getBrandsViaCategory(page, categories);
         return pagedList.getContent();
     }
-
-
-    /*
-    Admin Section beginning here
-
-           ----------------***********************************------------------------------------------
-           -------------------*****************************---------------------------------------------
-           ----------------------***********************------------------------------------------------
-           --------------------------***************----------------------------------------------------
-
-     */
-
 }

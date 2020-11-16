@@ -8,6 +8,7 @@ import com.owo.OwoDokan.entity.shopKeeper_related.User_debt_details;
 import com.owo.OwoDokan.service.shop_keeper_related.Debt.ShopUserDebt;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -35,9 +36,15 @@ public class ShopUserController {
     }
 
     @PostMapping("/addUserDebt") //this is the first time when shop keeper will add user to debt list
-    public void addUserDebt(@RequestBody UserDebts userDebts, @RequestParam(name = "shop_service_mobile") String shop_service_mobile)
+    public ResponseEntity<String> addUserDebt(@RequestBody UserDebts userDebts, @RequestParam(name = "shop_mobile_number") String shop_mobile_number)
     {
-        shopUserDebt.addDebt(userDebts, shop_service_mobile);
+        return new ResponseEntity<String>(shopUserDebt.addDebt(userDebts, shop_mobile_number), HttpStatus.OK);
+    }
+
+    @GetMapping("/getUserDebtLists")
+    public ResponseEntity getUserDebtLists(@RequestParam(name = "page") int page, @RequestParam(name = "shop_mobile_number") String shop_mobile_number)
+    {
+        return shopUserDebt.getAllDebts(page, shop_mobile_number);
     }
 
     @PostMapping("/addAdebtDetails") //This is for adding debt details of an existing user
