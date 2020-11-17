@@ -8,7 +8,6 @@ import com.owo.OwoDokan.entity.shopKeeper_related.User_debt_details;
 import com.owo.OwoDokan.service.shop_keeper_related.Debt.ShopUserDebt;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,9 +35,9 @@ public class ShopUserController {
     }
 
     @PostMapping("/addUserDebt") //this is the first time when shop keeper will add user to debt list
-    public ResponseEntity<String> addUserDebt(@RequestBody UserDebts userDebts, @RequestParam(name = "shop_mobile_number") String shop_mobile_number)
+    public ResponseEntity addUserDebt(@RequestBody UserDebts userDebts, @RequestParam(name = "shop_mobile_number") String shop_mobile_number)
     {
-        return new ResponseEntity<String>(shopUserDebt.addDebt(userDebts, shop_mobile_number), HttpStatus.OK);
+        return shopUserDebt.addDebt(userDebts, shop_mobile_number);
     }
 
     @GetMapping("/getUserDebtLists")
@@ -48,32 +47,32 @@ public class ShopUserController {
     }
 
     @PostMapping("/addAdebtDetails") //This is for adding debt details of an existing user
-    public void addAdebtDetails(@RequestBody User_debt_details user_debt_details, @RequestParam(name = "mobile_number") String mobile_number)
+    public ResponseEntity addAdebtDetails(@RequestBody User_debt_details user_debt_details, @RequestParam(name = "mobile_number") String mobile_number)
     {
-        shopUserDebt.addDebtDetails(user_debt_details, mobile_number);
+        return shopUserDebt.addDebtDetails(user_debt_details, mobile_number);
     }
 
     @DeleteMapping("/deleteAdebtDetails")
-    public void deleteAdebtDetails(@RequestParam(name = "id_of_debt_details") long id_of_debt_details, @RequestParam(name = "mobile_number") String mobile_number)
+    public ResponseEntity deleteAdebtDetails(@RequestParam(name = "id_of_debt_details") long id_of_debt_details, @RequestParam(name = "mobile_number") String mobile_number)
     {
-        shopUserDebt.deleteAdebtDetails(id_of_debt_details, mobile_number);
+        return shopUserDebt.deleteAdebtDetails(id_of_debt_details, mobile_number);
     }
 
     @PutMapping("/updateAdebtDetails") //Updating a customer's debt_details
-    public void updateAdebtDetails(@RequestBody User_debt_details user_debt_details, @RequestParam(name = "mobile_number") String mobile_number)
+    public ResponseEntity updateAdebtDetails(@RequestBody User_debt_details user_debt_details, @RequestParam(name = "mobile_number") String mobile_number)
     {
-        shopUserDebt.updateAdebtDetails(user_debt_details, mobile_number);
+        return shopUserDebt.updateAdebtDetails(user_debt_details, mobile_number);
     }
 
     @PutMapping("/clearAllDebtDetails") //this is for clearing a customer all debt details
-    public void clearAllDebtDetails(@RequestParam(name = "mobile_number") String mobile_number)
+    public ResponseEntity clearAllDebtDetails(@RequestParam(name = "mobile_number") String mobile_number)
     {
-        shopUserDebt.clearAllDebtDetails(mobile_number);
+        return shopUserDebt.clearAllDebtDetails(mobile_number);
     }
 
 
     @GetMapping("/getAllDebtDetails") //This method is for getting debt details for an user
-    public List<User_debt_details> getAllDebtDetails(@RequestParam(name = "mobile_number") String mobile_number)
+    public ResponseEntity getAllDebtDetails(@RequestParam(name = "mobile_number") String mobile_number)
     {
         return shopUserDebt.getAllDebtDetails(mobile_number);
     }
@@ -81,7 +80,7 @@ public class ShopUserController {
     @GetMapping("/getAllDebtDetailsReport") //This method is for getting pdf report of the debt for a user
     public ResponseEntity<Resource> generateExcelReport(@RequestParam(name = "mobile_number") String mobile_number) throws DocumentException {
 
-        List<User_debt_details> user_debt_details = shopUserDebt.getAllDebtDetails(mobile_number);
+        List<User_debt_details> user_debt_details = shopUserDebt.getAllDebtDetailsViaList(mobile_number);
 
         String customer_name = shopUserDebt.getCustomerName(mobile_number);
 

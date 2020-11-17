@@ -5,12 +5,9 @@ import com.owo.OwoDokan.entity.shopKeeper_related.UserDebts;
 import com.owo.OwoDokan.entity.shopKeeper_related.User_debt_details;
 import com.owo.OwoDokan.repository.admin_related.ShopRepository;
 import com.owo.OwoDokan.repository.shop_keeper_related.Debt.UserDebt;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +21,7 @@ public class ShopUserDebt {
         this.shopRepository = shopRepository;
     }
 
-    public String addDebt(UserDebts userDebts, String shop_mobile_number) {
+    public ResponseEntity addDebt(UserDebts userDebts, String shop_mobile_number) {
 
         Shops shops = shopRepository.getByPhone(shop_mobile_number);
 
@@ -34,19 +31,27 @@ public class ShopUserDebt {
         {
             if(userDebts2.getUser_mobile_number().equals(userDebts.getUser_mobile_number()))
             {
-                return "User already exists";
+                return new ResponseEntity(HttpStatus.CONFLICT);
             }
         }
 
         shops.getUserDebts().add(userDebts);
         userDebts.setShops(shops);
         shopRepository.save(shops);
-        return "Success";
+        return new ResponseEntity(HttpStatus.OK);
 
     }
 
-    public void addDebtDetails(User_debt_details user_debt_details, String mobile_number) {
-        UserDebts userDebts1 = userDebt.findByUserMobileNumber(mobile_number);
+    public ResponseEntity addDebtDetails(User_debt_details user_debt_details, String mobile_number) {
+
+        UserDebts userDebts1;
+
+        try {
+            userDebts1 = userDebt.findByUserMobileNumber(mobile_number);
+        }catch (Exception e)
+        {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
 
         user_debt_details.setUserDebts(userDebts1);
 
@@ -58,12 +63,27 @@ public class ShopUserDebt {
 
         userDebts1.getUserDebtDetails().add(user_debt_details);
 
-        userDebt.save(userDebts1);
+        try {
+            userDebt.save(userDebts1);
+            return new ResponseEntity(HttpStatus.CREATED);
+        }catch (Exception e)
+        {
+            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
+        }
+
     }
 
-    public void deleteAdebtDetails(long id_of_debt_details, String mobile_number) {
+    public ResponseEntity deleteAdebtDetails(long id_of_debt_details, String mobile_number) {
 
-        UserDebts userDebts1 = userDebt.findByUserMobileNumber(mobile_number);
+        UserDebts userDebts1;
+
+        try
+        {
+            userDebts1 = userDebt.findByUserMobileNumber(mobile_number);
+        }catch (Exception e)
+        {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
 
         List<User_debt_details> userDebtDetailsList = new ArrayList<>();
 
@@ -85,25 +105,65 @@ public class ShopUserDebt {
         userDebts1.getUserDebtDetails().clear();
         userDebts1.getUserDebtDetails().addAll(userDebtDetailsList);
 
-        userDebt.save(userDebts1);
+        try
+        {
+            userDebt.save(userDebts1);
+            return new ResponseEntity(HttpStatus.OK);
+        }catch (Exception e)
+        {
+            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
+        }
+
     }
 
-    public List<User_debt_details> getAllDebtDetails(String mobile_number) {
-        UserDebts userDebts1 = userDebt.findByUserMobileNumber(mobile_number);
-        return userDebts1.getUserDebtDetails();
+    public ResponseEntity getAllDebtDetails(String mobile_number) {
+
+        UserDebts userDebts1;
+
+        try
+        {
+            userDebts1 = userDebt.findByUserMobileNumber(mobile_number);
+            return new ResponseEntity<List<User_debt_details>>(userDebts1.getUserDebtDetails(), HttpStatus.OK);
+
+        }catch (Exception e)
+        {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    public List<User_debt_details> getAllDebtDetailsViaList(String mobile_number)
+    {
+        UserDebts userDebts1;
+
+        try
+        {
+            userDebts1 = userDebt.findByUserMobileNumber(mobile_number);
+            return userDebts1.getUserDebtDetails();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public String getCustomerName(String mobile_number) {
         return userDebt.findByUserMobileNumber(mobile_number).getUser_name();
     }
 
-    public void updateAdebtDetails(User_debt_details user_debt_details, String mobile_number) {
+    public ResponseEntity updateAdebtDetails(User_debt_details user_debt_details, String mobile_number) {
 
-        UserDebts userDebts = userDebt.findByUserMobileNumber(mobile_number);
+        UserDebts userDebts;
+        int length;
+        double debt;
 
-        int length = userDebts.getUserDebtDetails().size();
-
-        double debt = userDebts.getUser_total_debt();
+        try {
+            userDebts = userDebt.findByUserMobileNumber(mobile_number);
+            length = userDebts.getUserDebtDetails().size();
+            debt = userDebts.getUser_total_debt();
+        }catch (Exception e)
+        {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
 
         for(int i=0; i<length; i++)
         {
@@ -113,14 +173,31 @@ public class ShopUserDebt {
                 userDebts.setUser_total_debt(debt);
                 userDebts.getUserDebtDetails().set(i, user_debt_details);
                 userDebt.save(userDebts);
-                return;
+                return new ResponseEntity(HttpStatus.OK);
             }
         }
     }
 
-    public void clearAllDebtDetails(String mobile_number) {
-        UserDebts userDebts = userDebt.findByUserMobileNumber(mobile_number);
-        userDebt.delete(userDebts);
+    public ResponseEntity clearAllDebtDetails(String mobile_number) {
+        UserDebts userDebts;
+
+        try
+        {
+            userDebts = userDebt.findByUserMobileNumber(mobile_number);
+
+            try
+            {
+                userDebt.delete(userDebts);
+                return new ResponseEntity(HttpStatus.OK);
+            }catch (Exception e)
+            {
+                return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
+            }
+
+        }catch (Exception e)
+        {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
     }
 
     public ResponseEntity getAllDebts(int page, String shop_mobile_number) {
