@@ -158,24 +158,27 @@ public class ShopUserDebt {
 
         try {
             userDebts = userDebt.findByUserMobileNumber(mobile_number);
+
             length = userDebts.getUserDebtDetails().size();
             debt = userDebts.getUser_total_debt();
+
+            for(int i=0; i<length; i++)
+            {
+                if(user_debt_details.getId() == userDebts.getUserDebtDetails().get(i).getId())
+                {
+                    debt = debt - userDebts.getUserDebtDetails().get(i).getTaka() + user_debt_details.getTaka();
+                    userDebts.setUser_total_debt(debt);
+                    userDebts.getUserDebtDetails().set(i, user_debt_details);
+                    userDebt.save(userDebts);
+                    return new ResponseEntity(HttpStatus.OK);
+                }
+            }
+
         }catch (Exception e)
         {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
-
-        for(int i=0; i<length; i++)
-        {
-            if(user_debt_details.getId() == userDebts.getUserDebtDetails().get(i).getId())
-            {
-                debt = debt - userDebts.getUserDebtDetails().get(i).getTaka() + user_debt_details.getTaka();
-                userDebts.setUser_total_debt(debt);
-                userDebts.getUserDebtDetails().set(i, user_debt_details);
-                userDebt.save(userDebts);
-                return new ResponseEntity(HttpStatus.OK);
-            }
-        }
+        return null;
     }
 
     public ResponseEntity clearAllDebtDetails(String mobile_number) {
