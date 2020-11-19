@@ -42,12 +42,12 @@ public class ShopUserDebt {
 
     }
 
-    public ResponseEntity addDebtDetails(User_debt_details user_debt_details, String mobile_number) {
+    public ResponseEntity addDebtDetails(User_debt_details user_debt_details, Long user_id) {
 
         UserDebts userDebts1;
 
+        userDebts1 = userDebt.findByUserId(user_id);
         try {
-            userDebts1 = userDebt.findByUserMobileNumber(mobile_number);
         }catch (Exception e)
         {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -73,13 +73,14 @@ public class ShopUserDebt {
 
     }
 
-    public ResponseEntity deleteAdebtDetails(long id_of_debt_details, String mobile_number) {
+    public ResponseEntity deleteAdebtDetails(long id_of_debt_details, Long user_id) {
 
         UserDebts userDebts1;
 
         try
         {
-            userDebts1 = userDebt.findByUserMobileNumber(mobile_number);
+            userDebts1 = userDebt.findByUserId(user_id);
+
         }catch (Exception e)
         {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -116,14 +117,22 @@ public class ShopUserDebt {
 
     }
 
-    public ResponseEntity getAllDebtDetails(String mobile_number) {
+    public ResponseEntity getAllDebtDetails(Long user_id) {
 
         UserDebts userDebts1;
 
         try
         {
-            userDebts1 = userDebt.findByUserMobileNumber(mobile_number);
-            return new ResponseEntity<List<User_debt_details>>(userDebts1.getUserDebtDetails(), HttpStatus.OK);
+            userDebts1 = userDebt.findByUserId(user_id);
+
+            if(userDebts1.getUserDebtDetails().size() > 0)
+            {
+                return new ResponseEntity<List<User_debt_details>>(userDebts1.getUserDebtDetails(), HttpStatus.OK);
+            }
+            else
+            {
+                return new ResponseEntity(HttpStatus.NO_CONTENT);
+            }
 
         }catch (Exception e)
         {
@@ -131,13 +140,13 @@ public class ShopUserDebt {
         }
     }
 
-    public List<User_debt_details> getAllDebtDetailsViaList(String mobile_number)
+    public List<User_debt_details> getAllDebtDetailsViaList(Long user_id)
     {
         UserDebts userDebts1;
 
         try
         {
-            userDebts1 = userDebt.findByUserMobileNumber(mobile_number);
+            userDebts1 = userDebt.findByUserId(user_id);
             return userDebts1.getUserDebtDetails();
         }catch (Exception e)
         {
@@ -146,18 +155,18 @@ public class ShopUserDebt {
         }
     }
 
-    public String getCustomerName(String mobile_number) {
-        return userDebt.findByUserMobileNumber(mobile_number).getUser_name();
+    public String getCustomerName(Long user_id) {
+        return userDebt.findByUserId(user_id).getUser_name();
     }
 
-    public ResponseEntity updateAdebtDetails(User_debt_details user_debt_details, String mobile_number) {
+    public ResponseEntity updateAdebtDetails(User_debt_details user_debt_details, Long user_id) {
 
         UserDebts userDebts;
         int length;
         double debt;
 
         try {
-            userDebts = userDebt.findByUserMobileNumber(mobile_number);
+            userDebts = userDebt.findByUserId(user_id);
 
             length = userDebts.getUserDebtDetails().size();
             debt = userDebts.getUser_total_debt();
@@ -181,12 +190,13 @@ public class ShopUserDebt {
         return null;
     }
 
-    public ResponseEntity clearAllDebtDetails(String mobile_number) {
+    public ResponseEntity clearAllDebtDetails(Long user_id) {
+
         UserDebts userDebts;
 
         try
         {
-            userDebts = userDebt.findByUserMobileNumber(mobile_number);
+            userDebts = userDebt.findByUserId(user_id);
 
             try
             {

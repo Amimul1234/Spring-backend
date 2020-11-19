@@ -47,42 +47,42 @@ public class ShopUserController {
     }
 
     @PostMapping("/addAdebtDetails") //This is for adding debt details of an existing user
-    public ResponseEntity addAdebtDetails(@RequestBody User_debt_details user_debt_details, @RequestParam(name = "mobile_number") String mobile_number)
+    public ResponseEntity addAdebtDetails(@RequestBody User_debt_details user_debt_details, @RequestParam(name = "user_id") Long user_id)
     {
-        return shopUserDebt.addDebtDetails(user_debt_details, mobile_number);
+        return shopUserDebt.addDebtDetails(user_debt_details, user_id);
     }
 
     @DeleteMapping("/deleteAdebtDetails")
-    public ResponseEntity deleteAdebtDetails(@RequestParam(name = "id_of_debt_details") long id_of_debt_details, @RequestParam(name = "mobile_number") String mobile_number)
+    public ResponseEntity deleteAdebtDetails(@RequestParam(name = "id_of_debt_details") long id_of_debt_details, @RequestParam(name = "user_id") Long user_id)
     {
-        return shopUserDebt.deleteAdebtDetails(id_of_debt_details, mobile_number);
+        return shopUserDebt.deleteAdebtDetails(id_of_debt_details, user_id);
     }
 
     @PutMapping("/updateAdebtDetails") //Updating a customer's debt_details
-    public ResponseEntity updateAdebtDetails(@RequestBody User_debt_details user_debt_details, @RequestParam(name = "mobile_number") String mobile_number)
+    public ResponseEntity updateAdebtDetails(@RequestBody User_debt_details user_debt_details, @RequestParam(name = "user_id") Long user_id)
     {
-        return shopUserDebt.updateAdebtDetails(user_debt_details, mobile_number);
+        return shopUserDebt.updateAdebtDetails(user_debt_details, user_id);
     }
 
-    @PutMapping("/clearAllDebtDetails") //this is for clearing a customer all debt details
-    public ResponseEntity clearAllDebtDetails(@RequestParam(name = "mobile_number") String mobile_number)
+    @DeleteMapping("/clearAllDebtDetails") //this is for clearing a customer all debt details
+    public ResponseEntity clearAllDebtDetails(@RequestParam(name = "user_id") Long user_id)
     {
-        return shopUserDebt.clearAllDebtDetails(mobile_number);
+        return shopUserDebt.clearAllDebtDetails(user_id);
     }
 
 
     @GetMapping("/getAllDebtDetails") //This method is for getting debt details for an user
-    public ResponseEntity getAllDebtDetails(@RequestParam(name = "mobile_number") String mobile_number)
+    public ResponseEntity getAllDebtDetails(@RequestParam(name = "user_id") Long user_id)
     {
-        return shopUserDebt.getAllDebtDetails(mobile_number);
+        return shopUserDebt.getAllDebtDetails(user_id);
     }
 
     @GetMapping("/getAllDebtDetailsReport") //This method is for getting pdf report of the debt for a user
-    public ResponseEntity<Resource> generateExcelReport(@RequestParam(name = "mobile_number") String mobile_number) throws DocumentException {
+    public ResponseEntity<Resource> generateExcelReport(@RequestParam(name = "user_id") Long user_id) throws DocumentException {
 
-        List<User_debt_details> user_debt_details = shopUserDebt.getAllDebtDetailsViaList(mobile_number);
+        List<User_debt_details> user_debt_details = shopUserDebt.getAllDebtDetailsViaList(user_id);
 
-        String customer_name = shopUserDebt.getCustomerName(mobile_number);
+        String customer_name = shopUserDebt.getCustomerName(user_id);
 
         Document document = new Document(PageSize.A4, 25, 25, 25, 25);
 
