@@ -1,6 +1,7 @@
 package com.owo.OwoDokan.entity.shopKeeper_related;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.owo.OwoDokan.entity.admin_related.Shops;
 import lombok.AllArgsConstructor;
@@ -36,6 +37,6 @@ public class UserDebts implements Serializable {
             orphanRemoval = true
     )
 
-    @JsonManagedReference
+    @JsonIgnore
     private List<User_debt_details> userDebtDetails = new ArrayList<>();
 }

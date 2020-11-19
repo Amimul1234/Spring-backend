@@ -219,6 +219,7 @@ public class ShopUserDebt {
         }
 
         if (shop != null) {
+
             int size = shop.getUserDebts().size();
 
             if(fromIndex >= size)
