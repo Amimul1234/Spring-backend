@@ -46,8 +46,8 @@ public class ShopUserDebt {
 
         UserDebts userDebts1;
 
-        userDebts1 = userDebt.findByUserId(user_id);
         try {
+            userDebts1 = userDebt.findByUserId(user_id);
         }catch (Exception e)
         {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -125,6 +125,21 @@ public class ShopUserDebt {
         {
             userDebts1 = userDebt.findByUserId(user_id);
 
+            return new ResponseEntity<UserDebts>(userDebts1, HttpStatus.OK);
+
+        }catch (Exception e)
+        {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    public ResponseEntity getDebtDetailsForACustomer(Long user_id) {
+        UserDebts userDebts1;
+
+        try
+        {
+            userDebts1 = userDebt.findByUserId(user_id);
+
             if(userDebts1.getUserDebtDetails().size() > 0)
             {
                 return new ResponseEntity<List<User_debt_details>>(userDebts1.getUserDebtDetails(), HttpStatus.OK);
@@ -133,6 +148,7 @@ public class ShopUserDebt {
             {
                 return new ResponseEntity(HttpStatus.NO_CONTENT);
             }
+
 
         }catch (Exception e)
         {

@@ -71,10 +71,16 @@ public class ShopUserController {
     }
 
 
-    @GetMapping("/getAllDebtDetails") //This method is for getting debt details for an user
+    @GetMapping("/getUserSpecificDebtDetails") //This method is for getting debt details for an user
     public ResponseEntity getAllDebtDetails(@RequestParam(name = "user_id") Long user_id)
     {
         return shopUserDebt.getAllDebtDetails(user_id);
+    }
+
+    @GetMapping("/getADebtListForAUser")
+    public ResponseEntity getADebtListForUser(@RequestParam(name = "user_id") Long user_id)
+    {
+        return shopUserDebt.getDebtDetailsForACustomer(user_id);
     }
 
     @GetMapping("/getAllDebtDetailsReport") //This method is for getting pdf report of the debt for a user
