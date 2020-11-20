@@ -30,15 +30,16 @@ public class Shops {
     private String shop_service_mobile;
     private String trade_license_url;
 
-    @OneToMany(mappedBy = "shops")
+    @OneToMany(mappedBy = "shops",
+            orphanRemoval = true)
     private List<ShopKeeperProducts> shopKeeperProductsList = new ArrayList<>();
 
     @OneToMany(
-            targetEntity = UserDebts.class,
             mappedBy = "shops",
-            cascade = CascadeType.ALL
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH},
+            orphanRemoval = true
     )
-
     @JsonManagedReference
     private List<UserDebts> userDebts = new ArrayList<>();
 }

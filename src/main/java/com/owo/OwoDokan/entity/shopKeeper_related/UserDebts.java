@@ -2,7 +2,6 @@ package com.owo.OwoDokan.entity.shopKeeper_related;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.owo.OwoDokan.entity.admin_related.Shops;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,17 +25,17 @@ public class UserDebts implements Serializable {
     private String user_mobile_number;
     private double user_total_debt;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH
+            , CascadeType.REFRESH})
     @JsonBackReference
     private Shops shops;
 
     @OneToMany(
-            targetEntity = User_debt_details.class,
             mappedBy = "userDebts",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+            orphanRemoval = true,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH
+            , CascadeType.REFRESH}
     )
-
     @JsonIgnore
     private List<User_debt_details> userDebtDetails = new ArrayList<>();
 }
