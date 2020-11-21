@@ -6,7 +6,6 @@ import com.owo.OwoDokan.entity.admin_related.order.Shop_keeper_orders;
 import com.owo.OwoDokan.repository.admin_related.ShopRepository;
 import com.owo.OwoDokan.repository.admin_related.cart_repo.CartRepo;
 import com.owo.OwoDokan.repository.admin_related.order_repo.Order_repo;
-import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -24,7 +23,6 @@ public class Shop_keeper_order {
         this.cartRepo = cartRepo;
         this.shopRepository = shopRepository;
     }
-
 
     public ResponseEntity addOrder(Shop_keeper_orders shop_keeper_order_param, String mobile_number) {
 
