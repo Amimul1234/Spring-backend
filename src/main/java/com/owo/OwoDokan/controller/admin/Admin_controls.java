@@ -7,12 +7,12 @@ import com.owo.OwoDokan.entity.admin_related.Shops;
 import com.owo.OwoDokan.service.admin_related.BrandsService;
 import com.owo.OwoDokan.service.admin_related.ProductService;
 import com.owo.OwoDokan.service.admin_related.ShopAddingService;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 public class Admin_controls {
+
     private final ProductService productService;
     private final ShopAddingService shopAddingService;
     private final BrandsService brandsService;
@@ -46,7 +46,6 @@ public class Admin_controls {
     {
         return shopAddingService.getShopInfo(shop_phone);
     }
-
 
     @PutMapping("/updateProduct")
     public Owo_product updateProductInformation(@RequestBody Owo_product product)

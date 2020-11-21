@@ -6,6 +6,7 @@ import com.owo.OwoDokan.entity.admin_related.order.Shop_keeper_orders;
 import com.owo.OwoDokan.service.admin_related.cart.Shop_keeper_cart;
 import com.owo.OwoDokan.service.admin_related.order.Shop_keeper_order;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -44,9 +45,9 @@ public class ShopOrderController {
     }
 
     @PostMapping("/shop_keeper_order")
-    public void add_shop_order(@RequestBody Shop_keeper_orders shop_keeper_orders)
+    public ResponseEntity add_shop_order(@RequestBody Shop_keeper_orders shop_keeper_orders, @RequestParam(name = "mobile_number") String mobile_number)
     {
-        shop_keeper_order.addOrder(shop_keeper_orders);
+        return shop_keeper_order.addOrder(shop_keeper_orders, mobile_number);
     }
 
     @GetMapping("/get_shop_keeper_order")

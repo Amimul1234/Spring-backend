@@ -53,13 +53,13 @@ public class ShopUserController {
     }
 
     @DeleteMapping("/deleteAdebtDetails")
-    public ResponseEntity deleteAdebtDetails(@RequestParam(name = "id_of_debt_details") long id_of_debt_details, @RequestParam(name = "user_id") Long user_id)
+    public ResponseEntity deleteAdebtDetails(@RequestParam(name = "id_of_debt_details") long id_of_debt_details, @RequestParam(name = "user_id") long user_id)
     {
         return shopUserDebt.deleteAdebtDetails(id_of_debt_details, user_id);
     }
 
     @PutMapping("/updateAdebtDetails") //Updating a customer's debt_details
-    public ResponseEntity updateAdebtDetails(@RequestBody User_debt_details user_debt_details, @RequestParam(name = "user_id") Long user_id)
+    public ResponseEntity updateAdebtDetails(@RequestBody User_debt_details user_debt_details, @RequestParam(name = "user_id") long user_id)
     {
         return shopUserDebt.updateAdebtDetails(user_debt_details, user_id);
     }

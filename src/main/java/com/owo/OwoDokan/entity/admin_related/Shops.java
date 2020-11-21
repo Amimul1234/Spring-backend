@@ -1,6 +1,7 @@
 package com.owo.OwoDokan.entity.admin_related;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.owo.OwoDokan.entity.admin_related.order.Shop_keeper_orders;
 import com.owo.OwoDokan.entity.shopKeeper_related.ShopKeeperProducts;
 import com.owo.OwoDokan.entity.shopKeeper_related.UserDebts;
 import lombok.AllArgsConstructor;
@@ -37,8 +38,18 @@ public class Shops {
     @OneToMany(
             mappedBy = "shops",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+                    CascadeType.DETACH, CascadeType.REFRESH},
+            fetch = FetchType.LAZY
+    )
+    @JsonManagedReference
+    private List<Shop_keeper_orders> shop_keeper_orders = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "shops",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH},
-            orphanRemoval = true
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
     )
     @JsonManagedReference
     private List<UserDebts> userDebts = new ArrayList<>();

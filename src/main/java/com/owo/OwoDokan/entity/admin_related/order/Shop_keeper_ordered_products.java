@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 
 @Data
@@ -40,7 +39,9 @@ public class Shop_keeper_ordered_products {
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String product_image;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH})
+
     @JsonBackReference
     private Shop_keeper_orders shop_keeper_orders;
 }

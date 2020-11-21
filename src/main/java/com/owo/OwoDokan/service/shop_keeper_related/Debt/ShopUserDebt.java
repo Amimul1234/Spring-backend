@@ -73,7 +73,7 @@ public class ShopUserDebt {
 
     }
 
-    public ResponseEntity deleteAdebtDetails(long id_of_debt_details, Long user_id) {
+    public ResponseEntity deleteAdebtDetails(long id_of_debt_details, long user_id) {
 
         UserDebts userDebts1;
 
@@ -175,7 +175,7 @@ public class ShopUserDebt {
         return userDebt.findByUserId(user_id).getUser_name();
     }
 
-    public ResponseEntity updateAdebtDetails(User_debt_details user_debt_details, Long user_id) {
+    public ResponseEntity updateAdebtDetails(User_debt_details user_debt_details, long user_id) {
 
         UserDebts userDebts;
         int length;
@@ -199,11 +199,12 @@ public class ShopUserDebt {
                 }
             }
 
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+
         }catch (Exception e)
         {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
         }
-        return null;
     }
 
     public ResponseEntity clearAllDebtDetails(Long user_id) {
