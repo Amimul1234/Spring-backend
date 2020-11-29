@@ -2,8 +2,9 @@ package com.owo.OwoDokan.service.admin_related;
 
 import com.owo.OwoDokan.entity.admin_related.Brands;
 import com.owo.OwoDokan.repository.admin_related.BrandsRepository;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,9 +25,17 @@ public class BrandsService {
         return brandsRepository.getBrands(category);
     }
 
-    public Page<Brands> getBrandsViaCategory(int page, List<String>product_categories) {
+    public ResponseEntity getBrandsViaCategory(int page, List<String>product_categories) {
         int pageSize = 10; //products per page
         org.springframework.data.domain.Pageable pageable = PageRequest.of(page, pageSize);
-        return brandsRepository.findBrandViaCategories(product_categories, pageable);
+
+        try
+        {
+            return new ResponseEntity(brandsRepository.findBrandViaCategories(product_categories, pageable).getContent(), HttpStatus.OK);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
+        }
     }
 }

@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ShopUserDebt {
+public class ShopUserDebtService {
     private final UserDebt userDebt;
     private final ShopRepository shopRepository;
 
-    public ShopUserDebt(UserDebt userDebt, ShopRepository shopRepository) {
+    public ShopUserDebtService(UserDebt userDebt, ShopRepository shopRepository) {
         this.userDebt = userDebt;
         this.shopRepository = shopRepository;
     }

@@ -5,7 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.List;
 import com.owo.OwoDokan.entity.shopKeeper_related.UserDebts;
 import com.owo.OwoDokan.entity.shopKeeper_related.User_debt_details;
-import com.owo.OwoDokan.service.shop_keeper_related.Debt.ShopUserDebt;
+import com.owo.OwoDokan.service.shop_keeper_related.Debt.ShopUserDebtService;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -28,67 +28,67 @@ import com.itextpdf.text.pdf.PdfWriter;
 @RestController
 public class ShopUserController {
 
-    private final ShopUserDebt shopUserDebt;
+    private final ShopUserDebtService shopUserDebtService;
 
-    public ShopUserController(ShopUserDebt shopUserDebt) {
-        this.shopUserDebt = shopUserDebt;
+    public ShopUserController(ShopUserDebtService shopUserDebtService) {
+        this.shopUserDebtService = shopUserDebtService;
     }
 
     @PostMapping("/addUserDebt") //this is the first time when shop keeper will add user to debt list
     public ResponseEntity addUserDebt(@RequestBody UserDebts userDebts, @RequestParam(name = "shop_mobile_number") String shop_mobile_number)
     {
-        return shopUserDebt.addDebt(userDebts, shop_mobile_number);
+        return shopUserDebtService.addDebt(userDebts, shop_mobile_number);
     }
 
     @GetMapping("/getUserDebtLists")
     public ResponseEntity getUserDebtLists(@RequestParam(name = "page") int page, @RequestParam(name = "shop_mobile_number") String shop_mobile_number)
     {
-        return shopUserDebt.getAllDebts(page, shop_mobile_number);
+        return shopUserDebtService.getAllDebts(page, shop_mobile_number);
     }
 
     @PostMapping("/addAdebtDetails") //This is for adding debt details of an existing user
     public ResponseEntity addAdebtDetails(@RequestBody User_debt_details user_debt_details, @RequestParam(name = "user_id") Long user_id)
     {
-        return shopUserDebt.addDebtDetails(user_debt_details, user_id);
+        return shopUserDebtService.addDebtDetails(user_debt_details, user_id);
     }
 
     @DeleteMapping("/deleteAdebtDetails")
     public ResponseEntity deleteAdebtDetails(@RequestParam(name = "id_of_debt_details") long id_of_debt_details, @RequestParam(name = "user_id") long user_id)
     {
-        return shopUserDebt.deleteAdebtDetails(id_of_debt_details, user_id);
+        return shopUserDebtService.deleteAdebtDetails(id_of_debt_details, user_id);
     }
 
     @PutMapping("/updateAdebtDetails") //Updating a customer's debt_details
     public ResponseEntity updateAdebtDetails(@RequestBody User_debt_details user_debt_details, @RequestParam(name = "user_id") long user_id)
     {
-        return shopUserDebt.updateAdebtDetails(user_debt_details, user_id);
+        return shopUserDebtService.updateAdebtDetails(user_debt_details, user_id);
     }
 
     @DeleteMapping("/clearAllDebtDetails") //this is for clearing a customer all debt details
     public ResponseEntity clearAllDebtDetails(@RequestParam(name = "user_id") Long user_id)
     {
-        return shopUserDebt.clearAllDebtDetails(user_id);
+        return shopUserDebtService.clearAllDebtDetails(user_id);
     }
 
 
     @GetMapping("/getUserSpecificDebtDetails") //This method is for getting debt details for an user
     public ResponseEntity getAllDebtDetails(@RequestParam(name = "user_id") Long user_id)
     {
-        return shopUserDebt.getAllDebtDetails(user_id);
+        return shopUserDebtService.getAllDebtDetails(user_id);
     }
 
     @GetMapping("/getADebtListForAUser")
     public ResponseEntity getADebtListForUser(@RequestParam(name = "user_id") Long user_id)
     {
-        return shopUserDebt.getDebtDetailsForACustomer(user_id);
+        return shopUserDebtService.getDebtDetailsForACustomer(user_id);
     }
 
     @GetMapping("/getAllDebtDetailsReport") //This method is for getting pdf report of the debt for a user
     public ResponseEntity<Resource> generateExcelReport(@RequestParam(name = "user_id") Long user_id) throws DocumentException {
 
-        List<User_debt_details> user_debt_details = shopUserDebt.getAllDebtDetailsViaList(user_id);
+        List<User_debt_details> user_debt_details = shopUserDebtService.getAllDebtDetailsViaList(user_id);
 
-        String customer_name = shopUserDebt.getCustomerName(user_id);
+        String customer_name = shopUserDebtService.getCustomerName(user_id);
 
         Document document = new Document(PageSize.A4, 25, 25, 25, 25);
 

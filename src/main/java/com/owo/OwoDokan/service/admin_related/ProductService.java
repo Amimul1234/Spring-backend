@@ -2,8 +2,9 @@ package com.owo.OwoDokan.service.admin_related;
 
 import com.owo.OwoDokan.entity.admin_related.Owo_product;
 import com.owo.OwoDokan.repository.admin_related.ProductRepository;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
@@ -17,7 +18,6 @@ public class ProductService {
     @PersistenceContext
     EntityManager entityManager;
 
-
     private final ProductRepository productRepository;
 
     public ProductService(ProductRepository productRepository) {
@@ -29,51 +29,140 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public Page<Owo_product> getAllProducts(int page) //This method is for getting all the products via
+    public ResponseEntity getAllProducts(int page) //This method is for getting all the products via
     {
         int pageSize = 10; //products per page
         org.springframework.data.domain.Pageable pageable = PageRequest.of(page, pageSize);
-        return productRepository.findAll(pageable);
+
+        try
+        {
+            List<Owo_product> owo_productList = productRepository.findAll(pageable).getContent();
+
+            return maniPlateResponse(owo_productList);
+        }catch (Exception e)
+        {
+            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
+        }
     }
 
-    public Page<Owo_product> getProduct_by_category(int page, String category) {
+    public ResponseEntity getProduct_by_category(int page, String category) {
         int pageSize = 10; //products per page
         org.springframework.data.domain.Pageable pageable = PageRequest.of(page, pageSize);
-        return productRepository.findByproduct_category(category, pageable);
+
+        try
+        {
+            List<Owo_product> owo_productList = productRepository.findByproduct_category(category, pageable).getContent();
+
+            return maniPlateResponse(owo_productList);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
+        }
     }
 
-    public Page<Owo_product> getProduct_by_categoryDesc(int page, String category) {
+    public ResponseEntity getProduct_by_categoryDesc(int page, String category) {
+
         int pageSize = 10; //products per page
         org.springframework.data.domain.Pageable pageable = PageRequest.of(page, pageSize);
-        return productRepository.findByproduct_categoryDesc(category, pageable);
+
+        try
+        {
+            List<Owo_product> owo_productList = productRepository.findByproduct_categoryDesc(category, pageable).getContent();
+            return maniPlateResponse(owo_productList);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
+        }
     }
 
-    public Page<Owo_product> getProduct_by_categories(int page, List<String> categories) {
+    private ResponseEntity maniPlateResponse(List<Owo_product> owo_productList) {
+        for(Owo_product owo_product : owo_productList)
+        {
+            owo_product.setProduct_description(null);
+            owo_product.setProduct_creation_date(null);
+            owo_product.setProduct_creation_time(null);
+            owo_product.setProduct_category(null);
+            owo_product.setProduct_sub_category(null);
+            owo_product.setProduct_brand(null);
+        }
+
+        return new ResponseEntity(owo_productList, HttpStatus.OK);
+    }
+
+    public ResponseEntity getProduct_by_categories(int page, List<String> categories) {
         int pageSize = 10; //products per page
         org.springframework.data.domain.Pageable pageable = PageRequest.of(page, pageSize);
-        return productRepository.findByCategories(categories, pageable);
+
+        try
+        {
+            List<Owo_product> owo_productList = productRepository.findByCategories(categories, pageable).getContent();
+
+            return maniPlateResponse(owo_productList);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
+        }
     }
 
-    public Page<Owo_product> getProduct_by_categoriesDesc(int page, List<String> categories) {
-        int pageSize = 20; //products per page
-        org.springframework.data.domain.Pageable pageable = PageRequest.of(page, pageSize);
-        return productRepository.findByCategoriesDesc(categories, pageable);
-    }
-
-    public Page<Owo_product> getProduct_by_sub_category(int page, String sub_category) {
+    public ResponseEntity getProduct_by_categoriesDesc(int page, List<String> categories) {
         int pageSize = 10; //products per page
         org.springframework.data.domain.Pageable pageable = PageRequest.of(page, pageSize);
-        return productRepository.findByproduct_sub_category(sub_category, pageable);
+
+        try
+        {
+            List<Owo_product> owo_productList = productRepository.findByCategoriesDesc(categories, pageable).getContent();
+
+            return maniPlateResponse(owo_productList);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
+        }
     }
 
-    public Page<Owo_product> getProduct_by_sub_categoryDesc(int page, String sub_category) {
+    public ResponseEntity getProduct_by_sub_category(int page, String sub_category) {
         int pageSize = 10; //products per page
         org.springframework.data.domain.Pageable pageable = PageRequest.of(page, pageSize);
-        return productRepository.findByproduct_sub_categoryDesc(sub_category, pageable);
+
+        try
+        {
+            List<Owo_product> owo_productList = productRepository.findByproduct_sub_category(sub_category, pageable).getContent();
+
+            return maniPlateResponse(owo_productList);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
+        }
     }
 
-    public Owo_product getProductById(long id) {
-        return productRepository.findByProduct_Id(id);
+    public ResponseEntity getProduct_by_sub_categoryDesc(int page, String sub_category) {
+        int pageSize = 10; //products per page
+        org.springframework.data.domain.Pageable pageable = PageRequest.of(page, pageSize);
+
+        try
+        {
+            List<Owo_product> owo_productList = productRepository.findByproduct_sub_categoryDesc(sub_category, pageable).getContent();
+
+            return maniPlateResponse(owo_productList);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
+        }
+    }
+
+    public ResponseEntity getProductById(long id) {
+        try
+        {
+            return new ResponseEntity(productRepository.findByProduct_Id(id), HttpStatus.OK);
+        }catch (Exception e)
+        {
+            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
+        }
     }
 
     public Owo_product updateProduct(Owo_product product) {
@@ -86,7 +175,7 @@ public class ProductService {
         productRepository.delete(id);
     }
 
-    public List<Owo_product> searchProduct(int page, String[] categories, String name) {
+    public ResponseEntity searchProduct(int page, String[] categories, String name) {
 
         int offset = 30 * page; //Here page starts from 0
 
@@ -101,18 +190,24 @@ public class ProductService {
         query.setParameter("name", name+"*");
         query.setParameter("offset", offset);
 
-        Iterator iterator = query.getResultList().iterator();
+        try
+        {
+            Iterator iterator = query.getResultList().iterator();
+            List<Owo_product> result = new ArrayList<>();
 
-        List<Owo_product> result = new ArrayList<>();
+            while (iterator.hasNext()) {
+                result.add((Owo_product) iterator.next());
+            }
 
-        while (iterator.hasNext()) {
-            result.add((Owo_product) iterator.next());
+            return maniPlateResponse(result);
         }
-
-        return result;
+        catch (Exception e)
+        {
+            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
+        }
     }
 
-    public List<Owo_product> searchProductDesc(int page, String[] categories, String name) {
+    public ResponseEntity searchProductDesc(int page, String[] categories, String name) {
 
         int offset = 30 * page; //Here page starts from 0
 
@@ -128,32 +223,57 @@ public class ProductService {
         query.setParameter("categories", abcd);
         query.setParameter("name", name+"*");
 
-        Iterator iterator = query.getResultList().iterator();
+        try
+        {
+            Iterator iterator = query.getResultList().iterator();
 
-        List<Owo_product> result = new ArrayList<>();
+            List<Owo_product> result = new ArrayList<>();
 
-        while (iterator.hasNext()) {
-            result.add((Owo_product) iterator.next());
+            while (iterator.hasNext()) {
+                result.add((Owo_product) iterator.next());
+            }
+
+            return maniPlateResponse(result);
+
+        }catch (Exception e)
+        {
+            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
         }
-
-        return result;
     }
 
-    public Page<Owo_product> getProductByBrand(int page, String product_brand, String[] categories) {
+    public ResponseEntity getProductByBrand(int page, String product_brand, String[] categories) {
+
         int pageSize = 10; //products per page
         org.springframework.data.domain.Pageable pageable = PageRequest.of(page, pageSize);
         List<String> product_categories = Arrays.asList(categories);
-        return productRepository.findProductByBrand(pageable, product_brand, product_categories);
+
+        try
+        {
+            List<Owo_product> owo_productList = productRepository.findProductByBrand(pageable, product_brand, product_categories).getContent();
+            return maniPlateResponse(owo_productList);
+        }catch (Exception e)
+        {
+            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
+        }
     }
 
-    public Page<Owo_product> getProductByBrandDesc(int page, String product_brand, String[] categories) {
+    public ResponseEntity getProductByBrandDesc(int page, String product_brand, String[] categories) {
         int pageSize = 10; //products per page
         org.springframework.data.domain.Pageable pageable = PageRequest.of(page, pageSize);
         List<String> product_categories = Arrays.asList(categories);
-        return productRepository.findProductByBrandDesc(pageable, product_brand, product_categories);
+
+        try
+        {
+            List<Owo_product> owo_productList =  productRepository.findProductByBrandDesc(pageable, product_brand, product_categories).getContent();
+            return maniPlateResponse(owo_productList);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
+        }
     }
 
-    public List<Owo_product> searchProductAdmin(int page, String product_name) {
+    public ResponseEntity searchProductAdmin(int page, String product_name) {
 
         int offset = 30 * page; //Here page starts from 0
 
@@ -166,14 +286,20 @@ public class ProductService {
         query.setParameter("offset", offset);
         query.setParameter("name", product_name+"*");
 
-        Iterator iterator = query.getResultList().iterator();
+        try
+        {
+            Iterator iterator = query.getResultList().iterator();
 
-        List<Owo_product> result = new ArrayList<>();
+            List<Owo_product> result = new ArrayList<>();
 
-        while (iterator.hasNext()) {
-            result.add((Owo_product) iterator.next());
+            while (iterator.hasNext()) {
+                result.add((Owo_product) iterator.next());
+            }
+
+            return maniPlateResponse(result);
+        }catch (Exception e)
+        {
+            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
         }
-
-        return result;
     }
 }

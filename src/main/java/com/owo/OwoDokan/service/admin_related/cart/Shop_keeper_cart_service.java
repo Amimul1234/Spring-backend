@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class Shop_keeper_cart {
+public class Shop_keeper_cart_service {
 
     private final CartRepo cartRepo;
 
-    public Shop_keeper_cart(CartRepo cartRepo) {
+    public Shop_keeper_cart_service(CartRepo cartRepo) {
         this.cartRepo = cartRepo;
     }
 

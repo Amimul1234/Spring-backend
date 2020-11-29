@@ -13,12 +13,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
-public class Shop_keeper_order {
+public class Shop_keeper_order_service {
     private final Order_repo order_repo;
     private final CartRepo cartRepo;
     private final ShopRepository shopRepository;
 
-    public Shop_keeper_order(Order_repo order_repo, CartRepo cartRepo, ShopRepository shopRepository) {
+    public Shop_keeper_order_service(Order_repo order_repo, CartRepo cartRepo, ShopRepository shopRepository) {
         this.order_repo = order_repo;
         this.cartRepo = cartRepo;
         this.shopRepository = shopRepository;
@@ -82,5 +82,43 @@ public class Shop_keeper_order {
         int pageSize = 10; //products per page
         org.springframework.data.domain.Pageable pageable = PageRequest.of(page, pageSize);
         return order_repo.findByMobileNumber(mobile_number, pageable);
+    }
+
+    public ResponseEntity findAllByState(String pending) {
+        try
+        {
+            return new ResponseEntity(order_repo.findAllByState(pending), HttpStatus.OK);
+        }catch (Exception e)
+        {
+            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
+        }
+    }
+
+    public ResponseEntity setOrder_state(long order_id, String order_state) {
+        Shop_keeper_orders shop_keeper_orders;
+
+        try
+        {
+            shop_keeper_orders = order_repo.findOrderById(order_id);
+            shop_keeper_orders.setShipping_state(order_state);
+            order_repo.save(shop_keeper_orders);
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
+        }
+    }
+
+    public Page<Shop_keeper_orders> findCancelledOrders(int page_num) {
+        int page_size = 10;
+        org.springframework.data.domain.Pageable pageable = PageRequest.of(page_num, page_size);
+        return order_repo.findByCancelledOrders("Cancelled", pageable);
+    }
+
+    public Page<Shop_keeper_orders> findDeliveredOrders(int page_num) {
+        int page_size = 10;
+        org.springframework.data.domain.Pageable pageable = PageRequest.of(page_num, page_size);
+        return order_repo.findByCancelledOrders("Delivered", pageable);
     }
 }
