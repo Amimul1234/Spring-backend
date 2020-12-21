@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ShopKeeperOfferController {
+    
     private final Shop_offer_service shop_offer_service;
 
     public ShopKeeperOfferController(Shop_offer_service shop_offer_service) {
