@@ -112,27 +112,27 @@ public class Admin_controls {
     }
 
     @GetMapping("/getDeliveredOrders")
-    public ResponseEntity getDeliveredOrders(@RequestParam("page_num") int page_num)
+    public ResponseEntity<List<com.owo.OwoDokan.entity.admin_related.order.Shop_keeper_orders>> getDeliveredOrders(@RequestParam("page_num") int page_num)
     {
         try
         {
-            return new ResponseEntity(shop_keeper_orderService.findDeliveredOrders(page_num).getContent(), HttpStatus.OK);
+            return new ResponseEntity<>(shop_keeper_orderService.findDeliveredOrders(page_num).getContent(), HttpStatus.OK);
         }catch (Exception e)
         {
-            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
+            return new ResponseEntity<>(HttpStatus.FAILED_DEPENDENCY);
         }
     }
 
     @GetMapping("/getCancelledOrders")
-    public ResponseEntity getCancelledOrders(@RequestParam("page_num") int page_num)
+    public ResponseEntity<List<com.owo.OwoDokan.entity.admin_related.order.Shop_keeper_orders>> getCancelledOrders(@RequestParam("page_num") int page_num)
     {
         try
         {
-            return new ResponseEntity(shop_keeper_orderService.findCancelledOrders(page_num).getContent(), HttpStatus.OK);
+            return new ResponseEntity<>(shop_keeper_orderService.findCancelledOrders(page_num).getContent(), HttpStatus.OK);
         }
         catch (Exception e)
         {
-            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
+            return new ResponseEntity<>(HttpStatus.FAILED_DEPENDENCY);
         }
     }
 
