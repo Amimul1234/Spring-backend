@@ -1,5 +1,8 @@
 package com.owo.OwoDokan.controller.imageController;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
@@ -37,7 +40,7 @@ public class imageController {
     }
 
     @GetMapping("/getImageFromServer")
-    public byte[] sendImageToClient(@RequestParam(name = "path_of_image") String path_of_image)
+    public ResponseEntity sendImageToClient(@RequestParam(name = "path_of_image") String path_of_image)
     {
 
         byte[] requested_image;
@@ -50,10 +53,16 @@ public class imageController {
             fileInputStream.read(requested_image, 0, requested_image.length);
             fileInputStream.close();
 
-            return requested_image;
+
+            return ResponseEntity
+                    .ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(requested_image);
 
         } catch (IOException e) {
-            return null;
+            return ResponseEntity
+                    .status(HttpStatus.FAILED_DEPENDENCY)
+                    .body("Error getting image");
         }
     }
 }
