@@ -18,7 +18,7 @@ public class imageController {
 
     //This method is for saving upcoming image in filesystem
     @PostMapping("/imageController/{directory}")
-    public String saveImageInProject(@PathVariable("directory") String directory, @RequestPart(name = "multipartFile") MultipartFile multipartFile)
+    public ResponseEntity saveImageInProject(@PathVariable("directory") String directory, @RequestPart(name = "multipartFile") MultipartFile multipartFile)
     {
         String filename = UUID.randomUUID().toString() + multipartFile.getOriginalFilename();
 
@@ -31,10 +31,15 @@ public class imageController {
 
             Files.copy(multipartFile.getInputStream(), Paths.get(dir+ "/"+ filename), StandardCopyOption.REPLACE_EXISTING);
 
-            return directory + "/" + filename;
+
+            String response = "/getImageFromServer?path_of_image=images/" + directory + "/" + filename;
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
 
         } catch (IOException e) {
-            return "Failed to save image, Please try again";
+            String failed = "Failed to save image, Please try again";
+
+            return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body(failed);
         }
 
     }
@@ -46,7 +51,7 @@ public class imageController {
         byte[] requested_image;
 
         try {
-            File file = new File("images" + "/" + path_of_image);//This is for determining byte array size
+            File file = new File(path_of_image);//This is for determining byte array size
             requested_image = new byte[(int) file.length()];
 
             FileInputStream fileInputStream = new FileInputStream(file.getPath());
@@ -62,7 +67,31 @@ public class imageController {
         } catch (IOException e) {
             return ResponseEntity
                     .status(HttpStatus.FAILED_DEPENDENCY)
-                    .body("Error getting image");
+                    .body("No such image");
         }
     }
+
+    @DeleteMapping("/getImageFromServer")
+    public ResponseEntity deleteImage(@RequestParam(name = "path_of_image") String path_of_image)
+    {
+        File file = new File(path_of_image);
+
+        if(file.exists())
+        {
+            try
+            {
+                file.delete();
+                return ResponseEntity.status(HttpStatus.OK).body("Image Successfully Deleted");
+            }
+            catch (Exception e)
+            {
+                return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Failed To Delete Image");
+            }
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Image does not exists");
+        }
+    }
+
 }
