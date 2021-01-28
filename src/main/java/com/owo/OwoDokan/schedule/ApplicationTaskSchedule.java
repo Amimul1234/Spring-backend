@@ -21,7 +21,7 @@ public class ApplicationTaskSchedule {
 
 
     //Scheduling task for every 5 hours
-    @Scheduled(fixedRate = 1000 * 30)
+    @Scheduled(fixedRate = 1000*60*60*5)
     public void reportCurrentTime() {
         updateOfferState();//check for order state decisions
     }
