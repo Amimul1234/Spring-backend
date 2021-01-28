@@ -1,6 +1,7 @@
 package com.owo.OwoDokan.controller.admin;
 
 import com.owo.OwoDokan.entity.admin_related.Brands;
+import com.owo.OwoDokan.entity.admin_related.OffersEntity;
 import com.owo.OwoDokan.entity.admin_related.Owo_product;
 import com.owo.OwoDokan.entity.admin_related.Shops;
 import com.owo.OwoDokan.service.admin_related.BrandsService;
@@ -146,15 +147,32 @@ public class Admin_controls {
     }
 
     @PostMapping("/addAnOffer")
-    public ResponseEntity addAnOffer(@RequestParam(name = "offer_start_date") Date offer_start_date,
-                                     @RequestParam(name = "offer_end_date") Date offer_end_date,
-                                     @RequestParam(name = "offerIsFor") String offerIsFor,
-                                     @RequestParam(name = "offer_image") String offer_image,
-                                     @RequestParam(name = "offer_category") String offer_category)
+    public ResponseEntity addAnOffer(@RequestBody OffersEntity offersEntity)
     {
-        return offerService.addANewOffer(offer_start_date, offer_end_date, offerIsFor, offer_image, offer_category);
+        return offerService.addANewOffer(offersEntity);
     }
 
 
 
+    @PutMapping("/updateAnOffer")
+    public ResponseEntity updateAnOffer(@RequestBody OffersEntity offersEntity)
+    {
+        return offerService.updateExistenceOffer(offersEntity);
+    }
+
+    @DeleteMapping("/deleteOffer")
+    public ResponseEntity deleteAnOffer(@RequestParam(name = "offer_id") Long offer_id)
+    {
+        return offerService.deleteOffer(offer_id);
+    }
+
+    /*
+    @PostMapping("/addNewCategory")
+    public ResponseEntity addNewCategory(@RequestParam(name = "category_name") String category_name,
+                                         @RequestParam(name = "category_image") String category_image)
+    {
+
+    }
+
+     */
 }
