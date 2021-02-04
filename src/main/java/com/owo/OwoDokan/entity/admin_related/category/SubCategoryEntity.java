@@ -14,11 +14,11 @@ import javax.persistence.*;
 public class SubCategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer subCategoryId;
+    private Long sub_category_id;
     @Column(nullable = false)
-    private String subCategoryName;
+    private String sub_category_name;
     @Column(nullable = false, columnDefinition = "LONGTEXT")
-    private String subCategoryImage;
+    private String sub_category_image;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference

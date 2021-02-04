@@ -3,7 +3,7 @@ package com.owo.OwoDokan.service.shop_keeper_related.Debt;
 import com.owo.OwoDokan.entity.admin_related.Shops;
 import com.owo.OwoDokan.entity.shopKeeper_related.UserDebts;
 import com.owo.OwoDokan.entity.shopKeeper_related.User_debt_details;
-import com.owo.OwoDokan.repository.admin_related.ShopRepository;
+import com.owo.OwoDokan.repository.adminRelated.ShopRepository;
 import com.owo.OwoDokan.repository.shop_keeper_related.Debt.UserDebt;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

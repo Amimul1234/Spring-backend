@@ -15,9 +15,11 @@ import java.util.List;
 @Table(name = "Category")
 public class CategoryEntity {
     @Id
-    private String category_name;
+    private Long categoryId;
+    @Column(nullable = false)
+    private String categoryName;
     @Column(nullable = false, columnDefinition = "LONGTEXT")
-    private String category_image;
+    private String categoryImage;
 
     @OneToMany(
             targetEntity = SubCategoryEntity.class,

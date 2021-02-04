@@ -1,7 +1,7 @@
 package com.owo.OwoDokan.service.admin_related;
 
 import com.owo.OwoDokan.entity.admin_related.Shops;
-import com.owo.OwoDokan.repository.admin_related.ShopRepository;
+import com.owo.OwoDokan.repository.adminRelated.ShopRepository;
 import org.springframework.stereotype.Service;
 
 @Service

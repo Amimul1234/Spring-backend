@@ -2,7 +2,7 @@ package com.owo.OwoDokan.service.shop_keeper_related.Debt;
 
 import com.owo.OwoDokan.entity.admin_related.Shops;
 import com.owo.OwoDokan.entity.shopKeeper_related.Shop_offers;
-import com.owo.OwoDokan.repository.admin_related.ShopRepository;
+import com.owo.OwoDokan.repository.adminRelated.ShopRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

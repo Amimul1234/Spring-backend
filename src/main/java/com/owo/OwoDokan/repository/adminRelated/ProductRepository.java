@@ -1,4 +1,4 @@
-package com.owo.OwoDokan.repository.admin_related;
+package com.owo.OwoDokan.repository.adminRelated;
 
 import com.owo.OwoDokan.entity.admin_related.Owo_product;
 import org.springframework.data.domain.Page;

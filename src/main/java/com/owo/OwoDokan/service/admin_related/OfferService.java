@@ -1,7 +1,7 @@
 package com.owo.OwoDokan.service.admin_related;
 
 import com.owo.OwoDokan.entity.admin_related.OffersEntity;
-import com.owo.OwoDokan.repository.admin_related.OfferRepository;
+import com.owo.OwoDokan.repository.adminRelated.OfferRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -13,8 +13,7 @@ import java.util.Optional;
 public class OfferService {
 
     private final OfferRepository offerRepository;
-
-    private static final Logger logger = LoggerFactory.getLogger(OfferService.class);
+    private final Logger logger = LoggerFactory.getLogger(OfferService.class);
 
     public OfferService(OfferRepository offerRepository) {
         this.offerRepository = offerRepository;

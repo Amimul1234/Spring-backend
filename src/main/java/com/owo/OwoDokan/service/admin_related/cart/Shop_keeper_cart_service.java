@@ -3,7 +3,7 @@ package com.owo.OwoDokan.service.admin_related.cart;
 import com.owo.OwoDokan.ModelClass.CartListFromClient;
 import com.owo.OwoDokan.entity.admin_related.cart.CartList;
 import com.owo.OwoDokan.entity.admin_related.cart.Cart_list_product;
-import com.owo.OwoDokan.repository.admin_related.cart_repo.CartRepo;
+import com.owo.OwoDokan.repository.adminRelated.cart_repo.CartRepo;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;

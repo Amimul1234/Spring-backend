@@ -4,32 +4,39 @@ import com.owo.OwoDokan.entity.admin_related.Brands;
 import com.owo.OwoDokan.entity.admin_related.OffersEntity;
 import com.owo.OwoDokan.entity.admin_related.Owo_product;
 import com.owo.OwoDokan.entity.admin_related.Shops;
+import com.owo.OwoDokan.entity.admin_related.category.CategoryEntity;
+import com.owo.OwoDokan.entity.admin_related.category.SubCategoryEntity;
 import com.owo.OwoDokan.service.admin_related.BrandsService;
 import com.owo.OwoDokan.service.admin_related.OfferService;
 import com.owo.OwoDokan.service.admin_related.ProductService;
 import com.owo.OwoDokan.service.admin_related.ShopAddingService;
+import com.owo.OwoDokan.service.admin_related.category.CategoryService;
+import com.owo.OwoDokan.service.admin_related.category.SubCategoryService;
 import com.owo.OwoDokan.service.admin_related.order.Shop_keeper_order_service;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Date;
 import java.util.List;
 
 @RestController
-public class Admin_controls {
+public class AdminControls {
 
     private final ProductService productService;
     private final ShopAddingService shopAddingService;
     private final BrandsService brandsService;
     private final Shop_keeper_order_service shop_keeper_orderService;
     private final OfferService offerService;
+    private final CategoryService categoryService;
+    private final SubCategoryService subCategoryService;
 
-    public Admin_controls(ProductService productService, ShopAddingService shopAddingService, BrandsService brandsService, Shop_keeper_order_service shop_keeper_orderService, OfferService offerService) {
+    public AdminControls(ProductService productService, ShopAddingService shopAddingService, BrandsService brandsService, Shop_keeper_order_service shop_keeper_orderService, OfferService offerService, CategoryService categoryService, SubCategoryService subCategoryService) {
         this.productService = productService;
         this.shopAddingService = shopAddingService;
         this.brandsService = brandsService;
         this.shop_keeper_orderService = shop_keeper_orderService;
         this.offerService = offerService;
+        this.categoryService = categoryService;
+        this.subCategoryService = subCategoryService;
     }
 
     @PostMapping("/addProduct") //This method is for adding new products
@@ -84,6 +91,8 @@ public class Admin_controls {
     {
         return brandsService.getBrandsAdmin(category);
     }
+
+    //Order Management
 
     @GetMapping("/getPendingOrders")
     public ResponseEntity getPendingOrders()
@@ -143,16 +152,16 @@ public class Admin_controls {
     @PutMapping("/setOrderState")
     public ResponseEntity setOrderState(@RequestParam(name = "order_id") long order_id, @RequestParam("order_state") String order_state)
     {
-        return shop_keeper_orderService.setOrder_state(order_id, order_state);
+        return shop_keeper_orderService.setOrderState(order_id, order_state);
     }
+
+    //Offer management
 
     @PostMapping("/addAnOffer")
     public ResponseEntity addAnOffer(@RequestBody OffersEntity offersEntity)
     {
         return offerService.addANewOffer(offersEntity);
     }
-
-
 
     @PutMapping("/updateAnOffer")
     public ResponseEntity updateAnOffer(@RequestBody OffersEntity offersEntity)
@@ -166,13 +175,43 @@ public class Admin_controls {
         return offerService.deleteOffer(offer_id);
     }
 
-    /*
-    @PostMapping("/addNewCategory")
-    public ResponseEntity addNewCategory(@RequestParam(name = "category_name") String category_name,
-                                         @RequestParam(name = "category_image") String category_image)
-    {
+    //Category Management
 
+    @PostMapping("/addNewCategory")
+    public ResponseEntity addNewCategory(@RequestBody CategoryEntity categoryEntity)
+    {
+        return categoryService.addNewCategory(categoryEntity);
     }
 
-     */
+    @PutMapping("/updateCategory")
+    public ResponseEntity updateCategory(@RequestParam(name = "categoryId") Long categoryId, @RequestBody CategoryEntity categoryEntity)
+    {
+        return categoryService.updateCategory(categoryId, categoryEntity);
+    }
+
+    @DeleteMapping("/deleteCategory")
+    public ResponseEntity deleteCategory(@RequestParam(name = "categoryId") Long categoryId)
+    {
+        return categoryService.deleteCategory(categoryId);
+    }
+
+    //Subcategory Management
+
+    @PostMapping("/addNewSubCategory")
+    public ResponseEntity addNewSubCategory(@RequestParam(name = "categoryId") Long categoryId, @RequestBody SubCategoryEntity subCategoryEntity)
+    {
+        return subCategoryService.addNewSubCategory(categoryId, subCategoryEntity);
+    }
+
+    @PutMapping("/updateSubCategory")
+    public ResponseEntity updateSubCategory(@RequestBody SubCategoryEntity subCategoryEntity)
+    {
+        return subCategoryService.updateSubCategory(subCategoryEntity);
+    }
+
+    @DeleteMapping("/deleteSubCategory")
+    public ResponseEntity deleteSubCategory(@RequestParam(name = "subCategoryId") Long subCategoryId)
+    {
+        return subCategoryService.deleteSubCategory(subCategoryId);
+    }
 }

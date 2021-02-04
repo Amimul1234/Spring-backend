@@ -1,7 +1,7 @@
 package com.owo.OwoDokan.schedule;
 
 import com.owo.OwoDokan.entity.admin_related.OffersEntity;
-import com.owo.OwoDokan.repository.admin_related.OfferRepository;
+import com.owo.OwoDokan.repository.adminRelated.OfferRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;

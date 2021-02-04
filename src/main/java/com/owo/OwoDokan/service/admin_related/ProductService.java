@@ -1,7 +1,7 @@
 package com.owo.OwoDokan.service.admin_related;
 
 import com.owo.OwoDokan.entity.admin_related.Owo_product;
-import com.owo.OwoDokan.repository.admin_related.ProductRepository;
+import com.owo.OwoDokan.repository.adminRelated.ProductRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
