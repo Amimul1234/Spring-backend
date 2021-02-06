@@ -21,10 +21,10 @@ import java.util.List;
 public class Shops {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long shop_id;
-    private double latitude;
-    private double longitude;
-    private boolean approved;
+    private Long shop_id;
+    private Double latitude;
+    private Double longitude;
+    private Boolean approved;
     private String shop_address;
     private String shop_image_uri;
     private String shop_keeper_nid_front_uri;

@@ -1,7 +1,6 @@
 package com.owo.OwoDokan.entity.admin_related;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import javax.persistence.*;
 
