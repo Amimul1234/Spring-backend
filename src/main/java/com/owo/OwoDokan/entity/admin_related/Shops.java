@@ -24,6 +24,7 @@ public class Shops {
     private long shop_id;
     private double latitude;
     private double longitude;
+    private boolean approved;
     private String shop_address;
     private String shop_image_uri;
     private String shop_keeper_nid_front_uri;
@@ -39,29 +40,34 @@ public class Shops {
 
     @OneToMany(
             mappedBy = "shops",
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-                    CascadeType.DETACH, CascadeType.REFRESH},
-            fetch = FetchType.LAZY
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
+            orphanRemoval = true, fetch = FetchType.LAZY
     )
     @JsonIgnore
-    private List<Shop_offers> shop_offersList = new ArrayList<>();
+    private List<Shop_offers> shopOffersList = new ArrayList<>();
 
     @OneToMany(
             mappedBy = "shops",
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-                    CascadeType.DETACH, CascadeType.REFRESH},
-            fetch = FetchType.LAZY
-    )
-    @JsonManagedReference
-    private List<Shop_keeper_orders> shop_keeper_orders = new ArrayList<>();
-
-    @OneToMany(
-            mappedBy = "shops",
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-            CascadeType.DETACH, CascadeType.REFRESH},
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
             orphanRemoval = true,
             fetch = FetchType.LAZY
     )
     @JsonManagedReference
+    private List<Shop_keeper_orders> shopKeeperOrders = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "shops",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
+            orphanRemoval = true, fetch = FetchType.LAZY
+    )
+    @JsonManagedReference
     private List<UserDebts> userDebts = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "shops",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
+            orphanRemoval = true, fetch = FetchType.EAGER
+    )
+    @JsonManagedReference
+    private List<ShopKeeperPermissions> shopKeeperPermissions = new ArrayList<>();
 }

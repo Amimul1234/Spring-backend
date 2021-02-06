@@ -25,7 +25,7 @@ public class Shop_offer_service {
             shop_offers.setOffer_imag_uri(offer_uri);
             shop_offers.setShops(shops);
 
-            shops.getShop_offersList().add(shop_offers);
+            shops.getShopOffersList().add(shop_offers);
 
             shopRepository.save(shops);
             return new ResponseEntity(HttpStatus.OK);
@@ -42,7 +42,7 @@ public class Shop_offer_service {
         try
         {
             shops = shopRepository.getByPhone(mobile_number);
-            return new ResponseEntity(shops.getShop_offersList(), HttpStatus.OK);
+            return new ResponseEntity(shops.getShopOffersList(), HttpStatus.OK);
         }catch (Exception e)
         {
             return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
@@ -58,7 +58,7 @@ public class Shop_offer_service {
         {
             shop = shopRepository.getByPhone(mobile_number);
 
-            for(Shop_offers shop_offers1 : shop.getShop_offersList())
+            for(Shop_offers shop_offers1 : shop.getShopOffersList())
             {
                 if(shop_offers1.getOffer_id() == offer_id)
                 {
@@ -67,7 +67,7 @@ public class Shop_offer_service {
                 }
             }
 
-            shop.getShop_offersList().remove(shop_offers);
+            shop.getShopOffersList().remove(shop_offers);
 
             shopRepository.save(shop);
             return new ResponseEntity(HttpStatus.OK);

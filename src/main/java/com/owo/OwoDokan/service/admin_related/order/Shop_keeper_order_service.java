@@ -52,7 +52,7 @@ public class Shop_keeper_order_service {
         shopKeeperOrders.setTotal_amount(shop_keeper_order_param.getTotal_amount());
 
         shopKeeperOrders.setShops(shops);
-        shops.getShop_keeper_orders().add(shopKeeperOrders);
+        shops.getShopKeeperOrders().add(shopKeeperOrders);
 
         for(Shop_keeper_ordered_products shop_keeper_ordered_products : shop_keeper_order_param.getShop_keeper_ordered_products())
         {

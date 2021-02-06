@@ -39,6 +39,26 @@ public class AdminControls {
         this.subCategoryService = subCategoryService;
     }
 
+    //Shop Management
+    @PostMapping("/approveShop") //This method is for adding new products
+    public Shops approveShop(@RequestBody Shops shops)
+    {
+        return shopAddingService.approveNewShop(shops);
+    }
+
+    @GetMapping("/getShopInfo")
+    public Shops get_shop_info(@RequestParam(name = "shop_phone") String shop_phone) {
+        return shopAddingService.getShopInfo(shop_phone);
+    }
+
+    @PostMapping("/updateShopInfo") //This method is for adding new products
+    public Shops updateShop(@RequestBody Shops shops)
+    {
+        return shopAddingService.updateShop(shops);
+    }
+
+
+    //Product Management
     @PostMapping("/addProduct") //This method is for adding new products
     public Owo_product addProduct(@RequestBody Owo_product product)
     {
@@ -63,23 +83,6 @@ public class AdminControls {
         productService.deleteProduct(product_id);
     }
 
-    @GetMapping("/getShopInfo")
-    public Shops get_shop_info(@RequestParam(name = "shop_phone") String shop_phone) {
-        return shopAddingService.getShopInfo(shop_phone);
-    }
-
-    @PostMapping("/approveShop") //This method is for adding new products
-    public Shops approveShop(@RequestBody Shops shops)
-    {
-        return shopAddingService.approveNewShop(shops);
-    }
-
-    @PostMapping("/updateShopInfo") //This method is for adding new products
-    public Shops updateShop(@RequestBody Shops shops)
-    {
-        return shopAddingService.updateShop(shops);
-    }
-
     @PostMapping("/addABrand")
     public void addBrand(@RequestBody Brands brands)
     {
@@ -92,8 +95,8 @@ public class AdminControls {
         return brandsService.getBrandsAdmin(category);
     }
 
-    //Order Management
 
+    //Order Management
     @GetMapping("/getPendingOrders")
     public ResponseEntity getPendingOrders()
     {
