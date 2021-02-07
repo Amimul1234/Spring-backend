@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 
 public class ShopPendingRequest implements Serializable {
-    private double latitude;
-    private double longitude;
+    private Double latitude;
+    private Double longitude;
     private String shopAddress;
     private String shopImageUri;
     private String shopKeeperNidFrontUri;
@@ -19,7 +19,11 @@ public class ShopPendingRequest implements Serializable {
     public ShopPendingRequest() {
     }
 
-    public ShopPendingRequest(double latitude, double longitude, String shopAddress, String shopImageUri, String shopKeeperNidFrontUri, String shopName, String shopOwnerMobile, String shopOwnerName, String shopServiceMobile, String tradeLicenseUrl, List<String> categoryPermissions) {
+    public ShopPendingRequest(Double latitude, Double longitude, String shopAddress,
+                              String shopImageUri, String shopKeeperNidFrontUri, String shopName,
+                              String shopOwnerMobile, String shopOwnerName, String shopServiceMobile,
+                              String tradeLicenseUrl, List<String> categoryPermissions) {
+
         this.latitude = latitude;
         this.longitude = longitude;
         this.shopAddress = shopAddress;
