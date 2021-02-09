@@ -6,10 +6,7 @@ import com.owo.OwoDokan.entity.admin_related.Owo_product;
 import com.owo.OwoDokan.entity.admin_related.Shops;
 import com.owo.OwoDokan.entity.admin_related.category.CategoryEntity;
 import com.owo.OwoDokan.entity.admin_related.category.SubCategoryEntity;
-import com.owo.OwoDokan.service.admin_related.BrandsService;
-import com.owo.OwoDokan.service.admin_related.OfferService;
-import com.owo.OwoDokan.service.admin_related.ProductService;
-import com.owo.OwoDokan.service.admin_related.ShopAddingService;
+import com.owo.OwoDokan.service.admin_related.*;
 import com.owo.OwoDokan.service.admin_related.category.CategoryService;
 import com.owo.OwoDokan.service.admin_related.category.SubCategoryService;
 import com.owo.OwoDokan.service.admin_related.order.Shop_keeper_order_service;
@@ -28,8 +25,9 @@ public class AdminControls {
     private final OfferService offerService;
     private final CategoryService categoryService;
     private final SubCategoryService subCategoryService;
+    private final ShopKeeperRegistrationService shopKeeperRegistrationService;
 
-    public AdminControls(ProductService productService, ShopAddingService shopAddingService, BrandsService brandsService, Shop_keeper_order_service shop_keeper_orderService, OfferService offerService, CategoryService categoryService, SubCategoryService subCategoryService) {
+    public AdminControls(ProductService productService, ShopAddingService shopAddingService, BrandsService brandsService, Shop_keeper_order_service shop_keeper_orderService, OfferService offerService, CategoryService categoryService, SubCategoryService subCategoryService, ShopKeeperRegistrationService shopKeeperRegistrationService) {
         this.productService = productService;
         this.shopAddingService = shopAddingService;
         this.brandsService = brandsService;
@@ -37,22 +35,30 @@ public class AdminControls {
         this.offerService = offerService;
         this.categoryService = categoryService;
         this.subCategoryService = subCategoryService;
+        this.shopKeeperRegistrationService = shopKeeperRegistrationService;
+    }
+
+    //Shop Keeper Management
+    @GetMapping("/getShopKeeper")
+    public ResponseEntity getShopKeeper(@RequestParam(name = "mobile_number") String mobile_number)
+    {
+        return shopKeeperRegistrationService.getShopKeeper(mobile_number);
     }
 
     //Shop Management
     @PostMapping("/approveShop") //This method is for adding new products
-    public Shops approveShop(@RequestBody Shops shops)
+    public ResponseEntity approveShop(@RequestBody Shops shops)
     {
         return shopAddingService.approveNewShop(shops);
     }
 
     @GetMapping("/getShopInfo")
-    public Shops get_shop_info(@RequestParam(name = "shop_phone") String shop_phone) {
+    public ResponseEntity get_shop_info(@RequestParam(name = "shop_phone") String shop_phone) {
         return shopAddingService.getShopInfo(shop_phone);
     }
 
     @PostMapping("/updateShopInfo") //This method is for adding new products
-    public Shops updateShop(@RequestBody Shops shops)
+    public ResponseEntity updateShop(@RequestBody Shops  shops)
     {
         return shopAddingService.updateShop(shops);
     }
@@ -159,7 +165,6 @@ public class AdminControls {
     }
 
     //Offer management
-
     @PostMapping("/addAnOffer")
     public ResponseEntity addAnOffer(@RequestBody OffersEntity offersEntity)
     {
@@ -179,7 +184,6 @@ public class AdminControls {
     }
 
     //Category Management
-
     @PostMapping("/addNewCategory")
     public ResponseEntity addNewCategory(@RequestBody CategoryEntity categoryEntity)
     {
@@ -199,7 +203,6 @@ public class AdminControls {
     }
 
     //Subcategory Management
-
     @PostMapping("/addNewSubCategory")
     public ResponseEntity addNewSubCategory(@RequestParam(name = "categoryId") Long categoryId, @RequestBody SubCategoryEntity subCategoryEntity)
     {

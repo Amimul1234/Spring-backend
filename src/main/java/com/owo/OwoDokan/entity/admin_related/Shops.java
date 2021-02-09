@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,21 +18,32 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table
-public class Shops {
+@Table(indexes = {@Index(columnList = "shop_id", name = "shop_id"),
+        @Index(columnList = "shop_owner_mobile", name = "shop_owner_mobile")})
+public class Shops implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long shop_id;
+    @Column(nullable = false)
     private Double latitude;
+    @Column(nullable = false)
     private Double longitude;
     private Boolean approved;
+    @Column(nullable = false)
     private String shop_address;
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String shop_image_uri;
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String shop_keeper_nid_front_uri;
+    @Column(nullable = false)
     private String shop_name;
+    @Column(nullable = false)
     private String shop_owner_mobile;
+    @Column(nullable = false)
     private String shop_owner_name;
+    @Column(nullable = false)
     private String shop_service_mobile;
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String trade_license_url;
 
     @OneToMany(mappedBy = "shops",

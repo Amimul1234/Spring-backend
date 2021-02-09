@@ -2,26 +2,49 @@ package com.owo.OwoDokan.service.admin_related;
 
 import com.owo.OwoDokan.entity.admin_related.Shops;
 import com.owo.OwoDokan.repository.adminRelated.ShopRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import java.util.Optional;
+import static org.springframework.http.HttpStatus.*;
 
 @Service
 public class ShopAddingService {
     private final ShopRepository shopRepository;
+    private final Logger logger = LoggerFactory.getLogger(ShopAddingService.class);
 
     public ShopAddingService(ShopRepository shopRepository) {
         this.shopRepository = shopRepository;
     }
 
-    public Shops approveNewShop(Shops shops)
+    public ResponseEntity approveNewShop(Shops shops)
     {
-        return shopRepository.save(shops);
+        try {
+            shopRepository.save(shops);
+            return ResponseEntity.status(OK).body("Shop approved successfully");
+        }catch (Exception e)
+        {
+            return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Can not approve shop");
+        }
     }
 
-    public Shops updateShop(Shops shops) {
-        return shopRepository.save(shops);
+    public ResponseEntity updateShop(Shops shops) {
+        try
+        {
+            shopRepository.save(shops);
+            return ResponseEntity.status(OK).body(shops);
+        }
+        catch (Exception e)
+        {
+            logger.error("Error Occurred On Shop Adding Service, Error is: "+e.getMessage());
+            return new ResponseEntity(FAILED_DEPENDENCY);
+        }
     }
 
-    public Shops getShopInfo(String shop_phone) {
-        return shopRepository.getByPhone(shop_phone);
+    public ResponseEntity getShopInfo(String shop_phone) {
+        Optional<Shops> shopsOptional = shopRepository.getByPhone(shop_phone);
+        return shopsOptional.map(shops -> ResponseEntity.status(OK).body(shops)).orElseGet(() -> new ResponseEntity(NOT_FOUND));
     }
 }

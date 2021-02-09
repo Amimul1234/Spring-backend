@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ShopUserDebtService {
@@ -23,23 +24,31 @@ public class ShopUserDebtService {
 
     public ResponseEntity addDebt(UserDebts userDebts, String shop_mobile_number) {
 
-        Shops shops = shopRepository.getByPhone(shop_mobile_number);
+        Optional<Shops> shopsOptional = shopRepository.getByPhone(shop_mobile_number);
 
-        List<UserDebts> userDebts1 = shops.getUserDebts();
-
-        for(UserDebts userDebts2 : userDebts1)
+        if(shopsOptional.isPresent())
         {
-            if(userDebts2.getUser_mobile_number().equals(userDebts.getUser_mobile_number()))
+            Shops shops = shopsOptional.get();
+
+            List<UserDebts> userDebts1 = shops.getUserDebts();
+
+            for(UserDebts userDebts2 : userDebts1)
             {
-                return new ResponseEntity(HttpStatus.CONFLICT);
+                if(userDebts2.getUser_mobile_number().equals(userDebts.getUser_mobile_number()))
+                {
+                    return new ResponseEntity(HttpStatus.CONFLICT);
+                }
             }
+
+            shops.getUserDebts().add(userDebts);
+            userDebts.setShops(shops);
+            shopRepository.save(shops);
+            return new ResponseEntity(HttpStatus.OK);
         }
-
-        shops.getUserDebts().add(userDebts);
-        userDebts.setShops(shops);
-        shopRepository.save(shops);
-        return new ResponseEntity(HttpStatus.OK);
-
+        else
+        {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can not find shop");
+        }
     }
 
     public ResponseEntity addDebtDetails(User_debt_details user_debt_details, Long user_id) {
@@ -86,9 +95,7 @@ public class ShopUserDebtService {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
 
-        List<User_debt_details> userDebtDetailsList = new ArrayList<>();
-
-        userDebtDetailsList.addAll(userDebts1.getUserDebtDetails());
+        List<User_debt_details> userDebtDetailsList = new ArrayList<>(userDebts1.getUserDebtDetails());
 
         double debt = userDebts1.getUser_total_debt();
 
@@ -125,7 +132,7 @@ public class ShopUserDebtService {
         {
             userDebts1 = userDebt.findByUserId(user_id);
 
-            return new ResponseEntity<UserDebts>(userDebts1, HttpStatus.OK);
+            return new ResponseEntity<>(userDebts1, HttpStatus.OK);
 
         }catch (Exception e)
         {
@@ -142,7 +149,7 @@ public class ShopUserDebtService {
 
             if(userDebts1.getUserDebtDetails().size() > 0)
             {
-                return new ResponseEntity<List<User_debt_details>>(userDebts1.getUserDebtDetails(), HttpStatus.OK);
+                return new ResponseEntity<>(userDebts1.getUserDebtDetails(), HttpStatus.OK);
             }
             else
             {
@@ -233,21 +240,15 @@ public class ShopUserDebtService {
     public ResponseEntity getAllDebts(int page, String shop_mobile_number) {
 
         int pageSize = 10;
-
-        Shops shop = null;
-
         int fromIndex = page * pageSize;
 
-        try {
-            shop  = shopRepository.getByPhone(shop_mobile_number);
-        }catch (Exception e)
+        Optional<Shops> shopsOptional = shopRepository.getByPhone(shop_mobile_number);
+
+        if(shopsOptional.isPresent())
         {
-            System.out.println(e.getMessage());
-        }
+            Shops shops = shopsOptional.get();
 
-        if (shop != null) {
-
-            int size = shop.getUserDebts().size();
+            int size = shops.getUserDebts().size();
 
             if(fromIndex >= size)
             {
@@ -255,7 +256,7 @@ public class ShopUserDebtService {
             }
             else
             {
-                return new ResponseEntity<>(shop.getUserDebts().subList(fromIndex, Math.min(fromIndex + pageSize, shop.getUserDebts().size())), HttpStatus.OK);
+                return new ResponseEntity<>(shops.getUserDebts().subList(fromIndex, Math.min(fromIndex + pageSize, shops.getUserDebts().size())), HttpStatus.OK);
             }
         }
         else
