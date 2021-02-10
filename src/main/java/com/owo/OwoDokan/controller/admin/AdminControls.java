@@ -1,9 +1,6 @@
 package com.owo.OwoDokan.controller.admin;
 
-import com.owo.OwoDokan.entity.admin_related.Brands;
-import com.owo.OwoDokan.entity.admin_related.OffersEntity;
-import com.owo.OwoDokan.entity.admin_related.Owo_product;
-import com.owo.OwoDokan.entity.admin_related.Shops;
+import com.owo.OwoDokan.entity.admin_related.*;
 import com.owo.OwoDokan.entity.admin_related.category.CategoryEntity;
 import com.owo.OwoDokan.entity.admin_related.category.SubCategoryEntity;
 import com.owo.OwoDokan.service.admin_related.*;
@@ -36,6 +33,12 @@ public class AdminControls {
         this.categoryService = categoryService;
         this.subCategoryService = subCategoryService;
         this.shopKeeperRegistrationService = shopKeeperRegistrationService;
+    }
+
+    @PostMapping("/registerShopKeeper")
+    public ResponseEntity registerShopKeeper(@RequestBody UserShopKeeper userShopKeeper)
+    {
+        return shopKeeperRegistrationService.addNewShopKeeper(userShopKeeper);
     }
 
     //Shop Keeper Management

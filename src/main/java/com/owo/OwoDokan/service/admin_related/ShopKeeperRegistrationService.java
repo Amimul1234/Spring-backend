@@ -32,7 +32,7 @@ public class ShopKeeperRegistrationService {
         try
         {
             shopKeeperUserRepo.save(shopKeeperUser);
-            return ResponseEntity.status(HttpStatus.OK).body("Successfully Registered Shop");
+            return ResponseEntity.status(HttpStatus.OK).body("Successfully Registered Shop User");
         }catch (Exception e)
         {
             logger.error("Error occurred on ShopKeeperRegistrationService class, Error is: "+e.getMessage());
