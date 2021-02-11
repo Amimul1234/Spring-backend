@@ -35,13 +35,13 @@ public class AdminControls {
         this.shopKeeperRegistrationService = shopKeeperRegistrationService;
     }
 
+    //Shop Keeper Management
     @PostMapping("/registerShopKeeper")
     public ResponseEntity registerShopKeeper(@RequestBody UserShopKeeper userShopKeeper)
     {
         return shopKeeperRegistrationService.addNewShopKeeper(userShopKeeper);
     }
 
-    //Shop Keeper Management
     @GetMapping("/getShopKeeper")
     public ResponseEntity getShopKeeper(@RequestParam(name = "mobile_number") String mobile_number)
     {
@@ -49,7 +49,13 @@ public class AdminControls {
     }
 
     //Shop Management
-    @PostMapping("/approveShop") //This method is for adding new products
+    @GetMapping("/getAllShopRegistrationRequests")
+    public ResponseEntity getAllShopRegistrationRequests()
+    {
+        return shopAddingService.getAllShopRegistrationRequests();
+    }
+
+    @PostMapping("/approveShop")
     public ResponseEntity approveShop(@RequestBody Shops shops)
     {
         return shopAddingService.approveNewShop(shops);
@@ -60,7 +66,7 @@ public class AdminControls {
         return shopAddingService.getShopInfo(shop_phone);
     }
 
-    @PostMapping("/updateShopInfo") //This method is for adding new products
+    @PostMapping("/updateShopInfo")
     public ResponseEntity updateShop(@RequestBody Shops  shops)
     {
         return shopAddingService.updateShop(shops);

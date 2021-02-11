@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
 import static org.springframework.http.HttpStatus.*;
 
@@ -46,5 +48,10 @@ public class ShopAddingService {
     public ResponseEntity getShopInfo(String shop_phone) {
         Optional<Shops> shopsOptional = shopRepository.getByPhone(shop_phone);
         return shopsOptional.map(shops -> ResponseEntity.status(OK).body(shops)).orElseGet(() -> new ResponseEntity(NOT_FOUND));
+    }
+
+    public ResponseEntity getAllShopRegistrationRequests() {
+        Optional<List<Shops>> optionalShopsList = shopRepository.getAllShopRegistrationRequests();
+        return optionalShopsList.map(shops -> ResponseEntity.status(OK).body(shops)).orElseGet(() -> new ResponseEntity(NOT_FOUND));
     }
 }
