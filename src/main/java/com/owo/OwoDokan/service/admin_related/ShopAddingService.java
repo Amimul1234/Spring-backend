@@ -4,10 +4,10 @@ import com.owo.OwoDokan.entity.admin_related.Shops;
 import com.owo.OwoDokan.repository.adminRelated.ShopRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import static org.springframework.http.HttpStatus.*;
@@ -50,8 +50,10 @@ public class ShopAddingService {
         return shopsOptional.map(shops -> ResponseEntity.status(OK).body(shops)).orElseGet(() -> new ResponseEntity(NOT_FOUND));
     }
 
-    public ResponseEntity getAllShopRegistrationRequests() {
-        Optional<List<Shops>> optionalShopsList = shopRepository.getAllShopRegistrationRequests();
+    public ResponseEntity getAllShopRegistrationRequests(int pageNumber) {
+        int pageSize = 10;
+        org.springframework.data.domain.Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Optional<List<Shops>> optionalShopsList = shopRepository.getAllShopRegistrationRequests(pageable);
         return optionalShopsList.map(shops -> ResponseEntity.status(OK).body(shops)).orElseGet(() -> new ResponseEntity(NOT_FOUND));
     }
 }

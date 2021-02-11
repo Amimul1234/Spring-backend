@@ -1,6 +1,7 @@
 package com.owo.OwoDokan.repository.adminRelated;
 
 import com.owo.OwoDokan.entity.admin_related.Shops;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,5 +14,5 @@ public interface ShopRepository extends JpaRepository<Shops, Long> {
     Optional<Shops> getByPhone(@Param("mobile_number")String mobile_number);
 
     @Query("select e from Shops e where e.approved = false")
-    Optional<List<Shops>> getAllShopRegistrationRequests();
+    Optional<List<Shops>> getAllShopRegistrationRequests(Pageable pageNumber);
 }

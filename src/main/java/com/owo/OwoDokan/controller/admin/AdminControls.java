@@ -50,9 +50,9 @@ public class AdminControls {
 
     //Shop Management
     @GetMapping("/getAllShopRegistrationRequests")
-    public ResponseEntity getAllShopRegistrationRequests()
+    public ResponseEntity getAllShopRegistrationRequests(@RequestParam("pageNumber") int pageNumber)
     {
-        return shopAddingService.getAllShopRegistrationRequests();
+        return shopAddingService.getAllShopRegistrationRequests(pageNumber);
     }
 
     @PostMapping("/approveShop")

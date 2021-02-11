@@ -37,7 +37,6 @@ public class ProductService {
         try
         {
             List<Owo_product> owo_productList = productRepository.findAll(pageable).getContent();
-
             return maniPlateResponse(owo_productList);
         }catch (Exception e)
         {

@@ -44,7 +44,7 @@ public class imageController {
 
     }
 
-    @GetMapping("/getImageFromServer")
+    @GetMapping(value = "/getImageFromServer", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity sendImageToClient(@RequestParam(name = "path_of_image") String path_of_image)
     {
 
@@ -61,7 +61,7 @@ public class imageController {
 
             return ResponseEntity
                     .ok()
-                    .contentType(MediaType.IMAGE_JPEG)
+                    .contentLength(requested_image.length)
                     .body(requested_image);
 
         } catch (IOException e) {
