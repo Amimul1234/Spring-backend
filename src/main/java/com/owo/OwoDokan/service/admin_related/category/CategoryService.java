@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -77,7 +78,20 @@ public class CategoryService {
         }
         else
         {
-            return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Can not find category");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can not find category");
+        }
+    }
+
+    public ResponseEntity getAllCategories() {
+        List<CategoryEntity> categoryEntityList = categoryRepo.findAll();
+
+        if(categoryEntityList.isEmpty())
+        {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.OK).body(categoryEntityList);
         }
     }
 }

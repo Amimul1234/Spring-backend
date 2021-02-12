@@ -177,7 +177,7 @@ public class AdminControls {
     }
 
     @PutMapping("/setOrderState")
-    public ResponseEntity setOrderState(@RequestParam(name = "order_id") long order_id, @RequestParam("order_state") String order_state)
+    public ResponseEntity setOrderState(@RequestParam(name="order_id") long order_id, @RequestParam("order_state") String order_state)
     {
         return shop_keeper_orderService.setOrderState(order_id, order_state);
     }
@@ -206,6 +206,12 @@ public class AdminControls {
     public ResponseEntity addNewCategory(@RequestBody CategoryEntity categoryEntity)
     {
         return categoryService.addNewCategory(categoryEntity);
+    }
+
+    @GetMapping("/getAllCategories")
+    public ResponseEntity getAllCategories()
+    {
+        return categoryService.getAllCategories();
     }
 
     @PutMapping("/updateCategory")

@@ -26,7 +26,8 @@ public class CategoryEntity {
             targetEntity = SubCategoryEntity.class,
             mappedBy = "categoryEntity",
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
     )
     @JsonManagedReference
     private List<SubCategoryEntity> subCategoryEntities = new ArrayList<>();
