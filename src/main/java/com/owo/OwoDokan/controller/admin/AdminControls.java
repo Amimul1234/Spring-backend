@@ -49,21 +49,10 @@ public class AdminControls {
     }
 
     //Shop Management
-    @GetMapping("/getAllShopRegistrationRequests")
-    public ResponseEntity getAllShopRegistrationRequests(@RequestParam("pageNumber") int pageNumber)
-    {
-        return shopAddingService.getAllShopRegistrationRequests(pageNumber);
-    }
-
     @PostMapping("/approveShop")
     public ResponseEntity approveShop(@RequestBody Shops shops)
     {
         return shopAddingService.approveNewShop(shops);
-    }
-
-    @GetMapping("/getShopInfo")
-    public ResponseEntity get_shop_info(@RequestParam(name = "shop_phone") String shop_phone) {
-        return shopAddingService.getShopInfo(shop_phone);
     }
 
     @PostMapping("/updateShopInfo")
@@ -72,6 +61,22 @@ public class AdminControls {
         return shopAddingService.updateShop(shops);
     }
 
+    @GetMapping("/getShopInfo")
+    public ResponseEntity get_shop_info(@RequestParam(name = "shop_phone") String shop_phone) {
+        return shopAddingService.getShopInfo(shop_phone);
+    }
+
+    @GetMapping("/getAllShopRegistrationRequests")
+    public ResponseEntity getAllShopRegistrationRequests(@RequestParam("pageNumber") int pageNumber)
+    {
+        return shopAddingService.getAllShopRegistrationRequests(pageNumber);
+    }
+
+    @GetMapping("/getAllRegisteredShops")
+    public ResponseEntity getAllRegisteredShops(@RequestParam("pageNumber") int pageNumber)
+    {
+        return shopAddingService.getAllRegisteredShops(pageNumber);
+    }
 
     //Product Management
     @PostMapping("/addProduct") //This method is for adding new products

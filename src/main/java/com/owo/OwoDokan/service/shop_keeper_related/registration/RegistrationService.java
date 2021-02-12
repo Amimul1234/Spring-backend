@@ -26,6 +26,7 @@ public class RegistrationService {
         shops.setLatitude(shopPendingRequest.getLatitude());
         shops.setLongitude(shopPendingRequest.getLongitude());
         shops.setApproved(false);
+        shops.setBlocked(false);
         shops.setShop_address(shopPendingRequest.getShopAddress());
         shops.setShop_image_uri(shopPendingRequest.getShopImageUri());
         shops.setShop_keeper_nid_front_uri(shopPendingRequest.getShopKeeperNidFrontUri());

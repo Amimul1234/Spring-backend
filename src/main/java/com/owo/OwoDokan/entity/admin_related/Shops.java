@@ -29,6 +29,7 @@ public class Shops implements Serializable {
     @Column(nullable = false)
     private Double longitude;
     private Boolean approved;
+    private Boolean blocked;
     @Column(nullable = false)
     private String shop_address;
     @Column(nullable = false, columnDefinition = "LONGTEXT")

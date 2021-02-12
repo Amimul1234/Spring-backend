@@ -56,4 +56,11 @@ public class ShopAddingService {
         Optional<List<Shops>> optionalShopsList = shopRepository.getAllShopRegistrationRequests(pageable);
         return optionalShopsList.map(shops -> ResponseEntity.status(OK).body(shops)).orElseGet(() -> new ResponseEntity(NOT_FOUND));
     }
+
+    public ResponseEntity getAllRegisteredShops(int pageNumber) {
+        int pageSize = 10;
+        org.springframework.data.domain.Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Optional<List<Shops>> optionalShopsList = shopRepository.getAllRegisteredShops(pageable);
+        return optionalShopsList.map(shops -> ResponseEntity.status(OK).body(shops)).orElseGet(() -> new ResponseEntity(NOT_FOUND));
+    }
 }
