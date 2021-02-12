@@ -20,6 +20,7 @@ import java.util.List;
 @Entity
 @Table(indexes = {@Index(columnList = "shop_id", name = "shop_id"),
         @Index(columnList = "shop_owner_mobile", name = "shop_owner_mobile")})
+
 public class Shops implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +29,9 @@ public class Shops implements Serializable {
     private Double latitude;
     @Column(nullable = false)
     private Double longitude;
+    @Column(nullable = false)
     private Boolean approved;
+    @Column(nullable = false)
     private Boolean blocked;
     @Column(nullable = false)
     private String shop_address;

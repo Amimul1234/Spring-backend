@@ -24,7 +24,11 @@ public class AdminControls {
     private final SubCategoryService subCategoryService;
     private final ShopKeeperRegistrationService shopKeeperRegistrationService;
 
-    public AdminControls(ProductService productService, ShopAddingService shopAddingService, BrandsService brandsService, Shop_keeper_order_service shop_keeper_orderService, OfferService offerService, CategoryService categoryService, SubCategoryService subCategoryService, ShopKeeperRegistrationService shopKeeperRegistrationService) {
+    public AdminControls(ProductService productService, ShopAddingService shopAddingService, BrandsService brandsService,
+                         Shop_keeper_order_service shop_keeper_orderService, OfferService offerService,
+                         CategoryService categoryService, SubCategoryService subCategoryService,
+                         ShopKeeperRegistrationService shopKeeperRegistrationService)
+    {
         this.productService = productService;
         this.shopAddingService = shopAddingService;
         this.brandsService = brandsService;

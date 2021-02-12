@@ -15,6 +15,6 @@ public interface ShopRepository extends JpaRepository<Shops, Long> {
     @Query("select e from Shops e where e.approved = false")
     Optional<List<Shops>> getAllShopRegistrationRequests(Pageable pageNumber);
 
-    @Query("select e from Shops e where e.approved = false")
+    @Query("select e from Shops e where e.approved = true and e.blocked=false")
     Optional<List<Shops>> getAllRegisteredShops(Pageable pageNumber);
 }
