@@ -15,7 +15,6 @@ import java.util.UUID;
 
 @RestController
 public class imageController {
-
     //This method is for saving upcoming image in filesystem
     @PostMapping("/imageController/{directory}")
     public ResponseEntity saveImageInProject(@PathVariable("directory") String directory, @RequestPart(name = "multipartFile") MultipartFile multipartFile)

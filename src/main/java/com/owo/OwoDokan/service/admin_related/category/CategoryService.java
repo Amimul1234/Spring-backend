@@ -40,6 +40,7 @@ public class CategoryService {
         {
             CategoryEntity categoryEntity2 = categoryEntity1.get();
 
+            categoryEntity2.setCategoryId(categoryId);
             categoryEntity2.setCategoryImage(categoryEntity.getCategoryImage());
             categoryEntity2.setCategoryName(categoryEntity.getCategoryName());
             categoryEntity2.setSubCategoryEntities(categoryEntity2.getSubCategoryEntities());
