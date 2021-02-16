@@ -23,7 +23,6 @@ public class SubCategoryService {
         this.categoryRepo = categoryRepo;
     }
 
-    @Transactional
     public ResponseEntity addNewSubCategory(Long categoryId, SubCategoryEntity subCategoryEntity) {
 
         Optional<CategoryEntity> categoryEntity = categoryRepo.findById(categoryId);
@@ -38,7 +37,6 @@ public class SubCategoryService {
             try
             {
                 categoryRepo.save(categoryEntity1);
-                subCategoryRepo.save(subCategoryEntity);
                 return ResponseEntity.status(HttpStatus.OK).body("Sub category added successfully");
             }
             catch (Exception e)
