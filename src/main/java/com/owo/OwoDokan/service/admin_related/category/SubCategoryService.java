@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -99,6 +99,24 @@ public class SubCategoryService {
         else
         {
             return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Sub category does not exists");
+        }
+    }
+
+    public ResponseEntity getAllSubCategories(Long categoryId) {
+
+        Optional<CategoryEntity> categoryEntity = categoryRepo.findById(categoryId);
+
+        if(categoryEntity.isPresent())
+        {
+            CategoryEntity categoryEntity1 = categoryEntity.get();
+
+            List<SubCategoryEntity> subCategoryEntityList = categoryEntity1.getSubCategoryEntities();
+            return ResponseEntity.status(HttpStatus.OK).body(subCategoryEntityList);
+        }
+
+        else
+        {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
     }
 }

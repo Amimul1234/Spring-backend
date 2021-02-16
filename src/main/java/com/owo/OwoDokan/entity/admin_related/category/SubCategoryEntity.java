@@ -1,17 +1,18 @@
 package com.owo.OwoDokan.entity.admin_related.category;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Entity
-@Table(name = "SubCategory")
-public class SubCategoryEntity {
+@Table
+public class SubCategoryEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sub_category_id;
@@ -20,7 +21,7 @@ public class SubCategoryEntity {
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String sub_category_image;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JsonBackReference
     private CategoryEntity categoryEntity;
 }

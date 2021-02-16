@@ -17,8 +17,7 @@ public class ShopKeeperPermissions {
     private Long id;
     private String permittedCategory;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH
-            , CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JsonBackReference
     private Shops shops;
 }

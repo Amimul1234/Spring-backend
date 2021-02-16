@@ -233,6 +233,12 @@ public class AdminControls {
         return subCategoryService.addNewSubCategory(categoryId, subCategoryEntity);
     }
 
+    @GetMapping("/getAllSubCategories")
+    public ResponseEntity getAllSubCategories(@RequestParam(name = "categoryId") Long categoryId)
+    {
+        return subCategoryService.getAllSubCategories(categoryId);
+    }
+
     @PutMapping("/updateSubCategory")
     public ResponseEntity updateSubCategory(@RequestBody SubCategoryEntity subCategoryEntity)
     {

@@ -1,19 +1,20 @@
 package com.owo.OwoDokan.entity.admin_related.category;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "Category")
-public class CategoryEntity {
+public class CategoryEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryId;
@@ -23,9 +24,8 @@ public class CategoryEntity {
     private String categoryImage;
 
     @OneToMany(
-            targetEntity = SubCategoryEntity.class,
             mappedBy = "categoryEntity",
-            cascade = CascadeType.ALL,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
             orphanRemoval = true,
             fetch = FetchType.LAZY
     )
