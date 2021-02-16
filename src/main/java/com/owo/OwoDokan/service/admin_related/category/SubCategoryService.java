@@ -53,13 +53,14 @@ public class SubCategoryService {
     }
 
     public ResponseEntity updateSubCategory(SubCategoryEntity subCategoryEntity) {
+
         Optional<SubCategoryEntity> subCategoryEntity1 = subCategoryRepo.findById(subCategoryEntity.getSub_category_id());
 
         if(subCategoryEntity1.isPresent())
         {
             SubCategoryEntity subCategoryEntity2 = subCategoryEntity1.get();
 
-            subCategoryEntity2.setCategoryEntity(subCategoryEntity.getCategoryEntity());
+            subCategoryEntity2.setCategoryEntity(subCategoryEntity1.get().getCategoryEntity());
             subCategoryEntity2.setSub_category_name(subCategoryEntity.getSub_category_name());
             subCategoryEntity.setSub_category_image(subCategoryEntity.getSub_category_image());
 
