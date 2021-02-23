@@ -34,6 +34,7 @@ public class CategoryService {
         }
     }
 
+    @Transactional
     public ResponseEntity updateCategory(Long categoryId, CategoryEntity categoryEntity) {
 
         Optional<CategoryEntity> categoryEntity1 = categoryRepo.findById(categoryId);
@@ -63,6 +64,7 @@ public class CategoryService {
         }
     }
 
+    @Transactional
     public ResponseEntity deleteCategory(Long categoryId) {
 
         Optional<CategoryEntity> categoryEntity = categoryRepo.findById(categoryId);

@@ -107,19 +107,6 @@ public class AdminControls {
         productService.deleteProduct(product_id);
     }
 
-    @PostMapping("/addABrand")
-    public void addBrand(@RequestBody Brands brands)
-    {
-        brandsService.createBrand(brands);
-    }
-
-    @GetMapping("/getBrandsAdmin")
-    public List<String> brandsAdmin(@RequestParam(name = "category") String category)
-    {
-        return brandsService.getBrandsAdmin(category);
-    }
-
-
     //Order Management
     @GetMapping("/getPendingOrders")
     public ResponseEntity getPendingOrders()
@@ -250,4 +237,18 @@ public class AdminControls {
     {
         return subCategoryService.deleteSubCategory(subCategoryId);
     }
+
+    //Brands Management
+    @PostMapping("/addABrand")
+    public void addBrand(@RequestBody Brands brands)
+    {
+        brandsService.createBrand(brands);
+    }
+
+    @GetMapping("/getBrandsAdmin")
+    public List<String> brandsAdmin(@RequestParam(name = "category") String category)
+    {
+        return brandsService.getBrandsAdmin(category);
+    }
+
 }

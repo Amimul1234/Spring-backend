@@ -1,15 +1,19 @@
 package com.owo.OwoDokan.entity.admin_related.category;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.owo.OwoDokan.entity.admin_related.Brands;
 import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table
 public class SubCategoryEntity implements Serializable {
@@ -21,7 +25,16 @@ public class SubCategoryEntity implements Serializable {
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String sub_category_image;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     private CategoryEntity categoryEntity;
+
+    @OneToMany(
+            mappedBy = "subCategoryEntity",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    @JsonManagedReference
+    private List<Brands> brandsList = new ArrayList<>();
 }

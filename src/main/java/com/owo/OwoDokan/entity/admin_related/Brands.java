@@ -1,19 +1,26 @@
 package com.owo.OwoDokan.entity.admin_related;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.owo.OwoDokan.entity.admin_related.category.SubCategoryEntity;
+import lombok.*;
+
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table
-public class Brands {
+public class Brands implements Serializable {
     @Id
-    private String brand_name;
+    private String brandName;
     @Column(columnDefinition = "LONGTEXT")
-    private String brand_image;
-    private String category;
+    private String brandImage;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
+    private SubCategoryEntity subCategoryEntity;
 }
