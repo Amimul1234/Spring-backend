@@ -3,6 +3,8 @@ package com.owo.OwoDokan.entity.admin_related;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -10,15 +12,21 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table
+@Table(indexes = { @Index(name = "productIndex", columnList = "product_sub_category, product_brand") })
+@Indexed
 public class Owo_product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long product_id;
     @Column(nullable = false)
+    @FullTextField
     private String product_name;
     @Column(nullable = false)
     private String product_category;
+    @Column(nullable = false)
+    private String product_sub_category;
+    @Column(nullable = false)
+    private String product_brand;
     @Column(nullable = false)
     private double product_price;
     @Column(nullable = false)
@@ -31,10 +39,6 @@ public class Owo_product implements Serializable {
     private String product_creation_date;
     @Column(nullable = false)
     private String product_creation_time;
-    @Column(nullable = false)
-    private String product_sub_category;
-    @Column(nullable = false)
-    private String product_brand;
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String product_image;
 }

@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,15 +21,16 @@ public class CategoryService {
         this.categoryRepo = categoryRepo;
     }
 
-    public ResponseEntity addNewCategory(CategoryEntity categoryEntity) {
+    @Transactional
+    public String addNewCategory(CategoryEntity categoryEntity) {
         try
         {
             categoryRepo.save(categoryEntity);
-            return ResponseEntity.status(HttpStatus.OK).body("Category created successfully");
+            return "Category created successfully";
         }catch (Exception e)
         {
             logger.error("Error saving category entity, Error is: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Can not create category, please try again");
+            return "Can not create category, please try again";
         }
     }
 
@@ -83,16 +85,7 @@ public class CategoryService {
         }
     }
 
-    public ResponseEntity getAllCategories() {
-        List<CategoryEntity> categoryEntityList = categoryRepo.findAll();
-
-        if(categoryEntityList.isEmpty())
-        {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-        else
-        {
-            return ResponseEntity.status(HttpStatus.OK).body(categoryEntityList);
-        }
+    public List<CategoryEntity> getAllCategories() {
+        return categoryRepo.findAll();
     }
 }

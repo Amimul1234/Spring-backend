@@ -5,9 +5,10 @@ import com.owo.OwoDokan.repository.adminRelated.ShopRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import static org.springframework.http.HttpStatus.*;
@@ -21,17 +22,14 @@ public class ShopAddingService {
         this.shopRepository = shopRepository;
     }
 
-    public ResponseEntity approveNewShop(Shops shops)
+    @Transactional
+    public Shops approveNewShop(Shops shops)
     {
-        try {
-            shopRepository.save(shops);
-            return ResponseEntity.status(OK).body("Shop approved successfully");
-        }catch (Exception e)
-        {
-            return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Can not approve shop");
-        }
+        shopRepository.save(shops);
+        return shops;
     }
 
+    @Transactional
     public ResponseEntity updateShop(Shops shops) {
         try
         {

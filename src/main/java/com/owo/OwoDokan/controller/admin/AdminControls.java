@@ -54,7 +54,7 @@ public class AdminControls {
 
     //Shop Management
     @PostMapping("/approveShop")
-    public ResponseEntity approveShop(@RequestBody Shops shops)
+    public Shops approveShop(@RequestBody Shops shops)
     {
         return shopAddingService.approveNewShop(shops);
     }
@@ -203,13 +203,13 @@ public class AdminControls {
 
     //Category Management
     @PostMapping("/addNewCategory")
-    public ResponseEntity addNewCategory(@RequestBody CategoryEntity categoryEntity)
+    public String addNewCategory(@RequestBody CategoryEntity categoryEntity)
     {
         return categoryService.addNewCategory(categoryEntity);
     }
 
     @GetMapping("/getAllCategories")
-    public ResponseEntity getAllCategories()
+    public List<CategoryEntity> getAllCategories()
     {
         return categoryService.getAllCategories();
     }

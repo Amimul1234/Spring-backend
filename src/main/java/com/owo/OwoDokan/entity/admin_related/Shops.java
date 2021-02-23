@@ -20,7 +20,6 @@ import java.util.List;
 @Entity
 @Table(indexes = {@Index(columnList = "shop_id", name = "shop_id"),
         @Index(columnList = "shop_owner_mobile", name = "shop_owner_mobile")})
-
 public class Shops implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
