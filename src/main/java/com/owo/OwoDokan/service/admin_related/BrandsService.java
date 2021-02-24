@@ -82,4 +82,55 @@ public class BrandsService {
             throw new SubCategoryNotFound(subCategoryId);
         }
     }
+
+    @Transactional
+    public String updateBrand(Long subCategoryId, Brands brands) {
+
+        Optional<SubCategoryEntity> subCategoryEntityOptional = subCategoryRepo.findById(subCategoryId);
+
+        if(subCategoryEntityOptional.isPresent())
+        {
+            SubCategoryEntity subCategoryEntity = subCategoryEntityOptional.get();
+
+            List<Brands> brandsList = subCategoryEntity.getBrandsList();
+
+            Brands brands2 = null;
+
+            if(brandsList.size() > 0)
+            {
+                for(Brands brands1 : brandsList)
+                {
+                    if(brands1.getBrandId().equals(brands.getBrandId()))
+                    {
+                        brands1.setBrandName(brands.getBrandName());
+                        brands1.setBrandImage(brands.getBrandImage());
+                        brands2 = brands1;
+                        break;
+                    }
+                }
+
+                if(brands2 != null)
+                {
+                    brandsRepository.save(brands2);
+                    return "Brands Updated Successfully";
+                }
+                else
+                {
+                    throw new BrandsNotFoundException(subCategoryId);
+                }
+
+            }
+            else
+            {
+                throw new BrandsNotFoundException(subCategoryId);
+            }
+
+        }
+        else
+        {
+            log.error("Sub Category with id: "+subCategoryId+"not found");
+            throw new SubCategoryNotFound(subCategoryId);
+        }
+
+    }
 }

@@ -254,4 +254,10 @@ public class AdminControls {
         return brandsService.getAllBrands(subCategoryId);
     }
 
+    @PutMapping("/updateBrand")
+    public String updateBrand(@RequestParam(name = "subCategoryId") Long subCategoryId, @RequestBody Brands brands)
+    {
+        return brandsService.updateBrand(subCategoryId, brands);
+    }
+
 }

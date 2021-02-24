@@ -18,6 +18,9 @@ import java.util.List;
 @Table
 public class Brands{
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long brandId;
+    @Column(nullable = false)
     private String brandName;
     @Column(columnDefinition = "LONGTEXT")
     private String brandImage;
