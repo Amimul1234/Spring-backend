@@ -1,5 +1,6 @@
 package com.owo.OwoDokan.controller.imageController;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
+@Slf4j
 @RestController
 public class imageController {
     //This method is for saving upcoming image in filesystem
@@ -30,8 +32,9 @@ public class imageController {
 
             Files.copy(multipartFile.getInputStream(), Paths.get(dir+ "/"+ filename), StandardCopyOption.REPLACE_EXISTING);
 
-
             String response = "/getImageFromServer?path_of_image=images/" + directory + "/" + filename;
+
+            multipartFile.getInputStream().close();
 
             return ResponseEntity.status(HttpStatus.OK).body(response);
 
@@ -84,11 +87,13 @@ public class imageController {
             }
             catch (Exception e)
             {
+                log.error("Failed to delete image");
                 return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Failed To Delete Image");
             }
         }
         else
         {
+            log.error("File does not exists, path is: "+path_of_image);
             return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Image does not exists");
         }
     }

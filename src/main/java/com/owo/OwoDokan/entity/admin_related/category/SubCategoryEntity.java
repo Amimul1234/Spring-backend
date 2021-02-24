@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,15 +24,14 @@ public class SubCategoryEntity implements Serializable {
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String sub_category_image;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JsonBackReference
     private CategoryEntity categoryEntity;
 
     @OneToMany(
             mappedBy = "subCategoryEntity",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
-            orphanRemoval = true,
-            fetch = FetchType.LAZY
+            orphanRemoval = true
     )
     @JsonManagedReference
     private List<Brands> brandsList = new ArrayList<>();

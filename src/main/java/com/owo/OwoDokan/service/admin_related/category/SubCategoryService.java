@@ -2,17 +2,21 @@ package com.owo.OwoDokan.service.admin_related.category;
 
 import com.owo.OwoDokan.entity.admin_related.category.CategoryEntity;
 import com.owo.OwoDokan.entity.admin_related.category.SubCategoryEntity;
+import com.owo.OwoDokan.exceptions.CategoryNotFoundException;
 import com.owo.OwoDokan.repository.adminRelated.category_repo.CategoryRepo;
 import com.owo.OwoDokan.repository.adminRelated.category_repo.SubCategoryRepo;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class SubCategoryService {
     private final static Logger logger = LoggerFactory.getLogger(SubCategoryService.class);
     private final SubCategoryRepo subCategoryRepo;
@@ -52,32 +56,43 @@ public class SubCategoryService {
         }
     }
 
-    public ResponseEntity updateSubCategory(SubCategoryEntity subCategoryEntity) {
+    @Transactional
+    public String updateSubCategory(Long categoryId, SubCategoryEntity subCategoryEntity) {
 
-        Optional<SubCategoryEntity> subCategoryEntity1 = subCategoryRepo.findById(subCategoryEntity.getSub_category_id());
+        Optional<CategoryEntity> categoryEntityOptional = categoryRepo.findById(categoryId);
 
-        if(subCategoryEntity1.isPresent())
+        if(categoryEntityOptional.isPresent())
         {
-            SubCategoryEntity subCategoryEntity2 = subCategoryEntity1.get();
+            CategoryEntity categoryEntity = categoryEntityOptional.get();
 
-            subCategoryEntity2.setCategoryEntity(subCategoryEntity1.get().getCategoryEntity());
-            subCategoryEntity2.setSub_category_name(subCategoryEntity.getSub_category_name());
-            subCategoryEntity.setSub_category_image(subCategoryEntity.getSub_category_image());
+            List<SubCategoryEntity> subCategoryEntityList = categoryEntity.getSubCategoryEntities();
+
+            for(SubCategoryEntity subCategoryEntity1 : subCategoryEntityList)
+            {
+                if(subCategoryEntity.getSub_category_id().equals(subCategoryEntity1.getSub_category_id()))
+                {
+                    subCategoryEntity1.setSub_category_name(subCategoryEntity.getSub_category_name());
+                    subCategoryEntity1.setSub_category_image(subCategoryEntity.getSub_category_image());
+                    break;
+                }
+            }
+
+            categoryEntity.setSubCategoryEntities(subCategoryEntityList);
 
             try
             {
-                subCategoryRepo.save(subCategoryEntity2);
-                return ResponseEntity.status(HttpStatus.OK).body("Sub category info updated successfully");
+                categoryRepo.save(categoryEntity);
+                return "Sub category info updated successfully";
             }
             catch (Exception e)
             {
                 logger.error("Sub category service error, Error is: "+e.getMessage());
-                return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Error updating sub category info, please try again");
+                throw new RuntimeException(e);
             }
         }
         else
         {
-            return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Sub category does not exists");
+            throw new CategoryNotFoundException(categoryId);
         }
     }
 
@@ -103,21 +118,19 @@ public class SubCategoryService {
         }
     }
 
-    public ResponseEntity getAllSubCategories(Long categoryId) {
+    public List<SubCategoryEntity> getAllSubCategories(Long categoryId) {
 
         Optional<CategoryEntity> categoryEntity = categoryRepo.findById(categoryId);
 
         if(categoryEntity.isPresent())
         {
             CategoryEntity categoryEntity1 = categoryEntity.get();
-
-            List<SubCategoryEntity> subCategoryEntityList = categoryEntity1.getSubCategoryEntities();
-            return ResponseEntity.status(HttpStatus.OK).body(subCategoryEntityList);
+            return categoryEntity1.getSubCategoryEntities();
         }
-
         else
         {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            log.error("Can not find category");
+            throw new CategoryNotFoundException(categoryId);
         }
     }
 }

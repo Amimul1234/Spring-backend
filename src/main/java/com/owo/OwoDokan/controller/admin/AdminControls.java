@@ -221,15 +221,15 @@ public class AdminControls {
     }
 
     @GetMapping("/getAllSubCategories")
-    public ResponseEntity getAllSubCategories(@RequestParam(name = "categoryId") Long categoryId)
+    public List<SubCategoryEntity> getAllSubCategories(@RequestParam(name = "categoryId") Long categoryId)
     {
         return subCategoryService.getAllSubCategories(categoryId);
     }
 
     @PutMapping("/updateSubCategory")
-    public ResponseEntity updateSubCategory(@RequestBody SubCategoryEntity subCategoryEntity)
+    public String updateSubCategory(@RequestParam(name = "categoryId") Long categoryId, @RequestBody SubCategoryEntity subCategoryEntity)
     {
-        return subCategoryService.updateSubCategory(subCategoryEntity);
+        return subCategoryService.updateSubCategory(categoryId, subCategoryEntity);
     }
 
     @DeleteMapping("/deleteSubCategory")
