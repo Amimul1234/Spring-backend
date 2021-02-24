@@ -1,5 +1,6 @@
 package com.owo.OwoDokan.entity.admin_related;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,33 +13,35 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(indexes = { @Index(name = "productIndex", columnList = "product_sub_category, product_brand") })
+@Table(indexes = { @Index(name = "productIndex", columnList = "productCategoryId, productSubCategoryId") })
 @Indexed
-public class Owo_product implements Serializable {
+public class OwoProduct implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long product_id;
+    private long productId;
     @Column(nullable = false)
     @FullTextField
-    private String product_name;
+    private String productName;
     @Column(nullable = false)
-    private String product_category;
+    private Long productCategoryId;
     @Column(nullable = false)
-    private String product_sub_category;
+    private Long productSubCategoryId;
     @Column(nullable = false)
-    private String product_brand;
+    private Double productPrice;
     @Column(nullable = false)
-    private double product_price;
+    private Double productDiscount;
     @Column(nullable = false)
-    private double product_discount;
-    @Column(nullable = false)
-    private int product_quantity;
+    private Integer productQuantity;
     @Column(nullable = false, columnDefinition = "LONGTEXT")
-    private String product_description;
+    private String productDescription;
     @Column(nullable = false)
-    private String product_creation_date;
+    private String productCreationDate;
     @Column(nullable = false)
-    private String product_creation_time;
+    private String productCreationTime;
     @Column(nullable = false, columnDefinition = "LONGTEXT")
-    private String product_image;
+    private String productImage;
+
+    @ManyToOne
+    @JsonBackReference
+    private Brands brands;
 }

@@ -1,11 +1,10 @@
 package com.owo.OwoDokan.entity.admin_related.category;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.owo.OwoDokan.entity.admin_related.Brands;
 import lombok.*;
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table
-public class SubCategoryEntity implements Serializable {
+public class SubCategoryEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sub_category_id;
@@ -33,6 +32,6 @@ public class SubCategoryEntity implements Serializable {
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
             orphanRemoval = true
     )
-    @JsonManagedReference
+    @JsonIgnore
     private List<Brands> brandsList = new ArrayList<>();
 }

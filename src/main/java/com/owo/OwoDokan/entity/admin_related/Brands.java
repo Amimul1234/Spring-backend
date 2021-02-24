@@ -1,10 +1,14 @@
 package com.owo.OwoDokan.entity.admin_related;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.owo.OwoDokan.entity.admin_related.category.SubCategoryEntity;
 import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,7 +16,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Entity
 @Table
-public class Brands implements Serializable {
+public class Brands{
     @Id
     private String brandName;
     @Column(columnDefinition = "LONGTEXT")
@@ -21,4 +25,11 @@ public class Brands implements Serializable {
     @ManyToOne
     @JsonBackReference
     private SubCategoryEntity subCategoryEntity;
+
+    @OneToMany(mappedBy = "brands",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<OwoProduct> owoProductList = new ArrayList<>();
 }

@@ -75,6 +75,7 @@ public class ShopKeeperRestController {
         return pagedList.getContent();
     }
 
+    /*
     @GetMapping("/allProducts")
     public ResponseEntity getAllProduct(@RequestParam(name = "page") int page)
     {
@@ -155,4 +156,6 @@ public class ShopKeeperRestController {
         List<String> categories = Arrays.asList(product_categories);
         return brandsService.getBrandsViaCategory(page, categories);
     }
+
+     */
 }

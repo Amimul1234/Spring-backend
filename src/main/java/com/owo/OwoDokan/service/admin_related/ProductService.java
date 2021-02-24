@@ -1,6 +1,6 @@
 package com.owo.OwoDokan.service.admin_related;
 
-import com.owo.OwoDokan.entity.admin_related.Owo_product;
+import com.owo.OwoDokan.entity.admin_related.OwoProduct;
 import com.owo.OwoDokan.repository.adminRelated.ProductRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -24,11 +24,13 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public Owo_product saveProduct(Owo_product product)
+    public OwoProduct saveProduct(OwoProduct product)
     {
         return productRepository.save(product);
     }
 
+
+    /*
     public ResponseEntity getAllProducts(int page) //This method is for getting all the products via
     {
         int pageSize = 10; //products per page
@@ -36,7 +38,7 @@ public class ProductService {
 
         try
         {
-            List<Owo_product> owo_productList = productRepository.findAll(pageable).getContent();
+            List<OwoProduct> owo_productList = productRepository.findAll(pageable).getContent();
             return maniPlateResponse(owo_productList);
         }catch (Exception e)
         {
@@ -50,7 +52,7 @@ public class ProductService {
 
         try
         {
-            List<Owo_product> owo_productList = productRepository.findByproduct_category(category, pageable).getContent();
+            List<OwoProduct> owo_productList = productRepository.findByproduct_category(category, pageable).getContent();
 
             return maniPlateResponse(owo_productList);
         }
@@ -67,7 +69,7 @@ public class ProductService {
 
         try
         {
-            List<Owo_product> owo_productList = productRepository.findByproduct_categoryDesc(category, pageable).getContent();
+            List<OwoProduct> owo_productList = productRepository.findByproduct_categoryDesc(category, pageable).getContent();
             return maniPlateResponse(owo_productList);
         }
         catch (Exception e)
@@ -76,15 +78,15 @@ public class ProductService {
         }
     }
 
-    private ResponseEntity maniPlateResponse(List<Owo_product> owo_productList) {
-        for(Owo_product owo_product : owo_productList)
+    private ResponseEntity maniPlateResponse(List<OwoProduct> owo_productList) {
+        for(OwoProduct owo_product : owo_productList)
         {
-            owo_product.setProduct_description(null);
-            owo_product.setProduct_creation_date(null);
-            owo_product.setProduct_creation_time(null);
-            owo_product.setProduct_category(null);
-            owo_product.setProduct_sub_category(null);
-            owo_product.setProduct_brand(null);
+            owo_product.setProductDescription(null);
+            owo_product.setProductCreationDate(null);
+            owo_product.setProductCreationTime(null);
+            owo_product.setProductCategoryId(null);
+            owo_product.setProductSubCategoryId(null);
+            owo_product.setBrands(null);
         }
 
         return new ResponseEntity(owo_productList, HttpStatus.OK);
@@ -96,7 +98,7 @@ public class ProductService {
 
         try
         {
-            List<Owo_product> owo_productList = productRepository.findByCategories(categories, pageable).getContent();
+            List<OwoProduct> owo_productList = productRepository.findByCategories(categories, pageable).getContent();
 
             return maniPlateResponse(owo_productList);
         }
@@ -112,7 +114,7 @@ public class ProductService {
 
         try
         {
-            List<Owo_product> owo_productList = productRepository.findByCategoriesDesc(categories, pageable).getContent();
+            List<OwoProduct> owo_productList = productRepository.findByCategoriesDesc(categories, pageable).getContent();
 
             return maniPlateResponse(owo_productList);
         }
@@ -128,7 +130,7 @@ public class ProductService {
 
         try
         {
-            List<Owo_product> owo_productList = productRepository.findByproduct_sub_category(sub_category, pageable).getContent();
+            List<OwoProduct> owo_productList = productRepository.findByproduct_sub_category(sub_category, pageable).getContent();
 
             return maniPlateResponse(owo_productList);
         }
@@ -144,7 +146,7 @@ public class ProductService {
 
         try
         {
-            List<Owo_product> owo_productList = productRepository.findByproduct_sub_categoryDesc(sub_category, pageable).getContent();
+            List<OwoProduct> owo_productList = productRepository.findByproduct_sub_categoryDesc(sub_category, pageable).getContent();
 
             return maniPlateResponse(owo_productList);
         }
@@ -164,7 +166,7 @@ public class ProductService {
         }
     }
 
-    public Owo_product updateProduct(Owo_product product) {
+    public OwoProduct updateProduct(OwoProduct product) {
         return productRepository.save(product);
     }
 
@@ -180,7 +182,7 @@ public class ProductService {
 
         Query query = entityManager.createNativeQuery(
                 "SELECT * FROM owo_product WHERE product_category IN(:categories) and MATCH(product_name) AGAINST (:name IN BOOLEAN MODE) ORDER BY product_price ASC limit :offset , 30",
-                Owo_product.class
+                OwoProduct.class
         );
 
         List<String> abcd = Arrays.asList(categories);
@@ -192,10 +194,10 @@ public class ProductService {
         try
         {
             Iterator iterator = query.getResultList().iterator();
-            List<Owo_product> result = new ArrayList<>();
+            List<OwoProduct> result = new ArrayList<>();
 
             while (iterator.hasNext()) {
-                result.add((Owo_product) iterator.next());
+                result.add((OwoProduct) iterator.next());
             }
 
             return maniPlateResponse(result);
@@ -213,7 +215,7 @@ public class ProductService {
         Query query = entityManager.createNativeQuery(
                 "SELECT * FROM owo_product" +
                         " WHERE product_category IN(:categories) and MATCH(product_name) AGAINST (:name IN BOOLEAN MODE) ORDER BY product_price DESC limit :offset , 30",
-                Owo_product.class
+                OwoProduct.class
         );
 
         List<String> abcd = Arrays.asList(categories);
@@ -226,10 +228,10 @@ public class ProductService {
         {
             Iterator iterator = query.getResultList().iterator();
 
-            List<Owo_product> result = new ArrayList<>();
+            List<OwoProduct> result = new ArrayList<>();
 
             while (iterator.hasNext()) {
-                result.add((Owo_product) iterator.next());
+                result.add((OwoProduct) iterator.next());
             }
 
             return maniPlateResponse(result);
@@ -248,7 +250,7 @@ public class ProductService {
 
         try
         {
-            List<Owo_product> owo_productList = productRepository.findProductByBrand(pageable, product_brand, product_categories).getContent();
+            List<OwoProduct> owo_productList = productRepository.findProductByBrand(pageable, product_brand, product_categories).getContent();
             return maniPlateResponse(owo_productList);
         }catch (Exception e)
         {
@@ -263,7 +265,7 @@ public class ProductService {
 
         try
         {
-            List<Owo_product> owo_productList =  productRepository.findProductByBrandDesc(pageable, product_brand, product_categories).getContent();
+            List<OwoProduct> owo_productList =  productRepository.findProductByBrandDesc(pageable, product_brand, product_categories).getContent();
             return maniPlateResponse(owo_productList);
         }
         catch (Exception e)
@@ -279,7 +281,7 @@ public class ProductService {
         Query query = entityManager.createNativeQuery(
                 "SELECT * FROM owo_product" +
                         " Where MATCH(product_name) AGAINST (:name IN BOOLEAN MODE) limit :offset , 30",
-                Owo_product.class
+                OwoProduct.class
         );
 
         query.setParameter("offset", offset);
@@ -289,10 +291,10 @@ public class ProductService {
         {
             Iterator iterator = query.getResultList().iterator();
 
-            List<Owo_product> result = new ArrayList<>();
+            List<OwoProduct> result = new ArrayList<>();
 
             while (iterator.hasNext()) {
-                result.add((Owo_product) iterator.next());
+                result.add((OwoProduct) iterator.next());
             }
 
             return maniPlateResponse(result);
@@ -301,4 +303,6 @@ public class ProductService {
             return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
         }
     }
+
+     */
 }

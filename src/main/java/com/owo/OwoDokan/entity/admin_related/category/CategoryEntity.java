@@ -1,14 +1,13 @@
 package com.owo.OwoDokan.entity.admin_related.category;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "Category")
-public class CategoryEntity implements Serializable {
+public class CategoryEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryId;
@@ -19,11 +18,11 @@ public class CategoryEntity implements Serializable {
 
     @OneToMany(
             mappedBy = "categoryEntity",
+            fetch = FetchType.LAZY,
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
-            orphanRemoval = true,
-            fetch = FetchType.LAZY
+            orphanRemoval = true
     )
-    @JsonManagedReference
+    @JsonIgnore
     private List<SubCategoryEntity> subCategoryEntities = new ArrayList<>();
 
     public CategoryEntity() {

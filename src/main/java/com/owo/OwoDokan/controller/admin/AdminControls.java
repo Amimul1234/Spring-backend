@@ -84,13 +84,14 @@ public class AdminControls {
 
     //Product Management
     @PostMapping("/addProduct") //This method is for adding new products
-    public Owo_product addProduct(@RequestBody Owo_product product)
+    public OwoProduct addProduct(@RequestBody OwoProduct product)
     {
         return productService.saveProduct(product);
     }
 
+    /*
     @PutMapping("/updateProduct")
-    public Owo_product updateProductInformation(@RequestBody Owo_product product)
+    public OwoProduct updateProductInformation(@RequestBody OwoProduct product)
     {
         return productService.updateProduct(product);
     }
@@ -106,6 +107,8 @@ public class AdminControls {
     {
         productService.deleteProduct(product_id);
     }
+
+     */
 
     //Order Management
     @GetMapping("/getPendingOrders")
@@ -245,12 +248,10 @@ public class AdminControls {
         brandsService.createBrand(brands);
     }
 
-    @GetMapping("/getBrandsAdmin")
-    public List<String> brandsAdmin(@RequestParam(name = "category") String category)
+    @GetMapping("/getAllBrandsOfASubCategory")
+    public List<Brands> getAllBrands(@RequestParam("subCategoryId") Long subCategoryId)
     {
-        return brandsService.getBrandsAdmin(category);
+        return brandsService.getAllBrands(subCategoryId);
     }
-
-
 
 }

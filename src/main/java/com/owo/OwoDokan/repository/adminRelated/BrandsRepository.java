@@ -9,9 +9,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface BrandsRepository extends JpaRepository<Brands, Integer> {
-    @Query("SELECT e.brandName FROM Brands e WHERE e.subCategoryEntity = :category")
-    List<String> getBrands(@Param("category") String category);
-
     @Query("SELECT e FROM Brands e WHERE e.subCategoryEntity IN (:product_categories)")
     Page<Brands> findBrandViaCategories(@Param("product_categories") List<String> product_categories, Pageable pageable);
 }

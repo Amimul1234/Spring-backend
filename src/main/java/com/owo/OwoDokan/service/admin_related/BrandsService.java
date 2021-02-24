@@ -2,7 +2,9 @@ package com.owo.OwoDokan.service.admin_related;
 
 import com.owo.OwoDokan.entity.admin_related.Brands;
 import com.owo.OwoDokan.entity.admin_related.category.SubCategoryEntity;
+import com.owo.OwoDokan.exceptions.BrandListNotAvailable;
 import com.owo.OwoDokan.exceptions.BrandsNotFoundException;
+import com.owo.OwoDokan.exceptions.SubCategoryNotFound;
 import com.owo.OwoDokan.repository.adminRelated.BrandsRepository;
 import com.owo.OwoDokan.repository.adminRelated.category_repo.SubCategoryRepo;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +38,6 @@ public class BrandsService {
         {
             SubCategoryEntity subCategoryEntity = subCategoryEntityOptional.get();
             subCategoryEntity.getBrandsList().add(brands);
-            //subCategoryRepo.save(subCategoryEntity);
         }
         else
         {
@@ -45,16 +46,9 @@ public class BrandsService {
         }
     }
 
-    public List<String> getBrandsAdmin(String category) {
-        return brandsRepository.getBrands(category);
-    }
-
     public ResponseEntity getBrandsViaCategory(int page, List<String>product_categories) {
         int pageSize = 10; //products per page
         org.springframework.data.domain.Pageable pageable = PageRequest.of(page, pageSize);
-
-
-
         try
         {
             return new ResponseEntity(brandsRepository.findBrandViaCategories(product_categories, pageable).getContent(), HttpStatus.OK);
@@ -62,6 +56,30 @@ public class BrandsService {
         catch (Exception e)
         {
             return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
+        }
+    }
+
+    public List<Brands> getAllBrands(Long subCategoryId) {
+
+        Optional<SubCategoryEntity> subCategoryEntityOptional = subCategoryRepo.findById(subCategoryId);
+
+        if(subCategoryEntityOptional.isPresent())
+        {
+            List<Brands> brandsList = subCategoryEntityOptional.get().getBrandsList();
+
+            if(brandsList.size()>0)
+            {
+                return brandsList;
+            }
+            else
+            {
+                throw new BrandListNotAvailable();
+            }
+        }
+        else
+        {
+            log.error("Sub Category with id: "+subCategoryId+"not found");
+            throw new SubCategoryNotFound(subCategoryId);
         }
     }
 }
