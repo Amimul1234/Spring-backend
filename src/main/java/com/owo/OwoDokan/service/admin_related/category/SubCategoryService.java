@@ -57,7 +57,8 @@ public class SubCategoryService {
     }
 
     @Transactional
-    public String updateSubCategory(Long categoryId, SubCategoryEntity subCategoryEntity) {
+    public String updateSubCategory(Long categoryId, SubCategoryEntity subCategoryEntity)
+    {
 
         Optional<CategoryEntity> categoryEntityOptional = categoryRepo.findById(categoryId);
 
@@ -96,7 +97,9 @@ public class SubCategoryService {
         }
     }
 
+    @Transactional
     public ResponseEntity deleteSubCategory(Long subCategoryId) {
+
         Optional<SubCategoryEntity> subCategoryEntity = subCategoryRepo.findById(subCategoryId);
 
         if(subCategoryEntity.isPresent())
