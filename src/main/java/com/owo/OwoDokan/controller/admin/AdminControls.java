@@ -215,7 +215,7 @@ public class AdminControls {
 
     //Subcategory Management
     @PostMapping("/addNewSubCategory")
-    public ResponseEntity addNewSubCategory(@RequestParam(name = "categoryId") Long categoryId, @RequestBody SubCategoryEntity subCategoryEntity)
+    public String addNewSubCategory(@RequestParam(name = "categoryId") Long categoryId, @RequestBody SubCategoryEntity subCategoryEntity)
     {
         return subCategoryService.addNewSubCategory(categoryId, subCategoryEntity);
     }
@@ -233,7 +233,7 @@ public class AdminControls {
     }
 
     @DeleteMapping("/deleteSubCategory")
-    public ResponseEntity deleteSubCategory(@RequestParam(name = "subCategoryId") Long subCategoryId)
+    public String deleteSubCategory(@RequestParam(name = "subCategoryId") Long subCategoryId)
     {
         return subCategoryService.deleteSubCategory(subCategoryId);
     }
@@ -250,5 +250,7 @@ public class AdminControls {
     {
         return brandsService.getBrandsAdmin(category);
     }
+
+
 
 }

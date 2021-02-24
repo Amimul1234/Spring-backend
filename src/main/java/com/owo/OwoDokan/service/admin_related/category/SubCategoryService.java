@@ -3,6 +3,7 @@ package com.owo.OwoDokan.service.admin_related.category;
 import com.owo.OwoDokan.entity.admin_related.category.CategoryEntity;
 import com.owo.OwoDokan.entity.admin_related.category.SubCategoryEntity;
 import com.owo.OwoDokan.exceptions.CategoryNotFoundException;
+import com.owo.OwoDokan.exceptions.SubCategoryNotFound;
 import com.owo.OwoDokan.repository.adminRelated.category_repo.CategoryRepo;
 import com.owo.OwoDokan.repository.adminRelated.category_repo.SubCategoryRepo;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,7 @@ public class SubCategoryService {
         this.categoryRepo = categoryRepo;
     }
 
-    public ResponseEntity addNewSubCategory(Long categoryId, SubCategoryEntity subCategoryEntity) {
+    public String addNewSubCategory(Long categoryId, SubCategoryEntity subCategoryEntity) {
 
         Optional<CategoryEntity> categoryEntity = categoryRepo.findById(categoryId);
 
@@ -41,18 +42,18 @@ public class SubCategoryService {
             try
             {
                 categoryRepo.save(categoryEntity1);
-                return ResponseEntity.status(HttpStatus.OK).body("Sub category added successfully");
+                return "Sub category added successfully";
             }
             catch (Exception e)
             {
                 logger.error("Sub category service failed, Error is: "+e.getMessage());
-                return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Failed to add new sub category");
+                throw new RuntimeException(e);
             }
 
         }
         else
         {
-            return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Can not find the requested category");
+            throw new CategoryNotFoundException(categoryId);
         }
     }
 
@@ -98,7 +99,7 @@ public class SubCategoryService {
     }
 
     @Transactional
-    public ResponseEntity deleteSubCategory(Long subCategoryId) {
+    public String deleteSubCategory(Long subCategoryId) {
 
         Optional<SubCategoryEntity> subCategoryEntity = subCategoryRepo.findById(subCategoryId);
 
@@ -107,17 +108,17 @@ public class SubCategoryService {
             try
             {
                 subCategoryRepo.delete(subCategoryEntity.get());
-                return ResponseEntity.status(HttpStatus.OK).body("Sub category deleted successfully");
+                return "Sub category deleted successfully";
             }
             catch (Exception e)
             {
                 logger.error("Sub category service error, Error is: "+e.getMessage());
-                return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Error deleting sub category, please try again");
+                throw new RuntimeException(e);
             }
         }
         else
         {
-            return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Sub category does not exists");
+            throw new SubCategoryNotFound(subCategoryId);
         }
     }
 
