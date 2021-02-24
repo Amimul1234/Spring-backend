@@ -153,11 +153,9 @@ public class BrandsService {
                 {
                     if(brands1.getBrandId().equals(brands.getBrandId()))
                     {
-                        subCategoryEntity.getBrandsList().remove(brands1);
-
                         try
                         {
-                            subCategoryRepo.save(subCategoryEntity);
+                            subCategoryEntity.getBrandsList().remove(brands1);
                             return "Brand deleted successfully";
                         }catch (Exception e)
                         {
@@ -167,12 +165,8 @@ public class BrandsService {
 
                     }
                 }
-                throw new BrandsNotFoundException(subCategoryId);
             }
-            else
-            {
-                throw new BrandsNotFoundException(subCategoryId);
-            }
+            throw new BrandsNotFoundException(subCategoryId);
         }
         else
         {
