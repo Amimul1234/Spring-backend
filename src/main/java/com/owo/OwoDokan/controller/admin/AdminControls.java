@@ -242,16 +242,16 @@ public class AdminControls {
     }
 
     //Brands Management
-    @PostMapping("/addABrand")
-    public void addBrand(@RequestBody Brands brands)
-    {
-        brandsService.createBrand(brands);
-    }
-
     @GetMapping("/getAllBrandsOfASubCategory")
     public List<Brands> getAllBrands(@RequestParam("subCategoryId") Long subCategoryId)
     {
         return brandsService.getAllBrands(subCategoryId);
+    }
+
+    @PostMapping("/addABrand")
+    public void addBrand(@RequestBody Brands brands)
+    {
+        brandsService.createBrand(brands);
     }
 
     @PutMapping("/updateBrand")
@@ -259,5 +259,12 @@ public class AdminControls {
     {
         return brandsService.updateBrand(subCategoryId, brands);
     }
+
+    @DeleteMapping("/deleteBrand")
+    public String deleteBrand(@RequestParam(name = "subCategoryId") Long subCategoryId, @RequestBody Brands brands)
+    {
+        return brandsService.deleteBrand(subCategoryId, brands);
+    }
+
 
 }

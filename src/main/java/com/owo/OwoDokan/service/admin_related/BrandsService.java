@@ -59,7 +59,8 @@ public class BrandsService {
         }
     }
 
-    public List<Brands> getAllBrands(Long subCategoryId) {
+    public List<Brands> getAllBrands(Long subCategoryId)
+    {
 
         Optional<SubCategoryEntity> subCategoryEntityOptional = subCategoryRepo.findById(subCategoryId);
 
@@ -84,7 +85,8 @@ public class BrandsService {
     }
 
     @Transactional
-    public String updateBrand(Long subCategoryId, Brands brands) {
+    public String updateBrand(Long subCategoryId, Brands brands)
+    {
 
         Optional<SubCategoryEntity> subCategoryEntityOptional = subCategoryRepo.findById(subCategoryId);
 
@@ -132,5 +134,50 @@ public class BrandsService {
             throw new SubCategoryNotFound(subCategoryId);
         }
 
+    }
+
+    @Transactional
+    public String deleteBrand(Long subCategoryId, Brands brands) {
+
+        Optional<SubCategoryEntity> subCategoryEntityOptional = subCategoryRepo.findById(subCategoryId);
+
+        if(subCategoryEntityOptional.isPresent())
+        {
+            SubCategoryEntity subCategoryEntity = subCategoryEntityOptional.get();
+
+            List<Brands> brandsList = subCategoryEntity.getBrandsList();
+
+            if(brandsList.size() > 0)
+            {
+                for(Brands brands1 : brandsList)
+                {
+                    if(brands1.getBrandId().equals(brands.getBrandId()))
+                    {
+                        subCategoryEntity.getBrandsList().remove(brands1);
+
+                        try
+                        {
+                            subCategoryRepo.save(subCategoryEntity);
+                            return "Brand deleted successfully";
+                        }catch (Exception e)
+                        {
+                            log.error(e.getMessage());
+                            throw new RuntimeException(e);
+                        }
+
+                    }
+                }
+                throw new BrandsNotFoundException(subCategoryId);
+            }
+            else
+            {
+                throw new BrandsNotFoundException(subCategoryId);
+            }
+        }
+        else
+        {
+            log.error("Sub Category with id: "+subCategoryId+"not found");
+            throw new SubCategoryNotFound(subCategoryId);
+        }
     }
 }
