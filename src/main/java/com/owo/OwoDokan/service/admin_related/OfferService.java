@@ -1,12 +1,14 @@
 package com.owo.OwoDokan.service.admin_related;
 
 import com.owo.OwoDokan.entity.admin_related.OffersEntity;
+import com.owo.OwoDokan.exceptions.NoOffersException;
 import com.owo.OwoDokan.repository.adminRelated.OfferRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -94,6 +96,20 @@ public class OfferService {
         else
         {
             return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Offer is not presented");
+        }
+    }
+
+    public List<OffersEntity> getAllOffers() {
+
+        List<OffersEntity> offersEntityList = offerRepository.findAll();
+
+        if(!offersEntityList.isEmpty())
+        {
+            return offersEntityList;
+        }
+        else
+        {
+            throw new NoOffersException();
         }
     }
 }

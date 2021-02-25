@@ -173,6 +173,12 @@ public class AdminControls {
     }
 
     //Offer management
+    @GetMapping("/getAllOffers")
+    public List<OffersEntity> getAllOffers()
+    {
+        return offerService.getAllOffers();
+    }
+
     @PostMapping("/addAnOffer")
     public ResponseEntity addAnOffer(@RequestBody OffersEntity offersEntity)
     {
