@@ -137,7 +137,7 @@ public class BrandsService {
     }
 
     @Transactional
-    public String deleteBrand(Long subCategoryId, Brands brands) {
+    public String deleteBrand(Long subCategoryId, Long brands) {
 
         Optional<SubCategoryEntity> subCategoryEntityOptional = subCategoryRepo.findById(subCategoryId);
 
@@ -151,7 +151,7 @@ public class BrandsService {
             {
                 for(Brands brands1 : brandsList)
                 {
-                    if(brands1.getBrandId().equals(brands.getBrandId()))
+                    if(brands1.getBrandId().equals(brands))
                     {
                         try
                         {

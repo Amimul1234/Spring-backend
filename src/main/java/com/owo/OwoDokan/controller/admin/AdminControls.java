@@ -261,9 +261,9 @@ public class AdminControls {
     }
 
     @DeleteMapping("/deleteBrand")
-    public String deleteBrand(@RequestParam(name = "subCategoryId") Long subCategoryId, @RequestBody Brands brands)
+    public String deleteBrand(@RequestParam(name = "subCategoryId") Long subCategoryId, @RequestParam(name = "brandsId") Long brandsId)
     {
-        return brandsService.deleteBrand(subCategoryId, brands);
+        return brandsService.deleteBrand(subCategoryId, brandsId);
     }
 
 
