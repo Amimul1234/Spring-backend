@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import java.util.List;
 
-public interface ProductRepository extends JpaRepository<OwoProduct, Integer> {
+public interface ProductRepository extends JpaRepository<OwoProduct, Long> {
     /*
     @Query("SELECT e FROM OwoProduct e WHERE e.product_category IN (:categories) order by e.product_price")
     Page<OwoProduct> findByCategories(@Param("categories") List<String> categories, Pageable pageable);

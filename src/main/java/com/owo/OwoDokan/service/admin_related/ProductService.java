@@ -1,27 +1,30 @@
 package com.owo.OwoDokan.service.admin_related;
 
 import com.owo.OwoDokan.entity.admin_related.OwoProduct;
+import com.owo.OwoDokan.exceptions.ProductNotFoundException;
+import com.owo.OwoDokan.repository.adminRelated.BrandsRepository;
 import com.owo.OwoDokan.repository.adminRelated.ProductRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import java.util.*;
 
 @Service
+@Slf4j
 public class ProductService {
 
     @PersistenceContext
     EntityManager entityManager;
 
     private final ProductRepository productRepository;
+    private final BrandsRepository brandsRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, BrandsRepository brandsRepository) {
         this.productRepository = productRepository;
+        this.brandsRepository = brandsRepository;
     }
 
     public OwoProduct saveProduct(OwoProduct product)
@@ -29,23 +32,67 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    @Transactional
+    public OwoProduct updateProduct(OwoProduct product) {
 
-    /*
-    public ResponseEntity getAllProducts(int page) //This method is for getting all the products via
+        Optional<OwoProduct> optionalOwoProduct = productRepository.findById(product.getProductId());
+
+        if(optionalOwoProduct.isPresent())
+        {
+            OwoProduct owoProduct = optionalOwoProduct.get();
+
+            owoProduct.setProductName(product.getProductName());
+            owoProduct.setProductPrice(product.getProductPrice());
+            owoProduct.setProductDiscount(product.getProductDiscount());
+            owoProduct.setProductQuantity(product.getProductQuantity());
+            owoProduct.setProductDescription(product.getProductDescription());
+            owoProduct.setProductCreationDate(product.getProductCreationDate());
+            owoProduct.setProductCreationTime(product.getProductCreationTime());
+            owoProduct.setProductImage(product.getProductImage());
+
+            try
+            {
+                return productRepository.save(owoProduct);
+            }catch (Exception e)
+            {
+                throw new RuntimeException(e);
+            }
+
+        }
+        else
+        {
+            throw new ProductNotFoundException(product.getProductId());
+        }
+    }
+
+    public List<OwoProduct> getAllProducts(int page) //This method is for getting all the products via
     {
         int pageSize = 10; //products per page
         org.springframework.data.domain.Pageable pageable = PageRequest.of(page, pageSize);
 
         try
         {
-            List<OwoProduct> owo_productList = productRepository.findAll(pageable).getContent();
-            return maniPlateResponse(owo_productList);
+            return productRepository.findAll(pageable).getContent();
         }catch (Exception e)
         {
-            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
+            log.error(e.getMessage());
+            throw  new RuntimeException(e);
         }
     }
 
+    @Transactional
+    public void deleteProduct(Long productId) {
+        try
+        {
+            productRepository.deleteById(productId);
+        }catch (Exception e)
+        {
+            log.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    /*
     public ResponseEntity getProduct_by_category(int page, String category) {
         int pageSize = 10; //products per page
         org.springframework.data.domain.Pageable pageable = PageRequest.of(page, pageSize);

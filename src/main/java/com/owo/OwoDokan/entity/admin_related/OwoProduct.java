@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -13,14 +11,12 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(indexes = { @Index(name = "productIndex", columnList = "productCategoryId, productSubCategoryId") })
-@Indexed
+@Table(indexes = { @Index(name = "productIndex", columnList = "productCategoryId, productSubCategoryId")})
 public class OwoProduct implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
     @Column(nullable = false)
-    @FullTextField
     private String productName;
     @Column(nullable = false)
     private Long productCategoryId;

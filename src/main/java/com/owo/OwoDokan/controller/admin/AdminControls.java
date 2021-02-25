@@ -83,29 +83,35 @@ public class AdminControls {
     }
 
     //Product Management
+    @GetMapping("/getAllProducts")
+    public List<OwoProduct> getAllProducts(int page)
+    {
+        return productService.getAllProducts(page);
+    }
+
     @PostMapping("/addProduct") //This method is for adding new products
     public OwoProduct addProduct(@RequestBody OwoProduct product)
     {
         return productService.saveProduct(product);
     }
 
-    /*
     @PutMapping("/updateProduct")
     public OwoProduct updateProductInformation(@RequestBody OwoProduct product)
     {
         return productService.updateProduct(product);
     }
 
+    @DeleteMapping("/deleteProduct")
+    public void deleteProduct(@RequestParam("productId") Long productId)
+    {
+        productService.deleteProduct(productId);
+    }
+
+    /*
     @GetMapping("/searchProduct_admin")
     public ResponseEntity searchProduct_admin(@RequestParam(name = "page") int page, @RequestParam(name = "product_name") String product_name)
     {
         return productService.searchProductAdmin(page, product_name);
-    }
-
-    @DeleteMapping("/deleteProduct/{product_id}")
-    public void deleteProduct(@PathVariable("product_id") String product_id)
-    {
-        productService.deleteProduct(product_id);
     }
 
      */
