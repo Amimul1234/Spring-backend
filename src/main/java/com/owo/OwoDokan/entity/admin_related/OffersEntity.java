@@ -1,14 +1,15 @@
 package com.owo.OwoDokan.entity.admin_related;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
+import com.owo.OwoDokan.entity.admin_related.category.CategoryEntity;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
-import java.util.Locale;
 
 @Entity
 @Table
-public class OffersEntity {
+public class OffersEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long offerId;
@@ -23,21 +24,25 @@ public class OffersEntity {
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String offer_image;
     @Column(nullable = false)
-    private String category;
-    @Column(nullable = false)
     private boolean enabled;
+
+    @ManyToOne
+    @JsonBackReference
+    private CategoryEntity categoryEntity;
+
 
     public OffersEntity() {
     }
 
-    public OffersEntity(Date offer_start_date, Date offer_end_date, String offer_is_for,
-                        String offer_image, String category, boolean enabled) {
+    public OffersEntity(Long offerId, Date offer_start_date, Date offer_end_date,
+                        String offer_is_for, String offer_image, boolean enabled, CategoryEntity categoryEntity) {
+        this.offerId = offerId;
         this.offer_start_date = offer_start_date;
         this.offer_end_date = offer_end_date;
         this.offer_is_for = offer_is_for;
         this.offer_image = offer_image;
-        this.category = category;
         this.enabled = enabled;
+        this.categoryEntity = categoryEntity;
     }
 
     public Long getOfferId() {
@@ -80,19 +85,19 @@ public class OffersEntity {
         this.offer_image = offer_image;
     }
 
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
     public boolean isEnabled() {
         return enabled;
     }
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public CategoryEntity getCategoryEntity() {
+        return categoryEntity;
+    }
+
+    public void setCategoryEntity(CategoryEntity categoryEntity) {
+        this.categoryEntity = categoryEntity;
     }
 }

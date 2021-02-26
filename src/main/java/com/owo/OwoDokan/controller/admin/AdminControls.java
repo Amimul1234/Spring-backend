@@ -190,13 +190,13 @@ public class AdminControls {
     }
 
     @PostMapping("/addAnOffer")
-    public ResponseEntity addAnOffer(@RequestBody OffersEntity offersEntity)
+    public String addAnOffer(@RequestBody OffersEntity offersEntity)
     {
         return offerService.addANewOffer(offersEntity);
     }
 
     @PutMapping("/updateAnOffer")
-    public ResponseEntity updateAnOffer(@RequestBody OffersEntity offersEntity)
+    public String updateAnOffer(@RequestBody OffersEntity offersEntity)
     {
         return offerService.updateExistenceOffer(offersEntity);
     }

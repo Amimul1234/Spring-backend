@@ -1,6 +1,8 @@
 package com.owo.OwoDokan.entity.admin_related.category;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.owo.OwoDokan.entity.admin_related.OffersEntity;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,14 +27,25 @@ public class CategoryEntity{
     @JsonIgnore
     private List<SubCategoryEntity> subCategoryEntities = new ArrayList<>();
 
+    @OneToMany(
+            mappedBy = "categoryEntity",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
+            orphanRemoval = true
+    )
+    @JsonIgnore
+    private List<OffersEntity> offersEntityList = new ArrayList<>();
+
     public CategoryEntity() {
     }
 
-    public CategoryEntity(Long categoryId, String categoryName, String categoryImage, List<SubCategoryEntity> subCategoryEntities) {
+    public CategoryEntity(Long categoryId, String categoryName, String categoryImage,
+                          List<SubCategoryEntity> subCategoryEntities, List<OffersEntity> offersEntityList) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.categoryImage = categoryImage;
         this.subCategoryEntities = subCategoryEntities;
+        this.offersEntityList = offersEntityList;
     }
 
     public Long getCategoryId() {
@@ -65,5 +78,13 @@ public class CategoryEntity{
 
     public void setSubCategoryEntities(List<SubCategoryEntity> subCategoryEntities) {
         this.subCategoryEntities = subCategoryEntities;
+    }
+
+    public List<OffersEntity> getOffersEntityList() {
+        return offersEntityList;
+    }
+
+    public void setOffersEntityList(List<OffersEntity> offersEntityList) {
+        this.offersEntityList = offersEntityList;
     }
 }

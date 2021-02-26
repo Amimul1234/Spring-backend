@@ -22,30 +22,21 @@ public class OfferService {
     }
 
 
-    public ResponseEntity addANewOffer(OffersEntity offersEntity) {
-
-        OffersEntity offersEntity1 = new OffersEntity();
-
-        offersEntity1.setOffer_start_date(offersEntity.getOffer_start_date());
-        offersEntity1.setOffer_end_date(offersEntity.getOffer_end_date());
-        offersEntity1.setOffer_is_for(offersEntity.getOffer_is_for());
-        offersEntity1.setOffer_image(offersEntity.getOffer_image());
-        offersEntity1.setCategory(offersEntity.getCategory());
-        offersEntity1.setEnabled(offersEntity.isEnabled());
-
+    public String addANewOffer(OffersEntity offersEntity) {
         try
         {
-            offerRepository.save(offersEntity1);
-            return ResponseEntity.status(HttpStatus.OK).body("Offer saved successfully");
+            offerRepository.save(offersEntity);
+            return "Offer saved successfully";
         }
         catch (Exception e)
         {
-            return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Can not create offer");
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
         }
 
     }
 
-    public ResponseEntity updateExistenceOffer(OffersEntity offersEntityBody) {
+    public String updateExistenceOffer(OffersEntity offersEntityBody) {
 
         Optional<OffersEntity> offersEntity = offerRepository.findById(offersEntityBody.getOfferId());
 
@@ -57,23 +48,23 @@ public class OfferService {
             offersEntity1.setOffer_start_date(offersEntityBody.getOffer_start_date());
             offersEntity1.setOffer_end_date(offersEntityBody.getOffer_end_date());
             offersEntity1.setOffer_is_for(offersEntityBody.getOffer_is_for());
-            offersEntity1.setCategory(offersEntityBody.getCategory());
+            //offersEntity1.setCategory(offersEntityBody.getCategory());
             offersEntity1.setOffer_image(offersEntityBody.getOffer_image());
 
             try
             {
                 offerRepository.save(offersEntity1);
-                return ResponseEntity.status(HttpStatus.OK).body("Offer updated successfully");
+                return "Offer updated successfully";
             }
             catch (Exception e)
             {
                 logger.error("Can not update offer information, "+e);
-                return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Offer info can not be updated");
+                return "Offer info can not be updated";
             }
         }
         else
         {
-            return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Selected offer does not exists");
+            return "Selected offer does not exists";
         }
     }
 
