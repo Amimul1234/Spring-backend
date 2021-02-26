@@ -2,14 +2,16 @@ package com.owo.OwoDokan.entity.admin_related;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(indexes = { @Index(name = "productIndex", columnList = "productCategoryId, productSubCategoryId")})
 public class OwoProduct implements Serializable {

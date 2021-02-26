@@ -2,7 +2,6 @@ package com.owo.OwoDokan.service.admin_related;
 
 import com.owo.OwoDokan.entity.admin_related.OwoProduct;
 import com.owo.OwoDokan.exceptions.ProductNotFoundException;
-import com.owo.OwoDokan.repository.adminRelated.BrandsRepository;
 import com.owo.OwoDokan.repository.adminRelated.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -10,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.*;
 
 @Service
@@ -20,11 +20,9 @@ public class ProductService {
     EntityManager entityManager;
 
     private final ProductRepository productRepository;
-    private final BrandsRepository brandsRepository;
 
-    public ProductService(ProductRepository productRepository, BrandsRepository brandsRepository) {
+    public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
-        this.brandsRepository = brandsRepository;
     }
 
     public OwoProduct saveProduct(OwoProduct product)
@@ -68,12 +66,21 @@ public class ProductService {
     public List<OwoProduct> getAllProducts(int page) //This method is for getting all the products via
     {
         int pageSize = 10; //products per page
+
         org.springframework.data.domain.Pageable pageable = PageRequest.of(page, pageSize);
 
         try
         {
-            return productRepository.findAll(pageable).getContent();
-        }catch (Exception e)
+            List<OwoProduct> owoProductList = productRepository.findAll(pageable).getContent();
+
+            for(OwoProduct owoProduct : owoProductList)
+            {
+                responseManipulator(owoProduct);
+            }
+
+            return owoProductList;
+        }
+        catch (Exception e)
         {
             log.error(e.getMessage());
             throw  new RuntimeException(e);
@@ -81,7 +88,8 @@ public class ProductService {
     }
 
     @Transactional
-    public void deleteProduct(Long productId) {
+    public void deleteProduct(Long productId)
+    {
         try
         {
             productRepository.deleteById(productId);
@@ -91,6 +99,100 @@ public class ProductService {
             throw new RuntimeException(e);
         }
     }
+
+    public OwoProduct getAProduct(Long productId)
+    {
+
+        Optional<OwoProduct> owoProductOptional = productRepository.findById(productId);
+
+        if(owoProductOptional.isPresent())
+        {
+            OwoProduct owoProduct = owoProductOptional.get();
+
+            owoProduct.setProductDescription(owoProduct.getProductDescription());
+
+            return owoProduct;
+        }
+        else
+        {
+            throw new ProductNotFoundException(productId);
+        }
+    }
+
+    public List<OwoProduct> searchProductAdmin(int page, String product_name) {
+
+        int offset = 30 * page; //Here page starts from 0
+
+        Query query = entityManager.createNativeQuery(
+                "SELECT * FROM owo_product" +
+                        " Where MATCH(product_name) AGAINST (:name IN BOOLEAN MODE) limit :offset , 30", OwoProduct.class);
+
+        query.setParameter("offset", offset);
+        query.setParameter("name", product_name+"*");
+
+        try
+        {
+            Iterator iterator = query.getResultList().iterator();
+
+            List<OwoProduct> result = new ArrayList<>();
+
+            while (iterator.hasNext()) {
+                OwoProduct owoProduct = (OwoProduct) iterator.next();
+                responseManipulator(owoProduct);
+                result.add(owoProduct);
+            }
+
+            return result;
+
+        }catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void responseManipulator(OwoProduct owoProduct)
+    {
+        owoProduct.setProductDescription(null);
+        owoProduct.setProductCategoryId(null);
+        owoProduct.setProductSubCategoryId(null);
+        owoProduct.setProductCreationTime(null);
+        owoProduct.setProductCreationDate(null);
+    }
+
+    /*
+    public ResponseEntity searchProduct(int page, String[] categories, String name) {
+
+        int offset = 30 * page; //Here page starts from 0
+
+        Query query = entityManager.createNativeQuery(
+                "SELECT * FROM owo_product WHERE pro IN(:categories) and MATCH(product_name) AGAINST (:name IN BOOLEAN MODE) ORDER BY product_price ASC limit :offset , 30",
+                OwoProduct.class
+        );
+
+        List<String> abcd = Arrays.asList(categories);
+
+        query.setParameter("categories", abcd);
+        query.setParameter("name", name+"*");
+        query.setParameter("offset", offset);
+
+        try
+        {
+            Iterator iterator = query.getResultList().iterator();
+            List<OwoProduct> result = new ArrayList<>();
+
+            while (iterator.hasNext()) {
+                result.add((OwoProduct) iterator.next());
+            }
+
+            return maniPlateResponse(result);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
+        }
+    }
+
+     */
 
     /*
     public ResponseEntity getProduct_by_category(int page, String category) {
@@ -223,38 +325,6 @@ public class ProductService {
         productRepository.delete(id);
     }
 
-    public ResponseEntity searchProduct(int page, String[] categories, String name) {
-
-        int offset = 30 * page; //Here page starts from 0
-
-        Query query = entityManager.createNativeQuery(
-                "SELECT * FROM owo_product WHERE product_category IN(:categories) and MATCH(product_name) AGAINST (:name IN BOOLEAN MODE) ORDER BY product_price ASC limit :offset , 30",
-                OwoProduct.class
-        );
-
-        List<String> abcd = Arrays.asList(categories);
-
-        query.setParameter("categories", abcd);
-        query.setParameter("name", name+"*");
-        query.setParameter("offset", offset);
-
-        try
-        {
-            Iterator iterator = query.getResultList().iterator();
-            List<OwoProduct> result = new ArrayList<>();
-
-            while (iterator.hasNext()) {
-                result.add((OwoProduct) iterator.next());
-            }
-
-            return maniPlateResponse(result);
-        }
-        catch (Exception e)
-        {
-            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
-        }
-    }
-
     public ResponseEntity searchProductDesc(int page, String[] categories, String name) {
 
         int offset = 30 * page; //Here page starts from 0
@@ -316,36 +386,6 @@ public class ProductService {
             return maniPlateResponse(owo_productList);
         }
         catch (Exception e)
-        {
-            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
-        }
-    }
-
-    public ResponseEntity searchProductAdmin(int page, String product_name) {
-
-        int offset = 30 * page; //Here page starts from 0
-
-        Query query = entityManager.createNativeQuery(
-                "SELECT * FROM owo_product" +
-                        " Where MATCH(product_name) AGAINST (:name IN BOOLEAN MODE) limit :offset , 30",
-                OwoProduct.class
-        );
-
-        query.setParameter("offset", offset);
-        query.setParameter("name", product_name+"*");
-
-        try
-        {
-            Iterator iterator = query.getResultList().iterator();
-
-            List<OwoProduct> result = new ArrayList<>();
-
-            while (iterator.hasNext()) {
-                result.add((OwoProduct) iterator.next());
-            }
-
-            return maniPlateResponse(result);
-        }catch (Exception e)
         {
             return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
         }

@@ -84,9 +84,15 @@ public class AdminControls {
 
     //Product Management
     @GetMapping("/getAllProducts")
-    public List<OwoProduct> getAllProducts(int page)
+    public List<OwoProduct> getAllProducts(@RequestParam(name = "page") int page)
     {
         return productService.getAllProducts(page);
+    }
+
+    @GetMapping("/getAProduct")
+    public OwoProduct getAProduct(@RequestParam(name = "productId") Long productId)
+    {
+        return productService.getAProduct(productId);
     }
 
     @PostMapping("/addProduct") //This method is for adding new products
@@ -107,14 +113,12 @@ public class AdminControls {
         productService.deleteProduct(productId);
     }
 
-    /*
-    @GetMapping("/searchProduct_admin")
-    public ResponseEntity searchProduct_admin(@RequestParam(name = "page") int page, @RequestParam(name = "product_name") String product_name)
+    @GetMapping("/searchProductWithName")
+    public List<OwoProduct> searchProduct_admin(@RequestParam(name = "page") int page,
+                                                @RequestParam(name = "product_name") String product_name)
     {
         return productService.searchProductAdmin(page, product_name);
     }
-
-     */
 
     //Order Management
     @GetMapping("/getPendingOrders")
