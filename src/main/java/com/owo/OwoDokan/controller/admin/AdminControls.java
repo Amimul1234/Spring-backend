@@ -202,9 +202,9 @@ public class AdminControls {
     }
 
     @DeleteMapping("/deleteOffer")
-    public ResponseEntity deleteAnOffer(@RequestParam(name = "offer_id") Long offer_id)
+    public String deleteAnOffer(@RequestParam(name = "offerId") Long offerId)
     {
-        return offerService.deleteOffer(offer_id);
+        return offerService.deleteOffer(offerId);
     }
 
     //Category Management

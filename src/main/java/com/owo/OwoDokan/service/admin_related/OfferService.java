@@ -68,8 +68,9 @@ public class OfferService {
         }
     }
 
-    public ResponseEntity deleteOffer(Long offer_id) {
-        Optional<OffersEntity> offersEntity = offerRepository.findById(offer_id);
+    public String deleteOffer(Long offerId) {
+
+        Optional<OffersEntity> offersEntity = offerRepository.findById(offerId);
 
         if(offersEntity.isPresent())
         {
@@ -77,16 +78,16 @@ public class OfferService {
             {
                 OffersEntity offersEntity1 = offersEntity.get();
                 offerRepository.delete(offersEntity1);
-                return ResponseEntity.status(HttpStatus.OK).body("Offer deleted successfully");
+                return "Offer deleted successfully";
             }catch (Exception e)
             {
                 logger.error("Can not delete offer, "+e);
-                return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Offer can not be deleted");
+                throw new RuntimeException(e);
             }
         }
         else
         {
-            return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Offer is not presented");
+            throw new NoOffersException();
         }
     }
 
