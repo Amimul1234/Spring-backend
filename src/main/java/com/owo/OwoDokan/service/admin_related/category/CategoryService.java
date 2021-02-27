@@ -1,6 +1,7 @@
 package com.owo.OwoDokan.service.admin_related.category;
 
 import com.owo.OwoDokan.entity.admin_related.category.CategoryEntity;
+import com.owo.OwoDokan.exceptions.CategoryNotFoundException;
 import com.owo.OwoDokan.repository.adminRelated.category_repo.CategoryRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +36,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public ResponseEntity updateCategory(Long categoryId, CategoryEntity categoryEntity) {
+    public String updateCategory(Long categoryId, CategoryEntity categoryEntity) {
 
         Optional<CategoryEntity> categoryEntity1 = categoryRepo.findById(categoryId);
 
@@ -51,21 +52,21 @@ public class CategoryService {
             try
             {
                 categoryRepo.save(categoryEntity2);
-                return ResponseEntity.status(HttpStatus.OK).body("Category details updated successfully");
+                return "Category details updated successfully";
             }catch (Exception e)
             {
                 logger.error("Error updating category details, Error is: "+e.getMessage());
-                return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Error updating category details");
+                throw new RuntimeException(e);
             }
         }
         else
         {
-            return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Can not find requested category");
+            throw new CategoryNotFoundException(categoryId);
         }
     }
 
     @Transactional
-    public ResponseEntity deleteCategory(Long categoryId) {
+    public String deleteCategory(Long categoryId) {
 
         Optional<CategoryEntity> categoryEntity = categoryRepo.findById(categoryId);
 
@@ -74,16 +75,16 @@ public class CategoryService {
             try
             {
                 categoryRepo.delete(categoryEntity.get());
-                return ResponseEntity.status(HttpStatus.OK).body("Category deleted successfully");
+                return "Category deleted successfully";
             }catch (Exception e)
             {
                 logger.error("Can not delete category, Error: "+e.getMessage());
-                return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Can not delete category, please try again");
+                throw new RuntimeException(e);
             }
         }
         else
         {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can not find category");
+            throw new CategoryNotFoundException(categoryId);
         }
     }
 

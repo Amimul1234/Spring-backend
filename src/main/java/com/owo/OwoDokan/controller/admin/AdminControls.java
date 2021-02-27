@@ -3,6 +3,9 @@ package com.owo.OwoDokan.controller.admin;
 import com.owo.OwoDokan.entity.admin_related.*;
 import com.owo.OwoDokan.entity.admin_related.category.CategoryEntity;
 import com.owo.OwoDokan.entity.admin_related.category.SubCategoryEntity;
+import com.owo.OwoDokan.entity.admin_related.order.Shop_keeper_orders;
+import com.owo.OwoDokan.entity.admin_related.registerAccount.ShopKeeperUser;
+import com.owo.OwoDokan.entity.admin_related.registerAccount.UserShopKeeper;
 import com.owo.OwoDokan.service.admin_related.*;
 import com.owo.OwoDokan.service.admin_related.category.CategoryService;
 import com.owo.OwoDokan.service.admin_related.category.SubCategoryService;
@@ -40,17 +43,30 @@ public class AdminControls {
     }
 
     //Shop Keeper Management
+    @GetMapping("/getShopKeeper")
+    public ShopKeeperUser getShopKeeper(@RequestParam(name = "mobileNumber") String mobileNumber)
+    {
+        return shopKeeperRegistrationService.getShopKeeper(mobileNumber);
+    }
+
+    @GetMapping("/getAllEnabledShopKeepers")
+    public List<ShopKeeperUser> getAllEnabledShopKeepers(@RequestParam(name = "page") int page)
+    {
+        return shopKeeperRegistrationService.findAllEnabledShopKeeper(page);
+    }
+
+    @GetMapping("/getAllDisabledAccounts")
+    public List<ShopKeeperUser> getAllDisabledAccounts(@RequestParam(name = "page") int page)
+    {
+        return shopKeeperRegistrationService.findAllDisabledShopKeeper(page);
+    }
+
     @PostMapping("/registerShopKeeper")
-    public ResponseEntity registerShopKeeper(@RequestBody UserShopKeeper userShopKeeper)
+    public String registerShopKeeper(@RequestBody UserShopKeeper userShopKeeper)
     {
         return shopKeeperRegistrationService.addNewShopKeeper(userShopKeeper);
     }
 
-    @GetMapping("/getShopKeeper")
-    public ResponseEntity getShopKeeper(@RequestParam(name = "mobile_number") String mobile_number)
-    {
-        return shopKeeperRegistrationService.getShopKeeper(mobile_number);
-    }
 
     //Shop Management
     @PostMapping("/approveShop")
@@ -60,7 +76,7 @@ public class AdminControls {
     }
 
     @PostMapping("/updateShopInfo")
-    public ResponseEntity updateShop(@RequestBody Shops  shops)
+    public Shops updateShop(@RequestBody Shops  shops)
     {
         return shopAddingService.updateShop(shops);
     }
@@ -152,7 +168,7 @@ public class AdminControls {
     }
 
     @GetMapping("/getDeliveredOrders")
-    public ResponseEntity<List<com.owo.OwoDokan.entity.admin_related.order.Shop_keeper_orders>> getDeliveredOrders(@RequestParam("page_num") int page_num)
+    public ResponseEntity<List<Shop_keeper_orders>> getDeliveredOrders(@RequestParam("page_num") int page_num)
     {
         try
         {
@@ -164,7 +180,7 @@ public class AdminControls {
     }
 
     @GetMapping("/getCancelledOrders")
-    public ResponseEntity<List<com.owo.OwoDokan.entity.admin_related.order.Shop_keeper_orders>> getCancelledOrders(@RequestParam("page_num") int page_num)
+    public ResponseEntity<List<Shop_keeper_orders>> getCancelledOrders(@RequestParam("page_num") int page_num)
     {
         try
         {
@@ -221,13 +237,13 @@ public class AdminControls {
     }
 
     @PutMapping("/updateCategory")
-    public ResponseEntity updateCategory(@RequestParam(name = "categoryId") Long categoryId, @RequestBody CategoryEntity categoryEntity)
+    public String updateCategory(@RequestParam(name = "categoryId") Long categoryId, @RequestBody CategoryEntity categoryEntity)
     {
         return categoryService.updateCategory(categoryId, categoryEntity);
     }
 
     @DeleteMapping("/deleteCategory")
-    public ResponseEntity deleteCategory(@RequestParam(name = "categoryId") Long categoryId)
+    public String deleteCategory(@RequestParam(name = "categoryId") Long categoryId)
     {
         return categoryService.deleteCategory(categoryId);
     }
@@ -281,6 +297,4 @@ public class AdminControls {
     {
         return brandsService.deleteBrand(subCategoryId, brandsId);
     }
-
-
 }

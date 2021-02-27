@@ -1,4 +1,4 @@
-package com.owo.OwoDokan.entity.admin_related;
+package com.owo.OwoDokan.entity.admin_related.registerAccount;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

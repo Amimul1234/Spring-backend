@@ -49,8 +49,7 @@ public class Shops implements Serializable {
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String trade_license_url;
 
-    @OneToMany(mappedBy = "shops",
-            orphanRemoval = true)
+    @OneToMany(mappedBy = "shops", orphanRemoval = true)
     private List<ShopKeeperProducts> shopKeeperProductsList = new ArrayList<>();
 
     @OneToMany(
@@ -64,9 +63,7 @@ public class Shops implements Serializable {
     @OneToMany(
             mappedBy = "shops",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
-            orphanRemoval = true,
-            fetch = FetchType.LAZY
-    )
+            orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<Shop_keeper_orders> shopKeeperOrders = new ArrayList<>();
 

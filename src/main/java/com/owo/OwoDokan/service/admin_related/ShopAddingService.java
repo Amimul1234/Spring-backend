@@ -30,16 +30,16 @@ public class ShopAddingService {
     }
 
     @Transactional
-    public ResponseEntity updateShop(Shops shops) {
+    public Shops updateShop(Shops shops) {
         try
         {
             shopRepository.save(shops);
-            return ResponseEntity.status(OK).body(shops);
+            return shops;
         }
         catch (Exception e)
         {
             logger.error("Error Occurred On Shop Adding Service, Error is: "+e.getMessage());
-            return new ResponseEntity(FAILED_DEPENDENCY);
+            throw new RuntimeException(e);
         }
     }
 
