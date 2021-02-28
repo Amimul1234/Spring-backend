@@ -8,6 +8,8 @@ import com.owo.OwoDokan.repository.adminRelated.ShopKeeperUserRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -76,7 +78,8 @@ public class ShopKeeperRegistrationService {
         }
     }
 
-    public List<ShopKeeperUser> findAllDisabledShopKeeper(int page) {
+    public List<ShopKeeperUser> findAllDisabledShopKeeper(int page)
+    {
 
         int pageSize = 10;
 
@@ -95,6 +98,57 @@ public class ShopKeeperRegistrationService {
         else
         {
             throw new NoEnabledShops();
+        }
+    }
+
+    @Transactional
+    public String disableShopKeeper(String mobileNumber) {
+        Optional<ShopKeeperUser> shopKeeperUserOptional = shopKeeperUserRepo.findByMobileNumber(mobileNumber);
+
+        if(shopKeeperUserOptional.isPresent())
+        {
+            ShopKeeperUser shopKeeperUser = shopKeeperUserOptional.get();
+            shopKeeperUser.setAccountEnabled(false);
+
+            try
+            {
+                shopKeeperUserRepo.save(shopKeeperUser);
+                return "Shop Keeper Disabled Successfully";
+            }catch (Exception e)
+            {
+                log.error("Error occurred, Error is: "+e.getMessage());
+                throw new RuntimeException(e);
+            }
+        }
+        else
+        {
+            throw new ShopKeeperUserNotFount(mobileNumber);
+        }
+    }
+
+    @Transactional
+    public String deleteShopKeeper(String mobileNumber) {
+
+        Optional<ShopKeeperUser> shopKeeperUserOptional = shopKeeperUserRepo.findByMobileNumber(mobileNumber);
+
+        if(shopKeeperUserOptional.isPresent())
+        {
+            ShopKeeperUser shopKeeperUser = shopKeeperUserOptional.get();
+            shopKeeperUser.setAccountEnabled(false);
+
+            try
+            {
+                shopKeeperUserRepo.delete(shopKeeperUser);
+                return "Shop Keeper deleted Successfully";
+            }catch (Exception e)
+            {
+                log.error("Error occurred, Error is: "+e.getMessage());
+                throw new RuntimeException(e);
+            }
+        }
+        else
+        {
+            throw new ShopKeeperUserNotFount(mobileNumber);
         }
     }
 }

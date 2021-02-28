@@ -67,6 +67,17 @@ public class AdminControls {
         return shopKeeperRegistrationService.addNewShopKeeper(userShopKeeper);
     }
 
+    @PutMapping("/disableShopKeeper")
+    public String disableShopKeeper(@RequestParam("mobileNumber") String mobileNumber)
+    {
+        return shopKeeperRegistrationService.disableShopKeeper(mobileNumber);
+    }
+
+    @DeleteMapping("/deleteShopKeeper")
+    public String deleteShopKeeper(@RequestParam("mobileNumber") String mobileNumber)
+    {
+        return shopKeeperRegistrationService.deleteShopKeeper(mobileNumber);
+    }
 
     //Shop Management
     @PostMapping("/approveShop")
