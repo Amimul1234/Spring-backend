@@ -222,6 +222,12 @@ public class AdminControls {
         return offerService.getAllOffers();
     }
 
+    @GetMapping("/getBannerForSelectedCategories")
+    public List<String> bannerImages(@RequestParam("categoryIds") List<Long> categoryIds)
+    {
+        return offerService.getOfferImages(categoryIds);
+    }
+
     @PostMapping("/addAnOffer")
     public String addAnOffer(@RequestBody OffersEntity offersEntity)
     {

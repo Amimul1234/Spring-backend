@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -98,6 +100,19 @@ public class OfferService {
         if(!offersEntityList.isEmpty())
         {
             return offersEntityList;
+        }
+        else
+        {
+            throw new NoOffersException();
+        }
+    }
+
+    public List<String> getOfferImages(List<Long> categoryIds) {
+        Optional<List<String>> offersOptional = offerRepository.findByCategoryId(categoryIds);
+
+        if(offersOptional.isPresent())
+        {
+            return offersOptional.get();
         }
         else
         {
