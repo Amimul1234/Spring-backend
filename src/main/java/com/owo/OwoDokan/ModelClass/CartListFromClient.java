@@ -1,14 +1,15 @@
 package com.owo.OwoDokan.ModelClass;
 
-import com.owo.OwoDokan.entity.admin_related.cart.Cart_list_product;
+import com.owo.OwoDokan.entity.admin_related.cart.CartListProduct;
+import java.io.Serializable;
 
-public class CartListFromClient {
+public class CartListFromClient implements Serializable {
     private String mobile_number;
-    private Cart_list_product cart_list_product;
+    private CartListProduct cartListProduct;
 
-    public CartListFromClient(String mobile_number, Cart_list_product cart_list_product) {
+    public CartListFromClient(String mobile_number, CartListProduct cartListProduct) {
         this.mobile_number = mobile_number;
-        this.cart_list_product = cart_list_product;
+        this.cartListProduct = cartListProduct;
     }
 
     public CartListFromClient() {
@@ -22,11 +23,11 @@ public class CartListFromClient {
         this.mobile_number = mobile_number;
     }
 
-    public Cart_list_product getCart_list_product() {
-        return cart_list_product;
+    public CartListProduct getCartListProduct() {
+        return cartListProduct;
     }
 
-    public void setCart_list_product(Cart_list_product cart_list_product) {
-        this.cart_list_product = cart_list_product;
+    public void setCartListProduct(CartListProduct cart_list_product) {
+        this.cartListProduct = cart_list_product;
     }
 }

@@ -3,7 +3,7 @@ package com.owo.OwoDokan.controller.shopKeeper;
 import com.owo.OwoDokan.ModelClass.CartListFromClient;
 import com.owo.OwoDokan.entity.admin_related.OwoProduct;
 import com.owo.OwoDokan.entity.admin_related.ShopPendingRequest;
-import com.owo.OwoDokan.entity.admin_related.cart.Cart_list_product;
+import com.owo.OwoDokan.entity.admin_related.cart.CartListProduct;
 import com.owo.OwoDokan.entity.admin_related.order.Shop_keeper_orders;
 import com.owo.OwoDokan.service.admin_related.BrandsService;
 import com.owo.OwoDokan.service.admin_related.ProductService;
@@ -40,19 +40,19 @@ public class ShopKeeperRestController {
         return registrationService.addNewRequest(shopPendingRequest);
     }
 
-    @PostMapping("/shop_keeper_cart")
-    public void shop_keeper_cart(@RequestBody CartListFromClient cartListFromClient)
+    @PostMapping("/shopKeeperCart")
+    public String cartListItems(@RequestBody CartListFromClient cartListFromClient)
     {
-        shop_keeper_cartService.addCartItem(cartListFromClient);
+        return shop_keeper_cartService.addCartItem(cartListFromClient);
     }
 
     @GetMapping("/shop_keeper_cart_products")
-    public List<Cart_list_product> getCartListForShopKeeper(@RequestParam(name = "mobile_number") String mobile_number) throws Exception {
+    public List<CartListProduct> getCartListForShopKeeper(@RequestParam(name = "mobile_number") String mobile_number) throws Exception {
         return shop_keeper_cartService.getCartItems(mobile_number);
     }
 
     @PutMapping("/update_cart_list")
-    public Cart_list_product updateCartProduct(@RequestBody Cart_list_product cart_list_product, @RequestParam(name = "mobile_number") String mobile_number)
+    public CartListProduct updateCartProduct(@RequestBody CartListProduct cart_list_product, @RequestParam(name = "mobile_number") String mobile_number)
     {
         return shop_keeper_cartService.updateCartItem(cart_list_product, mobile_number);
     }
@@ -81,6 +81,18 @@ public class ShopKeeperRestController {
     {
         List<Long> categories = Arrays.asList(product_categories);
         return productService.getProduct_by_categories(page, categories);
+    }
+
+    @GetMapping("/getProductById")
+    public OwoProduct getProductById(@RequestParam(name = "productId") Long productId)
+    {
+        return productService.getProductById(productId);
+    }
+
+    @GetMapping("/getBrandNameViaProductId")
+    public String getBrandNameViaProductId(@RequestParam(name = "productId") Long productId)
+    {
+        return productService.getABrandViaProduct(productId);
     }
 
     /*
@@ -119,12 +131,6 @@ public class ShopKeeperRestController {
     public ResponseEntity getProductBySubCategoryDesc(@RequestParam(name = "page") int page, @RequestParam(name = "product_sub_category") String product_sub_category)
     {
         return productService.getProduct_by_sub_categoryDesc(page, product_sub_category);
-    }
-
-    @GetMapping("/getProductById")
-    public ResponseEntity getProductById(@RequestParam(name = "id") int id)
-    {
-        return productService.getProductById(id);
     }
 
     @GetMapping("/searchProduct")

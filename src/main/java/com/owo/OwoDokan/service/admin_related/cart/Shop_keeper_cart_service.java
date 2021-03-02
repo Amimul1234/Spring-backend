@@ -2,13 +2,15 @@ package com.owo.OwoDokan.service.admin_related.cart;
 
 import com.owo.OwoDokan.ModelClass.CartListFromClient;
 import com.owo.OwoDokan.entity.admin_related.cart.CartList;
-import com.owo.OwoDokan.entity.admin_related.cart.Cart_list_product;
+import com.owo.OwoDokan.entity.admin_related.cart.CartListProduct;
 import com.owo.OwoDokan.repository.adminRelated.cart_repo.CartRepo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Slf4j
 public class Shop_keeper_cart_service {
 
     private final CartRepo cartRepo;
@@ -17,7 +19,8 @@ public class Shop_keeper_cart_service {
         this.cartRepo = cartRepo;
     }
 
-    public CartList addCartItem(CartListFromClient cartListFromClient) {
+    @Transactional
+    public String addCartItem(CartListFromClient cartListFromClient) {
 
         CartList cartList;
 
@@ -32,28 +35,36 @@ public class Shop_keeper_cart_service {
 
         cartList.setMobile_number(cartListFromClient.getMobile_number());
 
-        Cart_list_product cart_list_product;
-        cart_list_product = cartListFromClient.getCart_list_product();
-        cart_list_product.setCart(cartList);
+        CartListProduct cartListProduct;
+        cartListProduct = cartListFromClient.getCartListProduct();
+        cartListProduct.setCart(cartList);
 
-        cartList.getCart_list_products().add(cart_list_product);
+        cartList.getCartListProducts().add(cartListProduct);
 
-        return cartRepo.save(cartList);
+        try {
+            cartRepo.save(cartList);
+            return "Product Added to Cart";
+        }catch (Exception e)
+        {
+            log.error("Error occurred while adding product to cart, Error is: "+e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
-    public List<Cart_list_product> getCartItems(String mobile_number) throws Exception{
-        return cartRepo.getOne(mobile_number).getCart_list_products();
+    public List<CartListProduct> getCartItems(String mobile_number) {
+        return cartRepo.getOne(mobile_number).getCartListProducts();
     }
 
-    public Cart_list_product updateCartItem(Cart_list_product cart_list_product, String mobile_number) {
-        long id = cart_list_product.getProduct_id();
+    public CartListProduct updateCartItem(CartListProduct cart_list_product, String mobile_number) {
+        Long id = cart_list_product.getProductId();
+
         CartList cartList = cartRepo.getOne(mobile_number);
 
-        for(Cart_list_product cartListProduct : cartList.getCart_list_products())
+        for(CartListProduct cartListProduct : cartList.getCartListProducts())
         {
-            if(cartListProduct.getProduct_id() == id)
+            if(cartListProduct.getProductId().equals(id))
             {
-                cartListProduct.setProduct_quantity(cart_list_product.getProduct_quantity());
+                cartListProduct.setProductQuantity(cart_list_product.getProductQuantity());
                 break;
             }
         }
@@ -67,20 +78,20 @@ public class Shop_keeper_cart_service {
 
         CartList cartList = cartRepo.getOne(mobile_number);
 
-        List<Cart_list_product> cart_list_products = new ArrayList<>();
+        List<CartListProduct> cart_list_products;
 
-        cart_list_products = cartList.getCart_list_products();
+        cart_list_products = cartList.getCartListProducts();
 
-        for(Cart_list_product cartListProduct : cart_list_products)
+        for(CartListProduct cartListProduct : cart_list_products)
         {
-            if(cartListProduct.getProduct_id() == id)
+            if(cartListProduct.getProductId() == id)
             {
                 cart_list_products.remove(cartListProduct);
                 break;
             }
         }
 
-        cartList.setCart_list_products(cart_list_products);
+        cartList.setCartListProducts(cart_list_products);
 
         cartRepo.save(cartList);
     }

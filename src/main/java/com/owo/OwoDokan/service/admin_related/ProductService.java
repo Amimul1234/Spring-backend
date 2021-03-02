@@ -181,6 +181,33 @@ public class ProductService {
         }
     }
 
+    public OwoProduct getProductById(Long productId) {
+        Optional<OwoProduct> owoProductOptional = productRepository.findById(productId);
+
+        if(owoProductOptional.isPresent())
+        {
+            return owoProductOptional.get();
+        }
+        else
+        {
+            log.error("Can not find product with id: "+productId);
+            throw new ProductNotFoundException(productId);
+        }
+    }
+
+    public String getABrandViaProduct(Long productId) {
+        Optional<OwoProduct> owoProductOptional = productRepository.findById(productId);
+
+        if(owoProductOptional.isPresent())
+        {
+            return owoProductOptional.get().getBrands().getBrandName();
+        }
+        else
+        {
+            throw new ProductNotFoundException(productId);
+        }
+    }
+
     /*
     public ResponseEntity searchProduct(int page, String[] categories, String name) {
 
@@ -306,16 +333,6 @@ public class ProductService {
             return maniPlateResponse(owo_productList);
         }
         catch (Exception e)
-        {
-            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
-        }
-    }
-
-    public ResponseEntity getProductById(long id) {
-        try
-        {
-            return new ResponseEntity(productRepository.findByProduct_Id(id), HttpStatus.OK);
-        }catch (Exception e)
         {
             return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
         }

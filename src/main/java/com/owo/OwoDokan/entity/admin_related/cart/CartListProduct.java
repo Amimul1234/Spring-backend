@@ -12,36 +12,31 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Entity
 @Table
-public class Cart_list_product implements Serializable {
+public class CartListProduct implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private long product_id;
+    private Long id;
+    private Long productId;
     @Column(nullable = false)
-    private String product_name;
+    private String productName;
     @Column(nullable = false)
-    private String product_category;
+    private Long productCategoryId;
     @Column(nullable = false)
-    private double product_price;
+    private Long productSubCategoryId;
     @Column(nullable = false)
-    private double product_discount;
+    private Double productPrice;
     @Column(nullable = false)
-    private int product_quantity;
+    private Double productDiscount;
+    @Column(nullable = false)
+    private int productQuantity;
+    @Column(nullable = false)
+    private String productAddingDate;
+    @Column(nullable = false)
+    private String productAddingTime;
     @Column(nullable = false, columnDefinition = "LONGTEXT")
-    private String product_description;
-    @Column(nullable = false)
-    private String product_creation_date;
-    @Column(nullable = false)
-    private String product_creation_time;
-    @Column(nullable = false)
-    private String product_sub_category;
-    @Column(nullable = false)
-    private String product_brand;
-    @Column(nullable = false, columnDefinition = "LONGTEXT")
-    private String product_image;
+    private String productImage;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JsonBackReference
-    @JoinColumn(name = "cart_mobile_number")
     private CartList cart;
 }
