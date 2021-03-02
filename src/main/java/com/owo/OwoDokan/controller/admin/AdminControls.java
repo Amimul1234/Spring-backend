@@ -73,6 +73,12 @@ public class AdminControls {
         return shopKeeperRegistrationService.disableShopKeeper(mobileNumber);
     }
 
+    @PutMapping("/enableShopKeeper")
+    public String enableShopKeeper(@RequestParam("mobileNumber") String mobileNumber)
+    {
+        return shopKeeperRegistrationService.enableShopKeeper(mobileNumber);
+    }
+
     @DeleteMapping("/deleteShopKeeper")
     public String deleteShopKeeper(@RequestParam("mobileNumber") String mobileNumber)
     {
@@ -93,7 +99,7 @@ public class AdminControls {
     }
 
     @GetMapping("/getShopInfo")
-    public ResponseEntity get_shop_info(@RequestParam(name = "shop_phone") String shop_phone) {
+    public Shops get_shop_info(@RequestParam(name = "shop_phone") String shop_phone) {
         return shopAddingService.getShopInfo(shop_phone);
     }
 
@@ -245,6 +251,18 @@ public class AdminControls {
     public List<CategoryEntity> getAllCategories()
     {
         return categoryService.getAllCategories();
+    }
+
+    @GetMapping("/getCategoryBasedOnId")
+    public CategoryEntity getCategoryBasedOnId(@RequestParam(name = "categoryId") Long categoryId)
+    {
+        return categoryService.getCategoryByID(categoryId);
+    }
+
+    @GetMapping("/getCategoryListBasedOnId")
+    public List<String> getCategoryListBasedOnId(@RequestParam(name = "categoryIds") List<Long> categoryIds)
+    {
+        return categoryService.getCategoriesByIds(categoryIds);
     }
 
     @PutMapping("/updateCategory")

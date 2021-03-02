@@ -31,7 +31,7 @@ public class Shops implements Serializable {
     @Column(nullable = false)
     private Boolean approved;
     @Column(nullable = false)
-    private Boolean blocked;
+    private Boolean blocked = false;
     @Column(nullable = false)
     private String shop_address;
     @Column(nullable = false, columnDefinition = "LONGTEXT")
@@ -46,7 +46,7 @@ public class Shops implements Serializable {
     private String shop_owner_name;
     @Column(nullable = false)
     private String shop_service_mobile;
-    @Column(nullable = false, columnDefinition = "LONGTEXT")
+    @Column(columnDefinition = "LONGTEXT")
     private String trade_license_url;
 
     @OneToMany(mappedBy = "shops", orphanRemoval = true)

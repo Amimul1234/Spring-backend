@@ -1,6 +1,7 @@
 package com.owo.OwoDokan.service.admin_related;
 
 import com.owo.OwoDokan.entity.admin_related.Shops;
+import com.owo.OwoDokan.exceptions.ShopNotFoundException;
 import com.owo.OwoDokan.repository.adminRelated.ShopRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,9 +44,19 @@ public class ShopAddingService {
         }
     }
 
-    public ResponseEntity getShopInfo(String shop_phone) {
+    public Shops getShopInfo(String shop_phone) {
+
         Optional<Shops> shopsOptional = shopRepository.getByPhone(shop_phone);
-        return shopsOptional.map(shops -> ResponseEntity.status(OK).body(shops)).orElseGet(() -> new ResponseEntity(NOT_FOUND));
+
+        if(shopsOptional.isPresent())
+        {
+            return shopsOptional.get();
+        }
+        else
+        {
+            logger.info("Shop with phone : "+shop_phone + " Not found");
+            throw new ShopNotFoundException(shop_phone);
+        }
     }
 
     public ResponseEntity getAllShopRegistrationRequests(int pageNumber) {

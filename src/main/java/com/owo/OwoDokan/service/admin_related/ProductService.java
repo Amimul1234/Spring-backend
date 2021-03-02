@@ -5,6 +5,7 @@ import com.owo.OwoDokan.exceptions.ProductNotFoundException;
 import com.owo.OwoDokan.repository.adminRelated.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
@@ -159,6 +160,27 @@ public class ProductService {
         owoProduct.setProductCreationDate(null);
     }
 
+    public List<OwoProduct> getProduct_by_categories(int page, List<Long> categories) {
+        int pageSize = 10; //products per page
+        org.springframework.data.domain.Pageable pageable = PageRequest.of(page, pageSize);
+
+        try
+        {
+            List<OwoProduct> owo_productList = productRepository.findByCategories(categories, pageable).getContent();
+
+            for(OwoProduct owoProduct : owo_productList)
+            {
+                responseManipulator(owoProduct);
+            }
+
+            return owo_productList;
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
     /*
     public ResponseEntity searchProduct(int page, String[] categories, String name) {
 
@@ -239,22 +261,6 @@ public class ProductService {
         }
 
         return new ResponseEntity(owo_productList, HttpStatus.OK);
-    }
-
-    public ResponseEntity getProduct_by_categories(int page, List<String> categories) {
-        int pageSize = 10; //products per page
-        org.springframework.data.domain.Pageable pageable = PageRequest.of(page, pageSize);
-
-        try
-        {
-            List<OwoProduct> owo_productList = productRepository.findByCategories(categories, pageable).getContent();
-
-            return maniPlateResponse(owo_productList);
-        }
-        catch (Exception e)
-        {
-            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
-        }
     }
 
     public ResponseEntity getProduct_by_categoriesDesc(int page, List<String> categories) {

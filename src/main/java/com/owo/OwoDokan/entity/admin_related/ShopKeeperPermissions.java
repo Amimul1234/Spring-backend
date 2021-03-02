@@ -15,7 +15,7 @@ public class ShopKeeperPermissions {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String permittedCategory;
+    private Long permittedCategoryId;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JsonBackReference

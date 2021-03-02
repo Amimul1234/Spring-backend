@@ -6,8 +6,6 @@ import com.owo.OwoDokan.entity.admin_related.Shops;
 import com.owo.OwoDokan.repository.shop_keeper_related.Debt.ShopRegistrationRequestRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,7 +17,7 @@ public class RegistrationService {
         this.shopRegistrationRequestRepo = shopRegistrationRequestRepo;
     }
 
-    public ResponseEntity addNewRequest(ShopPendingRequest shopPendingRequest) {
+    public String addNewRequest(ShopPendingRequest shopPendingRequest) {
 
         Shops shops = new Shops();
 
@@ -36,21 +34,22 @@ public class RegistrationService {
         shops.setShop_service_mobile(shopPendingRequest.getShopServiceMobile());
         shops.setTrade_license_url(shopPendingRequest.getTradeLicenseUrl());
 
-        shopPendingRequest.getCategoryPermissions().forEach(category -> {
+        for(Long categoryId : shopPendingRequest.getCategoryPermissionsId())
+        {
             ShopKeeperPermissions shopKeeperPermissions = new ShopKeeperPermissions();
             shopKeeperPermissions.setShops(shops);
-            shopKeeperPermissions.setPermittedCategory(category);
+            shopKeeperPermissions.setPermittedCategoryId(categoryId);
             shops.getShopKeeperPermissions().add(shopKeeperPermissions);
-        });
+        }
 
         try
         {
             shopRegistrationRequestRepo.save(shops);
-            return ResponseEntity.status(HttpStatus.OK).body("Requested for shop registration");
+            return "Requested for shop registration";
         }catch (Exception e)
         {
             logger.error("Error on Registration service, Error is: "+e.getMessage());
-            return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).body("Can request for shop creation");
+            throw new RuntimeException(e);
         }
     }
 }

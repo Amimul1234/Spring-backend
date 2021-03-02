@@ -11,9 +11,14 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<OwoProduct, Long> {
+
+    @Query("SELECT e FROM OwoProduct e WHERE e.productCategoryId IN (:categories) order by e.productPrice")
+    Page<OwoProduct> findByCategories(@Param("categories") List<Long> categories, Pageable pageable);
+
+
+
     /*
-    @Query("SELECT e FROM OwoProduct e WHERE e.product_category IN (:categories) order by e.product_price")
-    Page<OwoProduct> findByCategories(@Param("categories") List<String> categories, Pageable pageable);
+
 
     @Query("SELECT e FROM OwoProduct e WHERE e.product_category IN (:categories) order by e.product_price DESC")
     Page<OwoProduct> findByCategoriesDesc(@Param("categories") List<String> categories, Pageable pageable);

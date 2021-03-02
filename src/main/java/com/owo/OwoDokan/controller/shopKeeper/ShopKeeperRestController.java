@@ -1,6 +1,7 @@
 package com.owo.OwoDokan.controller.shopKeeper;
 
 import com.owo.OwoDokan.ModelClass.CartListFromClient;
+import com.owo.OwoDokan.entity.admin_related.OwoProduct;
 import com.owo.OwoDokan.entity.admin_related.ShopPendingRequest;
 import com.owo.OwoDokan.entity.admin_related.cart.Cart_list_product;
 import com.owo.OwoDokan.entity.admin_related.order.Shop_keeper_orders;
@@ -34,7 +35,7 @@ public class ShopKeeperRestController {
 
     //Shop Registration Request
     @PostMapping("/shopRegisterRequest")
-    public ResponseEntity shopRegisterRequest(@RequestBody ShopPendingRequest shopPendingRequest)
+    public String shopRegisterRequest(@RequestBody ShopPendingRequest shopPendingRequest)
     {
         return registrationService.addNewRequest(shopPendingRequest);
     }
@@ -75,6 +76,13 @@ public class ShopKeeperRestController {
         return pagedList.getContent();
     }
 
+    @GetMapping("/getProductByCategories") //This is for getting products via specific categories in Ascending  order
+    public List<OwoProduct> getProductByCategories(@RequestParam(name = "page") int page, @RequestParam(name = "product_categories") Long[] product_categories)
+    {
+        List<Long> categories = Arrays.asList(product_categories);
+        return productService.getProduct_by_categories(page, categories);
+    }
+
     /*
     @GetMapping("/allProducts")
     public ResponseEntity getAllProduct(@RequestParam(name = "page") int page)
@@ -92,13 +100,6 @@ public class ShopKeeperRestController {
     public ResponseEntity getProductByCategoryDesc(@RequestParam(name = "page") int page, @RequestParam(name = "product_category") String product_category)
     {
         return productService.getProduct_by_categoryDesc(page, product_category);
-    }
-
-    @GetMapping("/getProductByCategories") //This is for getting products via specific categories in Ascending  order
-    public ResponseEntity getProductByCategories(@RequestParam(name = "page") int page, @RequestParam(name = "product_categories") String[] product_categories)
-    {
-        List<String> categories = Arrays.asList(product_categories);
-        return productService.getProduct_by_categories(page, categories);
     }
 
     @GetMapping("/getProductByCategoriesDesc") //This is for getting products via specific categories in Descending  order for shopkeeper

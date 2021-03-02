@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ShopRepository extends JpaRepository<Shops, Long> {
-    @Query("SELECT e FROM Shops e WHERE e.shop_service_mobile = :mobile_number")
+    @Query("SELECT e FROM Shops e WHERE e.shop_owner_mobile = :mobile_number")
     Optional<Shops> getByPhone(@Param("mobile_number")String mobile_number);
 
     @Query("select e from Shops e where e.approved = false")

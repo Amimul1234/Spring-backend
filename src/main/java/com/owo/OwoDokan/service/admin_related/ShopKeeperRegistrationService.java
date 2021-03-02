@@ -151,4 +151,30 @@ public class ShopKeeperRegistrationService {
             throw new ShopKeeperUserNotFount(mobileNumber);
         }
     }
+
+    @Transactional
+    public String enableShopKeeper(String mobileNumber) {
+
+        Optional<ShopKeeperUser> shopKeeperUserOptional = shopKeeperUserRepo.findByMobileNumber(mobileNumber);
+
+        if(shopKeeperUserOptional.isPresent())
+        {
+            ShopKeeperUser shopKeeperUser = shopKeeperUserOptional.get();
+            shopKeeperUser.setAccountEnabled(true);
+
+            try
+            {
+                shopKeeperUserRepo.save(shopKeeperUser);
+                return "Shop Keeper Enabled Successfully";
+            }catch (Exception e)
+            {
+                log.error("Error occurred, Error is: "+e.getMessage());
+                throw new RuntimeException(e);
+            }
+        }
+        else
+        {
+            throw new ShopKeeperUserNotFount(mobileNumber);
+        }
+    }
 }

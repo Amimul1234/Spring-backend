@@ -14,7 +14,7 @@ public class ShopPendingRequest implements Serializable {
     private String shopOwnerName;
     private String shopServiceMobile;
     private String tradeLicenseUrl;
-    private List<String> categoryPermissions;
+    private List<Long> categoryPermissionsId;
 
     public ShopPendingRequest() {
     }
@@ -22,7 +22,7 @@ public class ShopPendingRequest implements Serializable {
     public ShopPendingRequest(Double latitude, Double longitude, String shopAddress,
                               String shopImageUri, String shopKeeperNidFrontUri, String shopName,
                               String shopOwnerMobile, String shopOwnerName, String shopServiceMobile,
-                              String tradeLicenseUrl, List<String> categoryPermissions) {
+                              String tradeLicenseUrl, List<Long> categoryPermissionsId) {
 
         this.latitude = latitude;
         this.longitude = longitude;
@@ -34,7 +34,7 @@ public class ShopPendingRequest implements Serializable {
         this.shopOwnerName = shopOwnerName;
         this.shopServiceMobile = shopServiceMobile;
         this.tradeLicenseUrl = tradeLicenseUrl;
-        this.categoryPermissions = categoryPermissions;
+        this.categoryPermissionsId = categoryPermissionsId;
     }
 
     public double getLatitude() {
@@ -117,12 +117,12 @@ public class ShopPendingRequest implements Serializable {
         this.tradeLicenseUrl = tradeLicenseUrl;
     }
 
-    public List<String> getCategoryPermissions() {
-        return categoryPermissions;
+    public List<Long> getCategoryPermissionsId() {
+        return categoryPermissionsId;
     }
 
-    public void setCategoryPermissions(List<String> categoryPermissions) {
-        this.categoryPermissions = categoryPermissions;
+    public void setCategoryPermissionsId(List<Long> categoryPermissionsId) {
+        this.categoryPermissionsId = categoryPermissionsId;
     }
 }
 
