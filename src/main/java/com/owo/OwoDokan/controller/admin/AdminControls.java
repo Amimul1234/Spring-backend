@@ -85,6 +85,12 @@ public class AdminControls {
         return shopKeeperRegistrationService.deleteShopKeeper(mobileNumber);
     }
 
+    @PutMapping("/updateShopKeeperInfo")
+    public String updateShopKeeperInfo(@RequestBody ShopKeeperUser shopKeeperUser)
+    {
+        return shopKeeperRegistrationService.updateShopInfo(shopKeeperUser);
+    }
+
     //Shop Management
     @PostMapping("/approveShop")
     public Shops approveShop(@RequestBody Shops shops)

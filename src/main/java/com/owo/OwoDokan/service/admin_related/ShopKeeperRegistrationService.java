@@ -177,4 +177,26 @@ public class ShopKeeperRegistrationService {
             throw new ShopKeeperUserNotFount(mobileNumber);
         }
     }
+
+    @Transactional
+    public String updateShopInfo(ShopKeeperUser shopKeeperUser) {
+        Optional<ShopKeeperUser> shopKeeperUserOptional = shopKeeperUserRepo.findById(shopKeeperUser.getShopKeeperId());
+
+        if(shopKeeperUserOptional.isPresent())
+        {
+            ShopKeeperUser shopKeeperUser1 = shopKeeperUserOptional.get();
+
+            shopKeeperUser1.setPin(shopKeeperUser.getPin());
+            shopKeeperUser1.setImageUri(shopKeeperUser.getImageUri());
+            shopKeeperUser1.setName(shopKeeperUser.getName());
+
+            shopKeeperUserRepo.save(shopKeeperUser1);
+
+            return "Shop Keeper Information Updated Successfully";
+        }
+        else
+        {
+            throw new ShopKeeperUserNotFount(shopKeeperUser.getMobileNumber());
+        }
+    }
 }

@@ -84,7 +84,8 @@ public class ShopUserController {
     }
 
     @GetMapping("/getAllDebtDetailsReport") //This method is for getting pdf report of the debt for a user
-    public ResponseEntity<Resource> generateExcelReport(@RequestParam(name = "user_id") Long user_id) throws DocumentException {
+    public ResponseEntity<Resource> generateExcelReport(@RequestParam(name = "user_id") Long user_id) throws DocumentException
+    {
 
         List<User_debt_details> user_debt_details = shopUserDebtService.getAllDebtDetailsViaList(user_id);
 

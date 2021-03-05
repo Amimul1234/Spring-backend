@@ -11,8 +11,6 @@ import com.owo.OwoDokan.repository.adminRelated.BrandsRepository;
 import com.owo.OwoDokan.repository.adminRelated.category_repo.CategoryRepo;
 import com.owo.OwoDokan.repository.adminRelated.category_repo.SubCategoryRepo;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -34,7 +32,8 @@ public class BrandsService {
     }
 
     @Transactional
-    public void createBrand(Brands brands) {
+    public void createBrand(Brands brands)
+    {
 
         Optional<SubCategoryEntity> subCategoryEntityOptional = subCategoryRepo.findById(brands.getSubCategoryEntity().getSub_category_id());
 
@@ -50,7 +49,8 @@ public class BrandsService {
         }
     }
 
-    public List<Brands> getBrandsViaCategory(int number, List<Long> categoryIds) {
+    public List<Brands> getBrandsViaCategory(int number, List<Long> categoryIds)
+    {
 
         Optional<CategoryEntity> categoryEntityOptional = categoryRepo.findById(categoryIds.get(number-1));
 
@@ -151,7 +151,8 @@ public class BrandsService {
     }
 
     @Transactional
-    public String deleteBrand(Long subCategoryId, Long brands) {
+    public String deleteBrand(Long subCategoryId, Long brands)
+    {
 
         Optional<SubCategoryEntity> subCategoryEntityOptional = subCategoryRepo.findById(subCategoryId);
 
