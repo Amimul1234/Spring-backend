@@ -332,4 +332,5 @@ public class AdminControls {
     {
         return brandsService.deleteBrand(subCategoryId, brandsId);
     }
+
 }

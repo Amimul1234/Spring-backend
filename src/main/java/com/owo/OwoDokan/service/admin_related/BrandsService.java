@@ -1,18 +1,21 @@
 package com.owo.OwoDokan.service.admin_related;
 
 import com.owo.OwoDokan.entity.admin_related.Brands;
+import com.owo.OwoDokan.entity.admin_related.category.CategoryEntity;
 import com.owo.OwoDokan.entity.admin_related.category.SubCategoryEntity;
 import com.owo.OwoDokan.exceptions.BrandListNotAvailable;
 import com.owo.OwoDokan.exceptions.BrandsNotFoundException;
+import com.owo.OwoDokan.exceptions.CategoryNotFoundException;
 import com.owo.OwoDokan.exceptions.SubCategoryNotFound;
 import com.owo.OwoDokan.repository.adminRelated.BrandsRepository;
+import com.owo.OwoDokan.repository.adminRelated.category_repo.CategoryRepo;
 import com.owo.OwoDokan.repository.adminRelated.category_repo.SubCategoryRepo;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,17 +25,18 @@ public class BrandsService {
 
     private final BrandsRepository brandsRepository;
     private final SubCategoryRepo subCategoryRepo;
+    private final CategoryRepo categoryRepo;
 
-    public BrandsService(BrandsRepository brandsRepository, SubCategoryRepo subCategoryRepo) {
+    public BrandsService(BrandsRepository brandsRepository, SubCategoryRepo subCategoryRepo, CategoryRepo categoryRepo) {
         this.brandsRepository = brandsRepository;
         this.subCategoryRepo = subCategoryRepo;
+        this.categoryRepo = categoryRepo;
     }
 
     @Transactional
     public void createBrand(Brands brands) {
 
-        Optional<SubCategoryEntity> subCategoryEntityOptional = subCategoryRepo.findById(brands.getSubCategoryEntity().
-                getSub_category_id());
+        Optional<SubCategoryEntity> subCategoryEntityOptional = subCategoryRepo.findById(brands.getSubCategoryEntity().getSub_category_id());
 
         if(subCategoryEntityOptional.isPresent())
         {
@@ -46,16 +50,26 @@ public class BrandsService {
         }
     }
 
-    public ResponseEntity getBrandsViaCategory(int page, List<String>product_categories) {
-        int pageSize = 10; //products per page
-        org.springframework.data.domain.Pageable pageable = PageRequest.of(page, pageSize);
-        try
+    public List<Brands> getBrandsViaCategory(int number, List<Long> categoryIds) {
+
+        Optional<CategoryEntity> categoryEntityOptional = categoryRepo.findById(categoryIds.get(number-1));
+
+        List<Brands> brandsList = new ArrayList<>();
+
+        if(categoryEntityOptional.isPresent())
         {
-            return new ResponseEntity(brandsRepository.findBrandViaCategories(product_categories, pageable).getContent(), HttpStatus.OK);
+            List<SubCategoryEntity> subCategoryEntityList = categoryEntityOptional.get().getSubCategoryEntities();
+
+            for(SubCategoryEntity subCategoryEntity : subCategoryEntityList)
+            {
+                brandsList.addAll(subCategoryEntity.getBrandsList());
+            }
+
+            return brandsList;
         }
-        catch (Exception e)
+        else
         {
-            return new ResponseEntity(HttpStatus.FAILED_DEPENDENCY);
+            throw new CategoryNotFoundException(categoryIds.get(number));
         }
     }
 

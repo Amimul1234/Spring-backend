@@ -108,6 +108,7 @@ public class CategoryService {
     }
 
     public List<String> getCategoriesByIds(List<Long> categoryIds) {
+
         List<CategoryEntity> categoryEntityList = categoryRepo.findAll();
 
         List<String> categoryNames = new ArrayList<>();
@@ -125,5 +126,26 @@ public class CategoryService {
         }
 
         return categoryNames;
+    }
+
+    public List<CategoryEntity> getSpecificCategoryData(List<Long> categoryIds) {
+
+        List<CategoryEntity> categoryEntityList = categoryRepo.findAll();
+
+        List<CategoryEntity> categoryEntityList1 = new ArrayList<>();
+
+        for(CategoryEntity categoryEntity : categoryEntityList)
+        {
+            for(Long categoryId : categoryIds)
+            {
+                if(categoryEntity.getCategoryId().equals(categoryId))
+                {
+                    categoryEntityList1.add(categoryEntity);
+                    break;
+                }
+            }
+        }
+
+        return categoryEntityList1;
     }
 }

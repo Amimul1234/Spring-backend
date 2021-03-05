@@ -1,13 +1,16 @@
 package com.owo.OwoDokan.controller.shopKeeper;
 
 import com.owo.OwoDokan.ModelClass.CartListFromClient;
+import com.owo.OwoDokan.entity.admin_related.Brands;
 import com.owo.OwoDokan.entity.admin_related.OwoProduct;
 import com.owo.OwoDokan.entity.admin_related.ShopPendingRequest;
 import com.owo.OwoDokan.entity.admin_related.cart.CartListProduct;
+import com.owo.OwoDokan.entity.admin_related.category.CategoryEntity;
 import com.owo.OwoDokan.entity.admin_related.order.Shop_keeper_orders;
 import com.owo.OwoDokan.service.admin_related.BrandsService;
 import com.owo.OwoDokan.service.admin_related.ProductService;
 import com.owo.OwoDokan.service.admin_related.cart.Shop_keeper_cart_service;
+import com.owo.OwoDokan.service.admin_related.category.CategoryService;
 import com.owo.OwoDokan.service.admin_related.order.Shop_keeper_order_service;
 import com.owo.OwoDokan.service.shop_keeper_related.registration.RegistrationService;
 import org.springframework.data.domain.Page;
@@ -24,13 +27,15 @@ public class ShopKeeperRestController {
     private final Shop_keeper_cart_service shop_keeper_cartService;
     private final Shop_keeper_order_service shop_keeper_orderService;
     private final RegistrationService registrationService;
+    private final CategoryService categoryService;
 
-    public ShopKeeperRestController(ProductService productService, BrandsService brandsService, Shop_keeper_cart_service shop_keeper_cartService, Shop_keeper_order_service shop_keeper_orderService, RegistrationService registrationService) {
+    public ShopKeeperRestController(ProductService productService, BrandsService brandsService, Shop_keeper_cart_service shop_keeper_cartService, Shop_keeper_order_service shop_keeper_orderService, RegistrationService registrationService, CategoryService categoryService) {
         this.productService = productService;
         this.brandsService = brandsService;
         this.shop_keeper_cartService = shop_keeper_cartService;
         this.shop_keeper_orderService = shop_keeper_orderService;
         this.registrationService = registrationService;
+        this.categoryService = categoryService;
     }
 
     //Shop Registration Request
@@ -95,6 +100,17 @@ public class ShopKeeperRestController {
         return productService.getABrandViaProduct(productId);
     }
 
+    @GetMapping("/getSpecificCategoryData")
+    public List<CategoryEntity> getSpecificCategoryData(@RequestParam("categoryIds") List<Long> categoryIds)
+    {
+        return categoryService.getSpecificCategoryData(categoryIds);
+    }
+
+    @GetMapping("/getBrandsViaCategory")
+    public List<Brands> getBrandsViaCategory(@RequestParam(name = "number") int number, @RequestParam(name = "categoryIds") List<Long> categoryIds)
+    {
+        return brandsService.getBrandsViaCategory(number, categoryIds);
+    }
     /*
     @GetMapping("/allProducts")
     public ResponseEntity getAllProduct(@RequestParam(name = "page") int page)
@@ -157,12 +173,7 @@ public class ShopKeeperRestController {
         return productService.getProductByBrandDesc(page, product_brand, product_categories);
     }
 
-    @GetMapping("/getBrandsViaCategory")
-    public ResponseEntity getBrandsViaCategory(@RequestParam(name = "page") int page, @RequestParam(name = "product_categories") String[] product_categories)
-    {
-        List<String> categories = Arrays.asList(product_categories);
-        return brandsService.getBrandsViaCategory(page, categories);
-    }
+
 
      */
 }
