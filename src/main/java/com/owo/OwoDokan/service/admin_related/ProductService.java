@@ -1,6 +1,8 @@
 package com.owo.OwoDokan.service.admin_related;
 
 import com.owo.OwoDokan.entity.admin_related.OwoProduct;
+import com.owo.OwoDokan.exceptions.BrandsNotFoundException;
+import com.owo.OwoDokan.exceptions.CategoryNotFoundException;
 import com.owo.OwoDokan.exceptions.ProductNotFoundException;
 import com.owo.OwoDokan.repository.adminRelated.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,7 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
+    @Transactional
     public OwoProduct saveProduct(OwoProduct product)
     {
         return productRepository.save(product);
@@ -205,6 +208,50 @@ public class ProductService {
         else
         {
             throw new ProductNotFoundException(productId);
+        }
+    }
+
+    public List<OwoProduct> getProductsByBrand(int page, Long brandsId) {
+        int pageSize = 10; //products per page
+        org.springframework.data.domain.Pageable pageable = PageRequest.of(page, pageSize);
+
+        Optional<List<OwoProduct>> optionalOwoProductList = productRepository.findByBrandId(brandsId, pageable);
+
+        if(optionalOwoProductList.isPresent())
+        {
+            List<OwoProduct> owoProductList = optionalOwoProductList.get();
+
+            for(OwoProduct owoProduct : owoProductList)
+            {
+                responseManipulator(owoProduct);
+            }
+
+            return owoProductList;
+        }
+        else
+        {
+            throw new BrandsNotFoundException(brandsId);
+        }
+    }
+
+    public List<OwoProduct> getProductsOfSpecificCategory(int page, Long productCategory) {
+        int pageSize = 10; //products per page
+        org.springframework.data.domain.Pageable pageable = PageRequest.of(page, pageSize);
+
+        Optional<List<OwoProduct>> optionalOwoProductList = productRepository.findBySpecificCategory(productCategory, pageable);
+
+        if(optionalOwoProductList.isPresent())
+        {
+            List<OwoProduct> owoProductList = optionalOwoProductList.get();
+
+            for(OwoProduct owoProduct : owoProductList)
+                responseManipulator(owoProduct);
+
+            return owoProductList;
+        }
+        else
+        {
+            throw new CategoryNotFoundException("This category does not have any products available");
         }
     }
 

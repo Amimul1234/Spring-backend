@@ -134,6 +134,12 @@ public class AdminControls {
         return productService.getAProduct(productId);
     }
 
+    @GetMapping("/getProductByBrand")
+    public List<OwoProduct> getProductViaBrand(@RequestParam(name = "page") int page, @RequestParam("brandsId") Long brandsId)
+    {
+        return productService.getProductsByBrand(page, brandsId);
+    }
+
     @PostMapping("/addProduct") //This method is for adding new products
     public OwoProduct addProduct(@RequestBody OwoProduct product)
     {

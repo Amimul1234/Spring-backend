@@ -4,7 +4,6 @@ import com.owo.OwoDokan.entity.admin_related.OwoProduct;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import java.util.List;
@@ -14,6 +13,12 @@ public interface ProductRepository extends JpaRepository<OwoProduct, Long> {
 
     @Query("SELECT e FROM OwoProduct e WHERE e.productCategoryId IN (:categories) order by e.productPrice")
     Page<OwoProduct> findByCategories(@Param("categories") List<Long> categories, Pageable pageable);
+
+    @Query("select e from OwoProduct e where e.brands.brandId = :brandId")
+    Optional<List<OwoProduct>> findByBrandId(@Param("brandId") Long brandsId, Pageable pageable);
+
+    @Query("SELECT e FROM OwoProduct e WHERE e.productCategoryId = :productCategory")
+    Optional<List<OwoProduct>> findBySpecificCategory(@Param("productCategory") Long productCategory, Pageable pageable);
 
 
 

@@ -82,10 +82,18 @@ public class ShopKeeperRestController {
     }
 
     @GetMapping("/getProductByCategories") //This is for getting products via specific categories in Ascending  order
-    public List<OwoProduct> getProductByCategories(@RequestParam(name = "page") int page, @RequestParam(name = "product_categories") Long[] product_categories)
+    public List<OwoProduct> getProductByCategories(@RequestParam(name = "page") int page,
+                                                   @RequestParam(name = "product_categories") Long[] product_categories)
     {
         List<Long> categories = Arrays.asList(product_categories);
         return productService.getProduct_by_categories(page, categories);
+    }
+
+    @GetMapping("/getProductBySpecificCategory")
+    public List<OwoProduct> getProductsViaSpecificCategory(@RequestParam(name = "page") int page,
+                                                           @RequestParam(name = "productCategory") Long productCategory)
+    {
+        return productService.getProductsOfSpecificCategory(page, productCategory);
     }
 
     @GetMapping("/getProductById")
