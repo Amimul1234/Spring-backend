@@ -158,7 +158,9 @@ public class ShopKeeperRestController {
     }
 
     @GetMapping("/searchProduct")
-    public ResponseEntity searchProduct(@RequestParam(name = "page") int page, @RequestParam(name = "product_categories") String[] product_categories, @RequestParam(name = "product_name") String product_name)
+    public ResponseEntity searchProduct(@RequestParam(name = "page") int page,
+        @RequestParam(name = "product_categories") String[] product_categories,
+        @RequestParam(name = "product_name") String product_name)
     {
         return productService.searchProduct(page, product_categories, product_name);
     }

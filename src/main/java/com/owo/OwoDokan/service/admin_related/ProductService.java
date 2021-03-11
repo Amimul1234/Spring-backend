@@ -7,7 +7,6 @@ import com.owo.OwoDokan.exceptions.ProductNotFoundException;
 import com.owo.OwoDokan.repository.adminRelated.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;

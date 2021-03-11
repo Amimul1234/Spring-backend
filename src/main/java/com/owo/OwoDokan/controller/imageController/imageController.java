@@ -19,7 +19,8 @@ import java.util.UUID;
 public class imageController {
     //This method is for saving upcoming image in filesystem
     @PostMapping("/imageController/{directory}")
-    public ResponseEntity saveImageInProject(@PathVariable("directory") String directory, @RequestPart(name = "multipartFile") MultipartFile multipartFile)
+    public ResponseEntity saveImageInProject(@PathVariable("directory") String directory,
+                                             @RequestPart(name = "multipartFile") MultipartFile multipartFile)
     {
         String filename = UUID.randomUUID().toString() + multipartFile.getOriginalFilename();
 
