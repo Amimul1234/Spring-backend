@@ -21,7 +21,6 @@ public interface ProductRepository extends JpaRepository<OwoProduct, Long> {
     Optional<List<OwoProduct>> findBySpecificCategory(@Param("productCategory") Long productCategory, Pageable pageable);
 
 
-
     /*
 
 
